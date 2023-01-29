@@ -6,7 +6,8 @@ const {DataTypes} = Sequelize;
 const Project = db.define('projects', {
     title: DataTypes.STRING,
     text: DataTypes.STRING,
-    status: DataTypes.STRING
+    status: DataTypes.STRING,
+    color: DataTypes.STRING
 
 }, {
     freezeTableName: true
