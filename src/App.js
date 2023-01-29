@@ -1,25 +1,28 @@
 import logo from './logo.svg';
 import './App.css';
+import {store} from "./redux/store";
+import {Provider} from "react-redux";
+import Login from "./components/Login";
+import {Navigate, Route, Routes} from "react-router-dom";
+import Main from "./components/Main";
+import "./auth/firebase.js"
+import Project from "./components/Project";
+import {useDispatch, useSelector} from "react-redux";
+import {getProjects, setUser} from "./redux/dataSlice";
+import {useEffect} from "react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    return (
+        <Provider store={store}>
+            <Routes>
+                <Route path={"/"} element={<Main/>}/>
+                <Route path={"/project/:id"} element={<Main/>}/>
+
+                <Route path={"/login"} element={<Login/>}/>
+            </Routes>
+        </Provider>
+    )
 }
 
 export default App;
