@@ -1,14 +1,17 @@
 import {Sequelize} from "sequelize";
 import db from "../config/Database.js";
 
-const {DataTypes} = Sequelize;
-
 const Project = db.define('projects', {
-    title: DataTypes.STRING,
-    text: DataTypes.STRING,
-    status: DataTypes.STRING,
-    color: DataTypes.STRING
-
+    id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
+        primaryKey: true
+    },
+    title: Sequelize.STRING,
+    text: Sequelize.STRING,
+    status: Sequelize.STRING,
+    color: Sequelize.STRING
 }, {
     freezeTableName: true
 });

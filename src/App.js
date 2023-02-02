@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import {store} from "./redux/store";
 import {Provider} from "react-redux";
@@ -10,6 +9,7 @@ import Project from "./components/Project";
 import {useDispatch, useSelector} from "react-redux";
 import {getProjects, setUser} from "./redux/dataSlice";
 import {useEffect} from "react";
+import Kanban from "./components/Kanban";
 
 function App() {
 
@@ -17,7 +17,9 @@ function App() {
         <Provider store={store}>
             <Routes>
                 <Route path={"/"} element={<Main/>}/>
+
                 <Route path={"/project/:id"} element={<Main/>}/>
+                <Route path={"/project/:id/task/:id"} element={<Main/>}/>
 
                 <Route path={"/login"} element={<Login/>}/>
             </Routes>

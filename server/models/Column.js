@@ -2,7 +2,7 @@ import {Sequelize} from "sequelize";
 import db from "../config/Database.js";
 
 
-const Card = db.define('cards', {
+const Column = db.define('columns', {
     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -10,18 +10,13 @@ const Card = db.define('cards', {
         primaryKey: true
     },
     title: Sequelize.STRING,
-    text: Sequelize.STRING,
-    due: Sequelize.DATE,
-    prio: Sequelize.STRING,
-    status: Sequelize.STRING,
-    position: {
-        type: Sequelize.STRING,
+    order: {
+        type: Sequelize.INTEGER,
         defaultValue: 0
     }
-
 }, {
     freezeTableName: true
 });
 
 
-export default Card;
+export default Column;

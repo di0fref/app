@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import Sidebar from "./Sidebar";
 import {signOutFireBase} from "../auth/firebase";
 import {useNavigate} from "react-router-dom";
+import Kanban from "./Kanban";
 
 export default function Main() {
 
@@ -29,10 +30,7 @@ export default function Main() {
                 relative 
                 h-screen 
                 md:flex 
-                bg-[#EAECEF] 
-                dark:bg-gray-900    
-                _bg-gray-50
-                _bg-gradient-to-br to-blue-100/50 from-[#EAECEF]
+                bg-[#127bbd] 
                 `
         }>
             <main className={"flex h-full flex-grow _pt-12"}>
@@ -45,11 +43,11 @@ export default function Main() {
                     </div>
                 </div>
 
-                <Sidebar/>
+                {/*<Sidebar/>*/}
                 <div className={'h-screen overflow-y-auto w-full flex'}>
                     <div className={'flex-grow'}>
-                        <div className={'px-12 max-w-3xl mx-auto h-full bg-neutral-100'}>
-                            <Project/>
+                        <div className={'px-12 w-full _max-w-3xl mx-auto h-full py-10'}>
+                            <Kanban/>
                         </div>
                     </div>
                 </div>

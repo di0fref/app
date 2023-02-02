@@ -2,15 +2,18 @@ import {Sequelize} from "sequelize";
 import db from "../config/Database.js";
 import Card from "./Card.js";
 
-const {DataTypes} = Sequelize;
-
 const User = db.define('users', {
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    image: DataTypes.STRING,
-    external_id: DataTypes.STRING,
-    username: DataTypes.STRING,
-    password: DataTypes.STRING
+    id: {
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        allowNull: false,
+        primaryKey: true
+    }, name: Sequelize.STRING,
+    email: Sequelize.STRING,
+    image: Sequelize.STRING,
+    external_id: Sequelize.STRING,
+    username: Sequelize.STRING,
+    password: Sequelize.STRING
 }, {
     freezeTableName: true
 });
