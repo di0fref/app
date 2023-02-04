@@ -1,17 +1,21 @@
 import {useEffect} from "react";
 import axios from "axios";
-import {getProjects, setAccessToken, setUser, startConnecting} from "../redux/dataSlice";
+import {getProjects, setAccessToken, setCurrentCard, setUser, startConnecting} from "../redux/dataSlice";
 import Project from "./Project";
 import {useDispatch, useSelector} from "react-redux";
 import Sidebar from "./Sidebar";
 import {signOutFireBase} from "../auth/firebase";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Kanban from "./Kanban";
 
 export default function Main() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const params = useParams()
+
+    const project = useSelector(state => state.data.project)
+
     useEffect(() => {
         if (!localStorage.getItem("accessToken")) {
             console.error("Missing accessToken", "Redirecting to login");
@@ -24,6 +28,20 @@ export default function Main() {
             dispatch(startConnecting())
         }
     }, [])
+
+
+    useEffect(() => {
+        if (params.cardId && project.columns) {
+            dispatch(setCurrentCard(
+                project.columns
+                .map((col) => col.cards)
+                .flat()
+                .find((card) => card.id === params.cardId)
+        ))}
+
+
+
+    }, [params.cardId, project.columns])
 
     return (
         <div className={`
@@ -47,7 +65,7 @@ export default function Main() {
                 <div className={'h-screen overflow-y-auto w-full flex'}>
                     <div className={'flex-grow'}>
                         <div className={'px-12 w-full _max-w-3xl mx-auto h-full py-10'}>
-                            <Kanban/>
+                            <Kanban project={project}/>
                         </div>
                     </div>
                 </div>

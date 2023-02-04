@@ -1,20 +1,25 @@
 import {useRef, useState, useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {addTask} from "../redux/dataSlice";
+import {ca} from "date-fns/locale";
+import Login from "./Login";
 
-export default function AddTask(props) {
+export default function AddTask({title, addCard, ...props}) {
 
     const [value, setValue] = useState("")
     const dispatch = useDispatch()
     const [editing, setEditing] = useState(false)
     const inputReference = useRef()
 
-    const submit = () => {
-        dispatch(addTask({
+    const submit = async () => {
+        const card = await dispatch(addTask({
             projectId: props.projectId,
             columnId: props.id,
             title: value
         }))
+        addCard(card.payload, {
+            on: 'top'
+        })
     }
     useEffect(() => {
         if (editing) {
@@ -31,12 +36,11 @@ export default function AddTask(props) {
             submit()
             setValue("")
             setEditing(false)
-
         }
     }
     return (
         <div className={'w-full'}>
-            <div className={'font-semibold'}>{props.title}</div>
+            <div className={'font-semibold'}>{title}</div>
             {!editing
                 ? (
                     <div>
@@ -45,7 +49,14 @@ export default function AddTask(props) {
                 )
                 : (
                     <div>
-                        <textarea onBlur={onBlur} ref={inputReference} onChange={e => setValue(e.target.value)} onKeyDown={onKeyDown} value={value} className={'text-md px-2 py-1.5 shadow  w-full resize-none rounded '} placeholder={"Enter a title for this card..."}></textarea>
+                        <textarea
+                            onBlur={onBlur}
+                            ref={inputReference}
+                            onChange={e => setValue(e.target.value)}
+                            onKeyDown={onKeyDown}
+                            value={value}
+                            className={'mt-1 border-0 text-md px-2 py-1.5 shadow  w-full resize-none rounded focus:ring-0 focus:border-0 '}
+                            placeholder={"Enter a title for this card..."}></textarea>
                     </div>
                 )}
         </div>

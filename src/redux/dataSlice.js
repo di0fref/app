@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import axios from "axios";
 import "../http-common.js"
+import {da} from "date-fns/locale";
 
 export const getProject = createAsyncThunk(
     'data/getProject',
@@ -31,10 +32,7 @@ export const updateTask = createAsyncThunk(
     async (task, thunkAPI) => {
         try {
             const response = await axios.put("/cards", task)
-            return {
-                old: task,
-                new: response.data
-            }
+            return response.data
         } catch (error) {
             throw thunkAPI.rejectWithValue(error.message)
         }
@@ -87,11 +85,35 @@ export const reorderTasks = createAsyncThunk(
         }
     }
 )
+export const addLabelToTask = createAsyncThunk(
+    'data/addLabelToTask',
+    async (data, thunkAPI) => {
+        try {
+            const response = await axios.post("/cards/addlabel", data)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+export const removeLabelFromTask = createAsyncThunk(
+    'data/removeLabelFromTask',
+    async (data, thunkAPI) => {
+        try {
+            const response = await axios.post("/cards/removelabel", data)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
 
 const initialState = {
     project: [],
     user: [],
     accessToken: null,
+    currentCard: null,
     isEstablishingConnection: false,
     isConnected: false
 }
@@ -115,6 +137,15 @@ export const dataSlice = createSlice({
         submitMessage: (state, action) => {
 
         },
+        setCurrentCard: (state, action) => {
+            state.currentCard = action.payload
+        },
+        setBoard: (state, action) => {
+            state.project = {
+                ...state.project,
+                ...action.payload
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -123,41 +154,58 @@ export const dataSlice = createSlice({
             })
             .addCase(addTask.fulfilled, (state, action) => {
                 /* Add to the correct project */
-                const index = state.project.columns.findIndex(col => col.id == action.payload.columnId)
-                state.project.columns[index].cards.unshift(action.payload)
+                // const index = state.project.columns.findIndex(col => col.id == action.payload.columnId)
+                // state.project.columns[index].cards.unshift(action.payload)
             })
             .addCase(updateTask.fulfilled, (state, action) => {
 
-                const oldColumnIndex = state.project.columns.findIndex(col => col.id === action.payload.old.oldColumnId)
-                const cardIndex = state.project.columns[oldColumnIndex].cards.findIndex(card => card.id === action.payload.old.id)
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
 
-                const newColumnIndex = state.project.columns.findIndex(col => col.id === action.payload.new.columnId)
+                state.project.columns[columnIndex].cards[cardIndex] = {
+                    ...state.project.columns[columnIndex].cards[cardIndex],
+                    ...action.payload
+                }
 
-                state.project.columns[oldColumnIndex].cards.splice(cardIndex,1)
-                state.project.columns[newColumnIndex].cards.unshift(action.payload.new)
             })
             .addCase(getColumns.fulfilled, (state, action) => {
-                console.log(action.payload);
                 state.columns = action.payload
             })
             .addCase(updateColumn.fulfilled, (state, action) => {
                 console.log(action);
             })
             .addCase(addColumn.fulfilled, (state, action) => {
-                console.log(action.payload);
                 return action.payload
             })
             .addCase(reorderTasks.fulfilled, (state, action) => {
 
             })
+            .addCase(addLabelToTask.fulfilled, (state, action) => {
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
+                const card = state.project.columns[columnIndex].cards.find(card => card.id === action.payload.cardId)
+                card.labels.unshift(action.payload.label)
+            })
+            .addCase(removeLabelFromTask.fulfilled, (state, action) => {
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
+                const card = state.project.columns[columnIndex].cards.find(card => card.id === action.payload.cardId)
+                const labelIndex = card.labels.findIndex(label => label.id === action.payload.label.id)
+
+                card.labels.splice(labelIndex, 1)
+
+            })
+
+
     }
+
 
 })
 export const {
     connectionEstablished,
     startConnecting,
     setUser,
-    setAccessToken
+    setAccessToken,
+    setCurrentCard,
+    setBoard
 } = dataSlice.actions
 
 export default dataSlice.reducer

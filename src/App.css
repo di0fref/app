@@ -1,11 +1,35 @@
-  /*@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap');*/
-@import '@asseinfo/react-kanban/dist/styles.css';
+/*@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700;1,900&display=swap');*/
+@import '@lourenci/react-kanban/dist/styles.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+body {
+	color: #172b4d;
+}
 
-  .react-kanban-column{
-	  @apply  bg-[#ebecf0]
-  }
+.react-kanban-column {
+	@apply bg-[#ebecf0]
+	rounded
+	/*max-h-[90vh] overflow-x-auto*/
+}
+
+.save-btn {
+	  @apply bg-blue-btn py-1 px-2  hover:bg-dark-blue-btn text-white rounded text-sm
+}
+.cancel-btn {
+	  @apply text-neutral-500 py-1 px-2 hover:bg-neutral-200 hover:text-neutral-700 text-sm rounded
+}
+
+input[type=checkbox] {
+	@apply shrink-0 mt-0.5
+	/*border-neutral-400/90*/
+		border-0
+		bg-neutral-200
+	rounded
+	focus:ring-0
+	dark:bg-gray-700 dark:border-gray-600 h-4 w-4
+	hover:bg-neutral-300
+	disabled:hover:cursor-not-allowed
+}

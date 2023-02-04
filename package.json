@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@asseinfo/react-kanban": "^2.2.0",
     "@dnd-kit/core": "^6.0.7",
+    "@headlessui/react": "^1.7.8",
+    "@lourenci/react-kanban": "^2.1.0",
     "@reduxjs/toolkit": "^1.9.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@uiw/react-md-editor": "^3.20.2",
     "axios": "^1.2.6",
     "date-fns": "^2.29.3",
     "firebase": "^9.16.0",
@@ -25,6 +27,7 @@
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
     "react-sortable-hoc": "^2.0.0",
+    "react-tag-autocomplete": "^6.3.0",
     "react-trello": "^2.2.11",
     "socket.io": "^4.5.4",
     "socket.io-client": "^4.5.4",
@@ -54,5 +57,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.3",
+    "@tailwindcss/typography": "^0.5.9"
   }
 }

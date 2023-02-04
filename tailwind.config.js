@@ -12,7 +12,14 @@ module.exports = {
             sans: ['Inter var', ...defaultTheme.fontFamily.sans],
         },
         extend: {
-              fontSize: {
+            colors: {
+                "modal-dark": "#ebecef",
+                modal: "#F4F5F7",
+                base: "#172b4d",
+                "blue-btn": "#127bbd",
+                "dark-blue-btn": "#2d68a2"
+            },
+            fontSize: {
                 base: "16px",
                 md: "0.9em",
             },
@@ -21,7 +28,10 @@ module.exports = {
             // },
         },
     },
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/forms'),
+        require('@tailwindcss/typography'),
+    ],
 }
 
 // -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;

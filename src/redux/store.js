@@ -30,12 +30,12 @@ const socketMiddleware = store => {
             })
             socket.on("new card", (data) => {
                 console.log("new card");
-                console.log(data);
+                // console.log(data);
             })
 
             socket.on("update", (data) => {
                 console.log("update");
-                console.log(data);
+                // console.log(data);
             })
 
         }

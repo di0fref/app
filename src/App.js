@@ -17,10 +17,8 @@ function App() {
         <Provider store={store}>
             <Routes>
                 <Route path={"/"} element={<Main/>}/>
-
-                <Route path={"/project/:id"} element={<Main/>}/>
-                <Route path={"/project/:id/task/:id"} element={<Main/>}/>
-
+                <Route path={"/project/:projectId"} element={<Main/>}/>
+                <Route path={"/project/:projectId/card/:cardId"} element={<Main/>}/>
                 <Route path={"/login"} element={<Login/>}/>
             </Routes>
         </Provider>

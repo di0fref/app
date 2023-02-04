@@ -1,5 +1,6 @@
 import Card from "../models/Card.js";
 import {io} from "../server.js"
+import Label from "../models/Label.js";
 
 export const getCards = async (req, res) => {
     try {
@@ -67,3 +68,43 @@ export const createCard = async (req, res) => {
         console.log(error.message);
     }
 }
+export const addLabel = async (req, res) => {
+    console.log(req.body.card_id);
+    try {
+        Card.findByPk(req.body.card_id).then(card => {
+            card.addLabels(req.body.labelId).then(sc => {
+
+                Label.findByPk(req.body.labelId).then(label => {
+                    res.status(201).json({
+                        cardId: card.id,
+                        columnId: card.columnId,
+                        label: label
+                    });
+                })
+            })
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+export const removeLabel = async (req, res) => {
+    console.log(req.body.card_id);
+    try {
+        Card.findByPk(req.body.card_id).then(card => {
+            card.removeLabels(req.body.labelId).then(sc => {
+
+                Label.findByPk(req.body.labelId).then(label => {
+                    res.status(201).json({
+                        cardId: card.id,
+                        columnId: card.columnId,
+                        label: label
+                    });
+                })
+            })
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+

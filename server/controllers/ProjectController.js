@@ -4,6 +4,7 @@ import User from "../models/User.js";
 import Column from "../models/Column.js"
 import {Sequelize} from "sequelize";
 import {Lane} from "react-trello";
+import Label from "../models/Label.js";
 
 export const getProjects = async (req, res) => {
     try {
@@ -37,20 +38,27 @@ export const getProjects = async (req, res) => {
 export const getProjectsById = async (req, res) => {
     try {
         const project = await Project.findByPk(req.params.id, {
-            include: {
-                model: Column,
-                separate: true,
-                order: [
-                    ["order", "asc"]
-                ],
-                include: {
-                    model: Card,
-                    order: [
-                        ["position", "asc"]
-                    ],
-                    separate: true
-                }
-            }
+            include: [
+                {
+                    model: Label
+                },
+                {
+                    model: Column,
+                    include: {
+                        model: Card,
+                        include: [
+                            {
+                                model: Column,
+                                attributes: ["title"],
+                            },
+                            {
+                                model: Label,
+                                attributes: ["title", "id", "color"],
+                            }
+                        ],
+                        separate: true
+                    }
+                }]
         })
 
 

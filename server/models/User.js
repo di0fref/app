@@ -8,7 +8,8 @@ const User = db.define('users', {
         defaultValue: Sequelize.UUIDV4,
         allowNull: false,
         primaryKey: true
-    }, name: Sequelize.STRING,
+    },
+    name: Sequelize.STRING,
     email: Sequelize.STRING,
     image: Sequelize.STRING,
     external_id: Sequelize.STRING,
