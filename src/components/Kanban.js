@@ -10,7 +10,7 @@ import {
 } from "../redux/dataSlice";
 import Card from "./Card";
 import Login from "./Login";
-import  Board, {addCard, addColumn, moveCard} from '@lourenci/react-kanban'
+import  Board, {addCard, addColumn, moveCard} from '@di0fref/react-kanban'
 // import Board from "../kanban/src/components/Board"
 import AddTask from "./AddTask";
 import {delay, sortF} from "../helper.js"
