@@ -44,22 +44,9 @@ export default function Main() {
     }, [params.cardId, project.columns])
 
     return (
-        <div className={`
-                relative 
-                h-screen 
-                md:flex 
-                bg-[#127bbd] 
-                `
-        }>
+        <div className={`relative h-screen md:flex`}>
             <main className={"flex h-full flex-grow _pt-12"}>
-                <div className={'bg-blue-100 w-[50px] border-r dark:border-gray-700 px-2 py-4'}>
-                    {/*<MainMenu/>*/}
-                    <div className={'flex flex-col items-center space-y-6 mt-6'}>
-                        {/*<div><FaCheckSquare className={'w-6 h-6 text-blue-500'}/></div>*/}
-                        {/*<div><SearchDialog/></div>*/}
-                        {/*<div><Notifications/></div>*/}
-                    </div>
-                </div>
+
 
                 {/*<Sidebar/>*/}
                 <div className={'h-screen overflow-y-auto w-full flex'}>

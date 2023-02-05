@@ -21,7 +21,7 @@ module.exports = {
             },
             fontSize: {
                 base: "16px",
-                md: "0.9em",
+                md: "0.95em",
             },
             // fontFamily: {
             //     sans: ['-apple-system,,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif'],

@@ -3,39 +3,62 @@ import {useEffect, useState} from "react";
 import {
     updateTask,
     getColumns,
-    addColumn as add,
     addTask,
     getProject,
-    sortTasks,
     reorderTasks,
     setBoard
 } from "../redux/dataSlice";
 import Card from "./Card";
 import Login from "./Login";
-import Board, {addCard, addColumn, moveCard} from '@lourenci/react-kanban'
+import  {addCard, addColumn, moveCard} from '@lourenci/react-kanban'
+import Board from "../../kanban/src/components/Board.js"
 import AddTask from "./AddTask";
 import {delay, sortF} from "../helper.js"
-import {store} from "../redux/store";
 import CardModal from "./CardModal";
-import {ca} from "date-fns/locale";
+import {store} from "../redux/store";
 
 export default function Kanban({project}) {
 
     const dispatch = useDispatch();
 
-    const board = {columns: useSelector(state => state.data.project.columns)}
-
     const currentCard = useSelector(state => state.data.currentCard)
     const [isOpen, setIsOpen] = useState(true)
 
-    // && state.data.project.columns
-    //     .filter(col => col.cards.filter(card => card).sort((a, b) => sortF(a, b, "position"))))
-// console.log(board);
+    const [board, setBoard] = useState({columns: store.getState().data.project.columns})
+
+    useEffect(() => {
+        setBoard({columns: store.getState().data.project.columns})
+    }, [project])
+
+
+    // columns:
+    //     useSelector(state => state.data.project.columns&&[...state.data.project.columns]
+    //         .sort((a, b) => {
+    //             return a.order - b.order
+    //         }).map(column => {
+    //             return {
+    //                 ...column,
+    //                 cards: [...column.cards].sort((a, b) => a.position - b.position)
+    //             }
+    //         }))
+
+    // return sortedColumns.map(col => {
+    //     return {
+    //         ...col,
+    //         cards: [...col.cards].sort((a,b) => a.position - b.position)
+    //     }
+    // })
+    // }
+    // })
+    // }
+
+
+    // console.log(board);
 
 
     function handleCardMove(_card, source, destination) {
         const updatedBoard = moveCard(board, source, destination);
-        dispatch(setBoard(updatedBoard))
+        setBoard(updatedBoard)
         const cards = updatedBoard.columns.map(column => column.cards.map(card => {
             return {
                 id: card.id,
@@ -55,14 +78,18 @@ export default function Kanban({project}) {
         dispatch(reorderTasks(orderedCards))
     }
 
+    const addNewCard = (card, columnId) => {
+        addCard(board, {id: columnId}, card, {on: "top"})
+    }
+
     try {
-        if (board.columns?.length) {
+        if (board.columns && board.columns.length) {
             return (
                 <>
                     <Board
                         onCardDragEnd={handleCardMove}
                         renderColumnHeader={(props) => (
-                            <AddTask {...props}/>
+                            <AddTask {...props} addNewCard={addNewCard}/>
                         )}
                         allowAddCard={{on: 'top'}}
                         renderCard={(card, index) => {
@@ -80,6 +107,4 @@ export default function Kanban({project}) {
     } catch (e) {
         console.log(e);
     }
-
-
 }

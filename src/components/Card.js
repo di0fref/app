@@ -5,9 +5,6 @@ import SmallLabel from "./SmallLabel";
 
 export default function Card({card, setIsOpen}) {
 
-
-    console.log(card.labels);
-
     return (
         <Link key={card.id} to={"card/" + card.id} className={'group'}>
             <div className={'hover:shadow-md p-2 my-1 rounded bg-white shadow w-64 _min-h-[6rem] hover:bg-neutral-50 relative'}>
@@ -18,14 +15,15 @@ export default function Card({card, setIsOpen}) {
                     {/*<span className="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Yellow</span>*/}
 
                     <div className={'flex flex-wrap gap-1'}>
-                        {card.labels.map(label => {
+                        {card.labels&&card.labels.map(label => {
                             return <SmallLabel label={label}/>
                         })}
                     </div>
                 </div>
-                <div className={'flex-grow pb-4 _text-md'}>{card.title} </div>
+                <div className={'flex-grow pb-4 text-md'}>
+                    <span className={'text-red-500 text-sm_ font-semibold'}>#{card.number}</span> {card.title}
+                </div>
                 <div className={'flex items-center space-x-4'}>
-                    <div className={'text-xs'}>High</div>
                     <div className={'text-xs'}>{formatDate(card.due)}</div>
                 </div>
             </div>

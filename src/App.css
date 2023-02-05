@@ -7,12 +7,14 @@
 
 body {
 	color: #172b4d;
+	background-color: #127bbd
 }
 
 .react-kanban-column {
 	@apply bg-[#ebecf0]
 	rounded
-	/*max-h-[90vh] overflow-x-auto*/
+	p-2.5
+	max-h-[90vh] overflow-x-auto
 }
 
 .save-btn {

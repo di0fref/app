@@ -1,10 +1,8 @@
 import {useRef, useState, useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {addTask} from "../redux/dataSlice";
-import {ca} from "date-fns/locale";
-import Login from "./Login";
 
-export default function AddTask({title, addCard, ...props}) {
+export default function AddTask({title, addNewCard, ...props}) {
 
     const [value, setValue] = useState("")
     const dispatch = useDispatch()
@@ -12,14 +10,15 @@ export default function AddTask({title, addCard, ...props}) {
     const inputReference = useRef()
 
     const submit = async () => {
+
         const card = await dispatch(addTask({
             projectId: props.projectId,
             columnId: props.id,
             title: value
         }))
-        addCard(card.payload, {
-            on: 'top'
-        })
+
+        addNewCard(card.payload, props.id)
+
     }
     useEffect(() => {
         if (editing) {
@@ -40,11 +39,11 @@ export default function AddTask({title, addCard, ...props}) {
     }
     return (
         <div className={'w-full'}>
-            <div className={'font-semibold'}>{title}</div>
+            <div className={'font-semibold text-md'}>{title}</div>
             {!editing
                 ? (
                     <div>
-                        <button  onClick={e => setEditing(true)} className={'rounded text-left text-sm text-neutral-500 px-1 py-1 hover:bg-neutral-200 w-full'}>+ Add card</button>
+                        <button onClick={e => setEditing(true)} className={'rounded text-left text-sm text-neutral-500 px-1 py-1 hover:bg-neutral-200 w-full'}>+ Add card</button>
                     </div>
                 )
                 : (

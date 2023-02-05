@@ -5,122 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3deba2d3-ba67-4f0a-a17b-bc7c9d7c5b8b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/kanban" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/controllers/CardController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/CardController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/controllers/ProjectController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/ProjectController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/Associations.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/Associations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/Card.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/Card.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/User.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/User.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.includes/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.includes/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.includes/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.includes/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isboolean/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isboolean/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isboolean/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isboolean/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isinteger/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isinteger/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isinteger/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isinteger/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isnumber/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isnumber/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isnumber/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isnumber/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isplainobject/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isplainobject/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isplainobject/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isplainobject/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isstring/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isstring/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isstring/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.isstring/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.once/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.once/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.once/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/lodash.once/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/.npmignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/.travis.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/foreach.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/isArguments.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/shim.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/test/foreach.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/test/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/test/isArguments.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/object-keys/test/shim.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/.all-contributorsrc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/.travis.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/CHANGELOG.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/ISSUE_TEMPLATE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/PULL_REQUEST_TEMPLATE.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/assets/join_auth0_community_badge.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/example/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/lib/UnauthorizedError.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/lib/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/.bin/semver" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/CHANGELOG.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/decode.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/lib/JsonWebTokenError.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/lib/NotBeforeError.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/lib/TokenExpiredError.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/lib/psSupported.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/lib/timespan.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/sign.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/jsonwebtoken/verify.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/ms/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/ms/license.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/ms/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/ms/readme.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/semver/CHANGELOG.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/semver/LICENSE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/semver/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/semver/bin/semver" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/semver/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/semver/range.bnf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/node_modules/semver/semver.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/test/authorizer.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/test/authorizer_namespaces.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/test/authorizer_noqs.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/test/authorizer_secret_function_noqs.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/test/authorizer_secret_function_qs.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/test/fixture/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/test/fixture/namespace.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/test/fixture/secret_function.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/test/mocha.opts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/socketio-jwt/types/index.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/xtend/.npmignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/xtend/LICENCE" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/xtend/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/xtend/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/xtend/has-keys.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/xtend/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/xtend/mutable.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/xtend/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/node_modules/xtend/test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/server/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/CardRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/CardRoute.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AddTask.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddTask.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Card.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Card.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Group.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Kanban.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Kanban.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/helper.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/helper.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/dataSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/dataSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/store.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/tailwind.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

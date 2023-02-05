@@ -141,10 +141,10 @@ export const dataSlice = createSlice({
             state.currentCard = action.payload
         },
         setBoard: (state, action) => {
-            state.project = {
-                ...state.project,
-                ...action.payload
-            }
+            // state.project = {
+            //     ...state.project.columns,
+            //     columns: action.payload
+            // }
         },
     },
     extraReducers: (builder) => {
@@ -153,9 +153,11 @@ export const dataSlice = createSlice({
                 state.project = action.payload
             })
             .addCase(addTask.fulfilled, (state, action) => {
-                /* Add to the correct project */
-                // const index = state.project.columns.findIndex(col => col.id == action.payload.columnId)
-                // state.project.columns[index].cards.unshift(action.payload)
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
+
+                state.project.columns[columnIndex].cards.unshift(action.payload)
+
             })
             .addCase(updateTask.fulfilled, (state, action) => {
 

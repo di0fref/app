@@ -26,14 +26,10 @@ export const _groupBy = (consolidatedHeroes, groupBy) => {
 };
 
 export const sortF = (a, b, sortBy) => {
-
     if (!a && !b) {
         return false
     }
-
-
     return a[sortBy] > b[sortBy] ? 1 : -1
-
 }
 
 
