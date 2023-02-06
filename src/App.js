@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getProjects, setUser} from "./redux/dataSlice";
 import {useEffect} from "react";
 import Kanban from "./components/Kanban";
+import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
 

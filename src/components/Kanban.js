@@ -10,7 +10,7 @@ import {
 } from "../redux/dataSlice";
 import Card from "./Card";
 import Login from "./Login";
-import  Board, {addCard, addColumn, moveCard} from '@di0fref/react-kanban'
+import Board, {addCard, addColumn, moveCard} from '@di0fref/react-kanban'
 // import Board from "../kanban/src/components/Board"
 import AddTask from "./AddTask";
 import {delay, sortF} from "../helper.js"
@@ -24,41 +24,17 @@ export default function Kanban({project}) {
     const currentCard = useSelector(state => state.data.currentCard)
     const [isOpen, setIsOpen] = useState(true)
 
-    const [board, setBoard] = useState({columns: store.getState().data.project.columns})
+    const [board, setBoard] = useState([])
 
     useEffect(() => {
         setBoard({columns: store.getState().data.project.columns})
     }, [project])
 
-
-    // columns:
-    //     useSelector(state => state.data.project.columns&&[...state.data.project.columns]
-    //         .sort((a, b) => {
-    //             return a.order - b.order
-    //         }).map(column => {
-    //             return {
-    //                 ...column,
-    //                 cards: [...column.cards].sort((a, b) => a.position - b.position)
-    //             }
-    //         }))
-
-    // return sortedColumns.map(col => {
-    //     return {
-    //         ...col,
-    //         cards: [...col.cards].sort((a,b) => a.position - b.position)
-    //     }
-    // })
-    // }
-    // })
-    // }
-
-
-    // console.log(board);
-
-
     function handleCardMove(_card, source, destination) {
+
         const updatedBoard = moveCard(board, source, destination);
         setBoard(updatedBoard)
+
         const cards = updatedBoard.columns.map(column => column.cards.map(card => {
             return {
                 id: card.id,
@@ -75,11 +51,13 @@ export default function Kanban({project}) {
                 title: card.title
             };
         })
-        dispatch(reorderTasks(orderedCards))
+        dispatch(reorderTasks(orderedCards)).then(res => dispatch(getProject(1)))
+        // dispatch(getProject(1))
     }
 
     const addNewCard = (card, columnId) => {
-        addCard(board, {id: columnId}, card, {on: "top"})
+        // const updatedBoard = addCard(board, {id: columnId}, card)
+        // setBoard(updatedBoard)
     }
 
     try {

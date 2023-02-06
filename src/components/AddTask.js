@@ -39,7 +39,7 @@ export default function AddTask({title, addNewCard, ...props}) {
     }
     return (
         <div className={'w-full'}>
-            <div className={'font-semibold text-md'}>{title}</div>
+            <div className={'font-semibold text-md'}>{title} {props.id}</div>
             {!editing
                 ? (
                     <div>

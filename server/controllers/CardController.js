@@ -1,4 +1,5 @@
 import Card from "../models/Card.js";
+import Column from "../models/Column.js";
 import {io} from "../server.js"
 import Label from "../models/Label.js";
 import {Sequelize} from "sequelize";
@@ -14,30 +15,29 @@ export const getCards = async (req, res) => {
     }
 }
 
+
+export const getCardsByIds = async (req, res) => {
+    const cards = await Card.findAll({
+        where: {
+            id: req.body.map(card => card.id)
+        }
+    })
+    res.status(200).json(cards);
+}
+
 export const reorderCards = async (req, res) => {
     try {
-
-
         Promise.all(
             Object.values(req.body).map(card => {
-
-                console.log(card);
                 Card.update(card, {
                     where: {
                         id: card.id
                     },
                 })
-
             })
-        ).then()
-
-        const cards = await Card.findAll({
-            where: {
-                id: req.body.map(card => card.id)
-            }
+        ).then(response => {
+            res.status(200).json(true);
         })
-
-        res.status(200).json(cards);
 
     } catch (err) {
         console.error(err.message);
@@ -70,14 +70,27 @@ export const getCardById = async (req, res) => {
     }
 }
 export const createCard = async (req, res) => {
-    const cards = await db.query("update cards set position = position +1 where columnId = " + req.body.columnId)
+    const cards = await db.query("update cards set position = position+1 where columnId = " + req.body.columnId)
 
     try {
-        const card = await Card.create({
+        const newCard = await Card.create({
             ...req.body,
             position: 0
         });
 
+
+        const card = await Card.findByPk(newCard.id, {
+            include: [
+                {
+                    model: Column,
+                    attributes: ["title"],
+                },
+                {
+                    model: Label,
+                    attributes: ["title", "id", "color"],
+                }
+            ],
+        });
         io.emit("new card", {
             card
         })

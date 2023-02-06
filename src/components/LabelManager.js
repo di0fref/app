@@ -31,19 +31,31 @@ export default function LabelManager({project}) {
         <div>
             <div className={'text-xs text-neutral-500 font-semibold mb-2'}>Labels</div>
 
-            <div className={""}>
+            <div className={"mb-6"}>
 
-                <div className={'flex flex-wrap gap-1'}>
-                    {currentCard && currentCard.labels && currentCard.labels.map(label => {
-                        return <Label label={label}/>
-                    })}
-                </div>
+                {/*<div className={'flex flex-wrap gap-1'}>*/}
+                {/*    {currentCard && currentCard.labels && currentCard.labels.map(label => {*/}
+                {/*        return <Label label={label}/>*/}
+                {/*    })}*/}
+                {/*</div>*/}
                 <Popover className="relative_">
 
-                    <Popover.Button>
-                        <div className={'h-7 w-7 bg-neutral-200 mt-1.5 rounded'}>
-                            <BsPlus className={'font-semibold h-7 w-7 '}/></div>
-                    </Popover.Button>
+                    <div className={'flex flex-wrap gap-1'}>
+                        {currentCard && currentCard.labels && currentCard.labels.map(label => {
+                            return <Label label={label}/>
+                        })}
+
+                        <Popover.Button>
+                            <div className={'w-8 h-8 bg-modal-dark font-bold py-1'}>+</div>
+                        </Popover.Button>
+
+                    </div>
+
+                    {/*<Popover.Button>*/}
+                    {/*    <div className={'h-7 w-7 bg-neutral-200 mt-1.5 rounded'}>*/}
+                    {/*        <BsPlus className={'font-semibold h-7 w-7 '}/>*/}
+                    {/*    </div>*/}
+                    {/*</Popover.Button>*/}
 
                     <Popover.Panel className="absolute top-4 left-4 z-10 mt-1 w-screen w-[16rem] transform px-4 sm:px-0 lg:max-w-3xl">
                         <div className="overflow-hidden rounded shadow-lg ring-1 ring-black ring-opacity-5">
@@ -53,7 +65,7 @@ export default function LabelManager({project}) {
                                 {labels.map((label) => (
                                     <div className={'flex items-center space-x-4 mb-4'}>
                                         <div>
-                                            <input checked={currentCard.labels.find(lab => lab.id === label.id)?1:0 } onChange={e => onCheck(e, label)} type={"checkbox"}/>
+                                            <input checked={currentCard?.labels.find(lab => lab.id === label.id) ? 1 : 0} onChange={e => onCheck(e, label)} type={"checkbox"}/>
                                         </div>
                                         <div className={'flex items-center space-x-2'}>
                                             <div style={{backgroundColor: label.color}} className={`w-44 px-2 py-1 flex items-center space-x-2 rounded`}>

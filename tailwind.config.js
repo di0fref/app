@@ -1,7 +1,10 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
-    content: ["./src/**/*.{html,js}"],
+    content: [
+        "./src/**/*.{html,js}",
+        "./node_modules/@di0fref/tailwind-datepicker-react/dist/**/*.js", // <--- Add this line
+    ],
     variants: {
         extend: {
             visibility: ["group-hover"],
@@ -17,7 +20,8 @@ module.exports = {
                 modal: "#F4F5F7",
                 base: "#172b4d",
                 "blue-btn": "#127bbd",
-                "dark-blue-btn": "#2d68a2"
+                "dark-blue-btn": "#2d68a2",
+                warning: "#e95b4c"
             },
             fontSize: {
                 base: "16px",

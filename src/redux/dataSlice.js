@@ -78,7 +78,7 @@ export const reorderTasks = createAsyncThunk(
     'data/reorderTasks',
     async (cards, thunkAPI) => {
         try {
-            const response = await axios.post("/cards/reorder", cards)
+            const response= await axios.post("/cards/reorder", cards)
             return response.data
         } catch (error) {
             throw thunkAPI.rejectWithValue(error.message)
@@ -180,6 +180,22 @@ export const dataSlice = createSlice({
                 return action.payload
             })
             .addCase(reorderTasks.fulfilled, (state, action) => {
+                //
+
+                // console.log(action.payload);
+                // action.payload.cards.map(data => {
+                //
+                //     const columnIndex = state.project.columns.find(column => column.id === action.payload.source.fromColumnId)
+                //     // const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === data.id)
+                //
+                //
+                //     console.log(columnIndex.title);
+                    //
+                    // state.project.columns[columnIndex].cards[cardIndex] = {
+                    //     ...state.project.columns[columnIndex].cards[cardIndex],
+                    //     ...data
+                    // }
+                // })
 
             })
             .addCase(addLabelToTask.fulfilled, (state, action) => {
