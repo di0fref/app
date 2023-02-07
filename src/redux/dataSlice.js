@@ -53,6 +53,8 @@ export const updateColumn = createAsyncThunk(
 export const addColumn = createAsyncThunk(
     'data/addColumn',
     async (column, thunkAPI) => {
+
+        console.log(column)
         try {
             const response = await axios.post("/projects/column/add", column)
             return response.data
@@ -177,7 +179,7 @@ export const dataSlice = createSlice({
                 console.log(action);
             })
             .addCase(addColumn.fulfilled, (state, action) => {
-                return action.payload
+                state.project.columns.push(action.payload)
             })
             .addCase(reorderTasks.fulfilled, (state, action) => {
                 //

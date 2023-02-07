@@ -70,7 +70,7 @@ export const getCardById = async (req, res) => {
     }
 }
 export const createCard = async (req, res) => {
-    const cards = await db.query("update cards set position = position+1 where columnId = " + req.body.columnId)
+    const cards = await db.query("update cards set position = position+1 where columnId = '" + req.body.columnId + "'")
 
     try {
         const newCard = await Card.create({

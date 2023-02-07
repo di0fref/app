@@ -5,6 +5,7 @@ import Column from "../models/Column.js"
 import {Sequelize} from "sequelize";
 import {Lane} from "react-trello";
 import Label from "../models/Label.js";
+import db from "../config/Database.js"
 
 export const getProjects = async (req, res) => {
     try {
@@ -83,12 +84,24 @@ export const updateColumn = async (req, res) => {
     }
 }
 export const addColumn = async (req, res) => {
-    console.log(req);
+
+    const maxOrder = await Column.findOne({
+        attributes: [[Sequelize.fn('max', Sequelize.col('order')), 'maxOrder']],
+        raw: true
+    })
+
     try {
-        const response = await Column.create(req.body, {
+        const col = await Column.create({
+            ...req.body,
+            order: maxOrder.maxOrder+1
+        })
+
+
+        const newCol = await Column.findByPk(col.id, {
             include: Card
-        });
-        res.status(200).json(response);
+        })
+
+        res.status(200).json(newCol);
     } catch
         (error) {
         console.log(error.message);
