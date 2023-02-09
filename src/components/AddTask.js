@@ -39,11 +39,11 @@ export default function AddTask({title, addNewCard, ...props}) {
     }
     return (
         <div className={'w-full'}>
-            <div className={'font-semibold text-md'}>{title} {props.id}</div>
+            <div className={'font-semibold text-md'}>{title}</div>
             {!editing
                 ? (
                     <div>
-                        <button onClick={e => setEditing(true)} className={'rounded text-left text-sm text-neutral-500 px-1 py-1 hover:bg-neutral-200 w-full'}>+ Add card</button>
+                        <button onClick={e => setEditing(true)} className={'rounded-box text-left text-sm text-neutral-500 px-1 py-1 hover:bg-neutral-200 w-full'}>+ Add card</button>
                     </div>
                 )
                 : (
@@ -54,8 +54,8 @@ export default function AddTask({title, addNewCard, ...props}) {
                             onChange={e => setValue(e.target.value)}
                             onKeyDown={onKeyDown}
                             value={value}
-                            className={'mt-1 border-0 text-md px-2 py-1.5 shadow  w-full resize-none rounded focus:ring-0 focus:border-0 '}
-                            placeholder={"Enter a title for this card..."}></textarea>
+                            className={'mt-1 border-0 text-md px-2 py-1.5 shadow  w-full resize-none rounded-box focus:ring-0 focus:border-0 '}
+                            placeholder={"Enter a title for this card..."}/>
                     </div>
                 )}
         </div>

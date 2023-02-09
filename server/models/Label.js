@@ -1,7 +1,7 @@
 import {Sequelize} from "sequelize";
 import db from "../config/Database.js";
 
-const Project = db.define('labels', {
+const Label = db.define('labels', {
     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -14,4 +14,4 @@ const Project = db.define('labels', {
     freezeTableName: true
 });
 
-export default Project
+export default Label

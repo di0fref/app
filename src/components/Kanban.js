@@ -6,16 +6,18 @@ import {
     addTask,
     getProject,
     reorderTasks,
-    setBoard
+    setBoard,
+    addColumn
 } from "../redux/dataSlice";
 import Card from "./Card";
 import Login from "./Login";
-import Board, {addCard, addColumn, moveCard} from '@di0fref/react-kanban'
-// import Board from "../kanban/src/components/Board"
+import Board, {addCard, moveCard} from '@di0fref/react-kanban'
 import AddTask from "./AddTask";
 import {delay, sortF} from "../helper.js"
 import CardModal from "./CardModal";
 import {store} from "../redux/store";
+import ColumnAdder from "./ColumnAdder";
+
 
 export default function Kanban({project}) {
 
@@ -59,12 +61,21 @@ export default function Kanban({project}) {
         // const updatedBoard = addCard(board, {id: columnId}, card)
         // setBoard(updatedBoard)
     }
-
+    const onNewColumnConfirm = (value) => {
+        dispatch(addColumn({
+            title: value,
+            projectId: project.id
+        }))
+        // addColumn(board, )
+    }
     try {
         if (board.columns && board.columns.length) {
             return (
                 <>
                     <Board
+                        allowAddColumn
+                        onNewColumnConfirm={onNewColumnConfirm}
+                        renderColumnAdder={() => <ColumnAdder onNewColumnConfirm={onNewColumnConfirm}/>}
                         onCardDragEnd={handleCardMove}
                         renderColumnHeader={(props) => (
                             <AddTask {...props} addNewCard={addNewCard}/>
@@ -80,7 +91,7 @@ export default function Kanban({project}) {
 
             )
         } else {
-            return <div></div>
+            return <div/>
         }
     } catch (e) {
         console.log(e);

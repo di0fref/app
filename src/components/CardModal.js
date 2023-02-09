@@ -73,7 +73,7 @@ export default function CardModal({project, ...props}) {
                 <div className="flex min-h-full items-center justify-center p-4">
 
 
-                    <Dialog.Panel className="md:max-w-3xl w-11/12 transform rounded-sm bg-modal dark:bg-gray-800 text-left align-middle shadow-xl transition-all">
+                    <Dialog.Panel className="md:max-w-3xl w-11/12 transform rounded-sm bg-modal __dark:bg-gray-800 text-left align-middle shadow-xl transition-all">
                         <div className={'min-h-[90vh] px-12 py-8'}>
                             <button onClick={closeModal} className={'absolute top-2 right-2'}>
                                 <BsX className={'h-6 w-6'}/>

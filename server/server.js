@@ -5,11 +5,11 @@ import {Server} from "socket.io";
 import CardRoute from "./routes/CardRoute.js";
 import UserRoute from "./routes/UserRoute.js";
 import ProjectRoute from "./routes/ProjectRoute.js";
+import LabelRoute from "./routes/LabelRoute.js"
 import "./models/Associations.js"
 import authenticateJWT from "./auth/token.js";
 import {accessTokenSecret} from "./controllers/UserController.js";
 import {authorize} from '@thream/socketio-jwt'
-
 export const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, {cors: {origin: "*"}});
@@ -38,7 +38,7 @@ io.use(
 app.use(cors());
 app.use(express.json());
 app.use(authenticateJWT)
-app.use([UserRoute, CardRoute, ProjectRoute]);
+app.use([UserRoute, CardRoute, ProjectRoute, LabelRoute]);
 
 // app.listen(8000, () => console.log('Server up and running...'));
 app.get('/', (req, res) => {

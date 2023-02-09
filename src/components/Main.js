@@ -8,6 +8,9 @@ import {signOutFireBase} from "../auth/firebase";
 import {useNavigate, useParams} from "react-router-dom";
 import Kanban from "./Kanban";
 
+// "@di0fref/react-kanban": "file:../react-kanban/dist",
+
+
 export default function Main() {
 
     const dispatch = useDispatch()
@@ -44,19 +47,13 @@ export default function Main() {
     }, [params.cardId, project.columns])
 
     return (
-        <div className={`relative h-screen md:flex`}>
-            <main className={"flex h-full flex-grow _pt-12"}>
 
 
-                {/*<Sidebar/>*/}
-                <div className={'h-screen overflow-y-auto w-full flex'}>
-                    <div className={'flex-grow'}>
-                        <div className={'px-12 w-full _max-w-3xl mx-auto h-full py-10'}>
+                <div className={'h-screen'}>
+                    <div className={''}>
                             <Kanban project={project}/>
                         </div>
-                    </div>
-                </div>
-            </main>
+
         </div>
     )
 }

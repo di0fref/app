@@ -15,6 +15,9 @@ module.exports = {
             sans: ['Inter var', ...defaultTheme.fontFamily.sans],
         },
         extend: {
+            borderRadius:{
+                box: "3px"
+            },
             colors: {
                 "modal-dark": "#ebecef",
                 modal: "#F4F5F7",

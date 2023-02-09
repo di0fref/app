@@ -9,7 +9,7 @@ export default function Card({card, setIsOpen}) {
     return (
         <Link key={card.id} to={"card/" + card.id} className={'group'}>
 
-            <div className={'hover:shadow-md p-2 my-1 rounded bg-white shadow w-64 _min-h-[6rem] hover:bg-neutral-50 relative'}>
+            <div className={'hover:shadow-md p-2 my-1 rounded-box bg-white shadow w-64 _min-h-[6rem] hover:bg-neutral-50 relative'}>
                 {/*<BsPencil className={'w-3 h-3 absolute right-2 top-2 text-transparent group-hover:text-neutral-400'}/>*/}
                 <div className={'pb-1'}>
                     {/*Pos: {card.position}<br/>*/}

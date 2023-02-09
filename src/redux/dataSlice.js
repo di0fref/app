@@ -110,6 +110,20 @@ export const removeLabelFromTask = createAsyncThunk(
     }
 )
 
+export const addLabel = createAsyncThunk(
+    'data/addLabel',
+    async (label, thunkAPI) => {
+        try {
+            const response = await axios.post("/labels", label)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
+
+
 
 const initialState = {
     project: [],
@@ -172,6 +186,12 @@ export const dataSlice = createSlice({
                 }
 
             })
+
+            .addCase(addLabel.fulfilled, (state, action) => {
+                console.log(action.payload)
+                state.project.labels.push(action.payload)
+            })
+
             .addCase(getColumns.fulfilled, (state, action) => {
                 state.columns = action.payload
             })
