@@ -6,13 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3deba2d3-ba67-4f0a-a17b-bc7c9d7c5b8b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/auth/token.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/auth/token.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/ProjectController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/ProjectController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/UserController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/UserController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddLabel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddLabel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/dataSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/dataSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/store.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +67,7 @@
       <workItem from="1675788129226" duration="7584000" />
       <workItem from="1675873258945" duration="21413000" />
       <workItem from="1676130372367" duration="3000" />
+      <workItem from="1676130754422" duration="857000" />
     </task>
     <servers />
   </component>
