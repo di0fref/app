@@ -3,6 +3,7 @@ import {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {addLabel} from "../redux/dataSlice";
 import Label from "./Label";
+import color from "color";
 
 
 export default function AddLabel({close}) {
@@ -12,7 +13,7 @@ export default function AddLabel({close}) {
     const [error, setError] = useState("")
     const [name, setName] = useState("")
     const [displayColorPicker, setDisplayColorPicker] = useState(false)
-    const [color, setColor] = useState("")
+    const [_color_, setColor] = useState("")
     const ref = useRef(null)
     const dispatch = useDispatch()
 
@@ -29,7 +30,7 @@ export default function AddLabel({close}) {
 
         dispatch(addLabel({
             title: name,
-            color: color,
+            color: _color_,
             projectId: project.id
         })).unwrap()
         close()
@@ -42,10 +43,10 @@ export default function AddLabel({close}) {
     }
 
     useEffect(() => {
-        if(name || color){
+        if (name || _color_) {
             setError("")
         }
-    }, [name, color])
+    }, [name, _color_])
 
     return (
         <div className={''}>
@@ -56,7 +57,7 @@ export default function AddLabel({close}) {
                 {/*Label preview */}
                 <Label label={{
                     title: name,
-                    color: color
+                    color: _color_
                 }}/>
 
                 <label htmlFor={"name"} className={'text-sm text-neutral-500 font-semibold mb-4'}>Title</label>
@@ -81,7 +82,11 @@ export default function AddLabel({close}) {
                             "#8FDFEB",
                             "#FCDCEF",
                             "#C1C7D0"
-                        ]} width={"100%"} onChange={onColorChange}/>
+                        ]
+                            .map(col => {
+                                return color(col).saturate(5).hex()
+                            })
+                        } width={"100%"} onChange={onColorChange}/>
                     </div>
                 </div>
 

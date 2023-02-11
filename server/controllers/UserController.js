@@ -7,11 +7,6 @@ export const accessTokenSecret = "kalle"
 export const login = async (req, res) => {
     try {
         const {username, password} = req.body;
-
-        console.log("username", username);
-        console.log("passwrd", password);
-
-        console.log(username);
         const user = await User.findOne({
             where: {
                 email: username
@@ -56,7 +51,6 @@ export const getUserById = async (req, res) => {
 }
 
 export const createUser = async (req, res) => {
-    console.log(req.body);
     try {
         await User.create(req.body);
         res.status(201).json({msg: "User Created"});

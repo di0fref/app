@@ -49,7 +49,6 @@ export default function authenticateJWT(req, res, next) {
                 }
             });
 
-            console.log("Created", created);
             req.user = user;
             next()
         }

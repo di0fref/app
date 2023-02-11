@@ -1,12 +1,13 @@
 import {useEffect} from "react";
 import axios from "axios";
-import {getProjects, setAccessToken, setCurrentCard, setUser, startConnecting} from "../redux/dataSlice";
+import {getProject, getProjects, setAccessToken, setCurrentCard, setUser, startConnecting} from "../redux/dataSlice";
 import Project from "./Project";
 import {useDispatch, useSelector} from "react-redux";
 import Sidebar from "./Sidebar";
 import {signOutFireBase} from "../auth/firebase";
 import {useNavigate, useParams} from "react-router-dom";
 import Kanban from "./Kanban";
+import Index from "./Index";
 
 // "@di0fref/react-kanban": "file:../react-kanban/dist",
 
@@ -37,11 +38,11 @@ export default function Main() {
         if (params.cardId && project.columns) {
             dispatch(setCurrentCard(
                 project.columns
-                .map((col) => col.cards)
-                .flat()
-                .find((card) => card.id === params.cardId)
-        ))}
-
+                    .map((col) => col.cards)
+                    .flat()
+                    .find((card) => card.id === params.cardId)
+            ))
+        }
 
 
     }, [params.cardId, project.columns])
@@ -49,10 +50,10 @@ export default function Main() {
     return (
 
 
-                <div className={'h-screen'}>
-                    <div className={''}>
-                            <Kanban project={project}/>
-                        </div>
+        <div className={'h-screen'}>
+            <div className={''}>
+                {project?.id?<Kanban project={project}/>:<Index/>}
+            </div>
 
         </div>
     )

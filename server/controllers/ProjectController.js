@@ -8,26 +8,10 @@ import Label from "../models/Label.js";
 import db from "../config/Database.js"
 
 export const getProjects = async (req, res) => {
+
+    console.log(req.user)
     try {
-        const response = await Project.findAll({
-            order: [
-                ["title", "asc"]
-            ],
-            include: [
-                {
-                    model: Card,
-                },
-                {
-                    model: User,
-                    where: {
-                        id: req.user.id
-                    },
-                    through: {
-                        attributes: []
-                    }
-                }
-            ]
-        })
+        const response = await Project.findAll()
 
         res.status(200).json(response);
     } catch
@@ -74,7 +58,6 @@ export const getProjectsById = async (req, res) => {
 }
 
 export const updateColumn = async (req, res) => {
-    console.log(req);
     try {
         const response = await Column.update(req.body, {where: {id: req.params.id}});
         res.status(200).json(response);

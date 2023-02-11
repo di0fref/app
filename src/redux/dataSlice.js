@@ -80,7 +80,7 @@ export const reorderTasks = createAsyncThunk(
     'data/reorderTasks',
     async (cards, thunkAPI) => {
         try {
-            const response= await axios.post("/cards/reorder", cards)
+            const response = await axios.post("/cards/reorder", cards)
             return response.data
         } catch (error) {
             throw thunkAPI.rejectWithValue(error.message)
@@ -121,11 +121,20 @@ export const addLabel = createAsyncThunk(
         }
     }
 )
-
-
-
+export const getProjects = createAsyncThunk(
+    'data/getProjects',
+    async (thunkAPI) => {
+        try {
+            const response = await axios.get("/projects")
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
 const initialState = {
+    projects: [],
     project: [],
     user: [],
     accessToken: null,
@@ -165,6 +174,11 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(getProjects.fulfilled, (state, action) => {
+
+
+                // console.log(action.payload)
+            })
             .addCase(getProject.fulfilled, (state, action) => {
                 state.project = action.payload
             })
@@ -212,11 +226,11 @@ export const dataSlice = createSlice({
                 //
                 //
                 //     console.log(columnIndex.title);
-                    //
-                    // state.project.columns[columnIndex].cards[cardIndex] = {
-                    //     ...state.project.columns[columnIndex].cards[cardIndex],
-                    //     ...data
-                    // }
+                //
+                // state.project.columns[columnIndex].cards[cardIndex] = {
+                //     ...state.project.columns[columnIndex].cards[cardIndex],
+                //     ...data
+                // }
                 // })
 
             })

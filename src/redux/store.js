@@ -1,7 +1,8 @@
 import {applyMiddleware, combineReducers, configureStore} from '@reduxjs/toolkit'
-import dataReducer, {getProject} from "./dataSlice"
+import dataReducer, {getProjects} from "./dataSlice"
 import {startConnecting, connectionEstablished} from "./dataSlice";
 import io from "socket.io-client"
+import {matchPath} from 'react-router'
 
 const logger = store => next => action => {
     // console.group(action.type)
@@ -16,6 +17,13 @@ export let socket;
 const jwt = localStorage.getItem("accessToken")
 const socketMiddleware = store => {
 
+    const path = matchPath({
+            path: "/project/:id",
+        },
+        "/project");
+
+    console.log(path)
+
     return next => action => {
         const isConnectionEstablished = socket && store.getState().data.isConnected;
 
@@ -26,7 +34,7 @@ const socketMiddleware = store => {
 
             socket.on('connect', () => {
                 store.dispatch(connectionEstablished());
-                store.dispatch(getProject(1))
+                store.dispatch(getProjects())
             })
             socket.on("new card", (data) => {
                 console.log("new card");
