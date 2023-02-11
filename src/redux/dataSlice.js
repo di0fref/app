@@ -80,7 +80,7 @@ export const reorderTasks = createAsyncThunk(
     'data/reorderTasks',
     async (cards, thunkAPI) => {
         try {
-            const response = await axios.post("/cards/reorder", cards)
+            const response= await axios.post("/cards/reorder", cards)
             return response.data
         } catch (error) {
             throw thunkAPI.rejectWithValue(error.message)
@@ -121,9 +121,10 @@ export const addLabel = createAsyncThunk(
         }
     }
 )
+
 export const getProjects = createAsyncThunk(
     'data/getProjects',
-    async (thunkAPI) => {
+    async (label, thunkAPI) => {
         try {
             const response = await axios.get("/projects")
             return response.data
@@ -133,12 +134,14 @@ export const getProjects = createAsyncThunk(
     }
 )
 
+
 const initialState = {
     projects: [],
     project: [],
     user: [],
     accessToken: null,
     currentCard: null,
+    currentProject: [],
     isEstablishingConnection: false,
     isConnected: false
 }
@@ -165,22 +168,17 @@ export const dataSlice = createSlice({
         setCurrentCard: (state, action) => {
             state.currentCard = action.payload
         },
-        setBoard: (state, action) => {
-            // state.project = {
-            //     ...state.project.columns,
-            //     columns: action.payload
-            // }
+        setCurrentProject: (state, action) => {
+           state.project = action.payload;
         },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(getProjects.fulfilled, (state, action) => {
-
-
-                // console.log(action.payload)
-            })
             .addCase(getProject.fulfilled, (state, action) => {
                 state.project = action.payload
+            })
+            .addCase(getProjects.fulfilled, (state, action) => {
+                state.projects = action.payload
             })
             .addCase(addTask.fulfilled, (state, action) => {
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
@@ -200,12 +198,9 @@ export const dataSlice = createSlice({
                 }
 
             })
-
             .addCase(addLabel.fulfilled, (state, action) => {
-                console.log(action.payload)
                 state.project.labels.push(action.payload)
             })
-
             .addCase(getColumns.fulfilled, (state, action) => {
                 state.columns = action.payload
             })
@@ -226,11 +221,11 @@ export const dataSlice = createSlice({
                 //
                 //
                 //     console.log(columnIndex.title);
-                //
-                // state.project.columns[columnIndex].cards[cardIndex] = {
-                //     ...state.project.columns[columnIndex].cards[cardIndex],
-                //     ...data
-                // }
+                    //
+                    // state.project.columns[columnIndex].cards[cardIndex] = {
+                    //     ...state.project.columns[columnIndex].cards[cardIndex],
+                    //     ...data
+                    // }
                 // })
 
             })
@@ -259,7 +254,7 @@ export const {
     setUser,
     setAccessToken,
     setCurrentCard,
-    setBoard
+    setCurrentProject
 } = dataSlice.actions
 
 export default dataSlice.reducer
