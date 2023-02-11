@@ -53,8 +53,7 @@ export default function Kanban({project}) {
                 title: card.title
             };
         })
-        dispatch(reorderTasks(orderedCards)).then(res => dispatch(getProject(1)))
-        // dispatch(getProject(1))
+        dispatch(reorderTasks(orderedCards)).then(res => dispatch(getProject(project.id)))
     }
 
     const addNewCard = (card, columnId) => {

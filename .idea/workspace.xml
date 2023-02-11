@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3deba2d3-ba67-4f0a-a17b-bc7c9d7c5b8b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/auth/token.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/auth/token.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/ProjectController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/ProjectController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/controllers/UserController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/UserController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddLabel.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddLabel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/Navbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Card.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Card.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Kanban.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Kanban.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/Main.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/dataSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/dataSlice.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/redux/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/store.js" afterDir="false" />

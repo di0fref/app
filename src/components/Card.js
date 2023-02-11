@@ -4,12 +4,12 @@ import {BsPencil} from "react-icons/bs";
 import SmallLabel from "./SmallLabel";
 import DateBadge from "./DateBadge";
 
-export default function Card({card, setIsOpen}) {
+export default function Card({card}) {
 
     return (
         <Link key={card.id} to={"card/" + card.id} className={'group'}>
 
-            <div className={'hover:shadow-md p-2 my-1 rounded-box bg-white shadow w-64 _min-h-[6rem] hover:bg-neutral-50 relative'}>
+            <div className={'hover:shadow-md p-2 my-1.5 rounded-box bg-white shadow w-64 _min-h-[6rem] hover:bg-neutral-50 relative'}>
                 {/*<BsPencil className={'w-3 h-3 absolute right-2 top-2 text-transparent group-hover:text-neutral-400'}/>*/}
                 <div className={'pb-1'}>
                     {/*Pos: {card.position}<br/>*/}
@@ -18,7 +18,7 @@ export default function Card({card, setIsOpen}) {
                     {/*<span className="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">Yellow</span>*/}
 
                     <div className={'flex flex-wrap gap-1'}>
-                        {card.labels&&card.labels.map(label => {
+                        {card.labels && card.labels.map(label => {
                             return <SmallLabel label={label}/>
                         })}
                     </div>
