@@ -20,6 +20,7 @@ module.exports = {
                 box: "3px"
             },
             colors: {
+                "modal-darker": "#e2e4e9",
                 "modal-dark": "#ebecef",
                 modal: "#F4F5F7",
                 base: "#172b4d",

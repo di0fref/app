@@ -1,18 +1,21 @@
 import {Menu} from "@headlessui/react";
 import {useState} from "react";
 import {Popover, Disclosure, Transition} from '@headlessui/react'
-import {BsArrowLeft, BsPencil, BsPlus, BsX} from "react-icons/bs";
+import {BsArrowLeft, BsCheck, BsPencil, BsPlus, BsX} from "react-icons/bs";
 import {useDispatch, useSelector} from "react-redux";
 import {addLabelToTask, removeLabelFromTask} from "../redux/dataSlice"
 import Label from "./Label";
 import AddLabel from "./AddLabel";
 import SmallModal from "./SmallModal";
+import {CardModelButton} from "./CardModal";
+import AddField from "./AddField";
+import {HiChevronRight} from "react-icons/hi";
 
-export default function LabelManager({project__}) {
+export default function FieldManager({project__}) {
 
     const project = useSelector(state => state.data.project)
 
-    const labels = useSelector(state => state.data.project.labels)
+    const fields = useSelector(state => state.data.project.project_fields)
 
 
     const dispatch = useDispatch();
@@ -44,28 +47,30 @@ export default function LabelManager({project__}) {
     }
     return (
         <div>
-            <div className={'text-xs text-neutral-500 font-semibold mb-2 '}>Labels</div>
+            {/*<div className={'text-xs text-neutral-500 font-semibold mb-2'}>Labels</div>*/}
 
             <div className={"mb-6"}>
                 <Popover className="relative_">
 
-                    <div className={'flex flex-wrap gap-1'}>
-                        {currentCard && currentCard.labels && currentCard.labels.map(label => {
-                            return <Label key={label.id} label={label}/>
-                        })}
+                    {/*<div className={'flex flex-wrap gap-1'}>*/}
+                    {/*    {currentCard && currentCard.labels && currentCard.labels.map(label => {*/}
+                    {/*        return <Label label={label}/>*/}
+                    {/*    })}*/}
 
-                        <Popover.Button>
-                            <div className={'w-8 h-8 bg-modal-dark font-bold py-1'}>+</div>
-                        </Popover.Button>
+                    <Popover.Button>
+                        <CardModelButton value={"Custom fields"} icon={<BsCheck/>}/>
+                    </Popover.Button>
 
-                    </div>
+                    {/*</div>*/}
 
-                    <Popover.Panel className="absolute top-4 left-4 z-10 mt-1 w-screen w-80 ">
+                    <Popover.Panel className="absolute top-4 right-4 z-10 mt-1 w-screen w-80 ">
 
                         {({close}) => (
                             <div className="overflow-hidden rounded shadow-lg min-h-[24rem] ring-1 ring-black ring-opacity-5 bg-white">
                                 <div className="relative bg-white p-4 ">
-                                    <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Labels</div>
+                                    <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Custom
+                                        fields
+                                    </div>
 
                                     {/*{({close}) => (*/}
                                     <>
@@ -74,30 +79,24 @@ export default function LabelManager({project__}) {
                                         </button>
                                     </>
                                     {/*)}*/}
+                                    <div className={'mb-8'}>
+                                        {fields && fields.map((field) => (
+                                            <div key={field.id} className={'flex items-center mb-2 w-full '}>
 
-                                    {labels && labels.map((label) => (
-                                        <div key={label.id} className={'flex items-center space-x-4 mb-4'}>
-                                            <div>
-                                                <input className={'mb-1'} checked={currentCard?.labels.find(lab => lab.id === label.id) ? 1 : 0} onChange={e => onCheck(e, label)} type={"checkbox"}/>
-                                            </div>
-                                            <div className={'flex items-center space-x-2'}>
-                                                <div style={{backgroundColor: label.color}} className={`w-60 px-2 py-1 flex items-center space-x-2 rounded`}>
-                                                    <div style={{
-                                                        backgroundColor: label.color
-                                                    }} className={'h-3 w-3 rounded-full brightness-90'}/>
-                                                    <div className={'text-md'}>{label.title}</div>
+                                                <div className={'flex items-center w-full bg-modal hover:cursor-pointer hover:bg-modal-dark'}>
+                                                    <div className={' w-full text-md py-1 px-2'}>{field.title}</div>
+                                                    <div className={'pr-2'}><HiChevronRight/></div>
+                                                    {/*<div><BsPencil className={'text-neutral-500 h-3 w-3'}/></div>*/}
                                                 </div>
-                                                <div><BsPencil className={'text-neutral-500 h-3 w-3'}/></div>
                                             </div>
-                                        </div>
-                                    ))}
-
+                                        ))}
+                                    </div>
 
                                     <Disclosure as={"div"} onClose={onClose}>
                                         {({close}) => (
                                             <>
                                                 <Disclosure.Button onClick={() => setModalOpen(true)} className={'cancel-btn bg-modal hover:bg-modal-dark w-full'}>
-                                                    Create new label
+                                                    Create new field
                                                 </Disclosure.Button>
                                                 <Transition
                                                     className={'absolute top-0 left-0 w-full h-full'}
@@ -111,7 +110,7 @@ export default function LabelManager({project__}) {
                                                         <button onClick={close} className={'absolute h-6 w-6 top-3 left-4'}>
                                                             <BsArrowLeft/>
                                                         </button>
-                                                        <AddLabel close={close}/>
+                                                        <AddField close={close}/>
                                                     </Disclosure.Panel>
                                                 </Transition>
                                             </>

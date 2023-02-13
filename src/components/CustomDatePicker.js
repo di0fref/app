@@ -12,14 +12,7 @@ export default function CustomDatePicker({_date, onDateChange, ...props}) {
     const [date, setDate] = useState(_date)
 
     const DateCustomInput = forwardRef(({value, onClick}, ref) => (
-        // <button onClick={onClick} className={`bg-modal-dark w-full h-9 px-2`}>
-        //     <div className={' flex items-center space-x-2'}>
-        //         <FiClock className={''}/>
-        //         <div className={`text-sm`}>{date ? formatDate(date):"Select"}</div>
-        //     </div>
-        // </button>
-
-        <CardModelButton className={'ml-0.5 md:ml-0'} onClick={onClick} value={value ? formatDate(value):"Select"} icon={<FiClock/>}/>
+        <CardModelButton onClick={onClick} value={value ? formatDate(value):"Select"} icon={<FiClock/>}/>
     ))
 
     useEffect(() => {

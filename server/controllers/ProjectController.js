@@ -6,6 +6,7 @@ import {Sequelize} from "sequelize";
 import {Lane} from "react-trello";
 import Label from "../models/Label.js";
 import db from "../config/Database.js"
+import ProjectField from "../models/ProjectField.js";
 
 export const getProjects = async (req, res) => {
 
@@ -20,10 +21,28 @@ export const getProjects = async (req, res) => {
     }
 }
 
+
+export const addField = async (req, res) => {
+    try {
+        const response = await ProjectField.create(req.body)
+
+        res.status(200).json(response);
+    } catch
+        (error) {
+        console.log(error.message);
+    }
+}
+
 export const getProjectsById = async (req, res) => {
     try {
         const project = await Project.findByPk(req.params.id, {
             include: [
+                {
+                    model: Label
+                },
+                {
+                    model: ProjectField
+                },
                 {
                     model: Column,
                     order: [["order", "asc"]],

@@ -1,7 +1,7 @@
 import {Sequelize} from "sequelize";
 import db from "../config/Database.js";
 
-const Label = db.define('labels', {
+const ProjectField = db.define('project_fields', {
     id: {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
@@ -9,11 +9,10 @@ const Label = db.define('labels', {
         primaryKey: true
     },
     title: Sequelize.STRING,
-    color: Sequelize.STRING
+    type: Sequelize.STRING,
 }, {
     freezeTableName: true,
     timestamps: false
-
 });
 
-export default Label
+export default ProjectField

@@ -12,15 +12,16 @@ import CustomDatePicker from "./CustomDatePicker";
 import {format} from "date-fns";
 import {dbDateFormat} from "../helper";
 import TextareaAutosize from "react-textarea-autosize"
+import FieldManager from "./FieldManager";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
-        <button onClick={onClick} className={`${props.className} bg-modal-dark w-full h-8 px-2`}>
-            <div className={'flex items-center space-x-2'}>
+        <div onClick={onClick} className={`${props.className} w-44 ml-0.5 md:ml-0 hover:cursor-pointer hover:bg-modal-darker bg-modal-dark w-full h-8 px-2`}>
+            <div className={'flex items-center space-x-2 h-8'}>
                 {icon}
                 <div className={`text-sm`}>{value}</div>
             </div>
-        </button>
+        </div>
     )
 }
 
@@ -74,7 +75,7 @@ export default function CardModal({project, ...props}) {
 
 
                     <Dialog.Panel className="md:max-w-3xl w-11/12 transform rounded-sm bg-modal __dark:bg-gray-800 text-left align-middle shadow-xl transition-all">
-                        <div className={'min-h-[90vh] px-12 py-8'}>
+                        <div className={'min-h-[90vh] pl-12 pr-8 py-8'}>
                             <button onClick={closeModal} className={'absolute top-2 right-2'}>
                                 <BsX className={'h-6 w-6'}/>
                             </button>
@@ -128,14 +129,12 @@ export default function CardModal({project, ...props}) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className={'bg-green-600_ w-40'}>
+                                <div className={'bg-green-600_ w-44'}>
                                     <div className={'mb-4'}>
                                         <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Due date</div>
-
                                         <CustomDatePicker onDateChange={onDateChange} _date={currentCard?.due}/>
-
-
                                     </div>
+                                    <FieldManager/>
                                 </div>
                             </div>
                         </div>

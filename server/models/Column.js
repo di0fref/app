@@ -15,7 +15,9 @@ const Column = db.define('columns', {
         defaultValue: 0
     }
 }, {
-    freezeTableName: true
+    freezeTableName: true,
+    timestamps: false
+
 });
 
 

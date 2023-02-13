@@ -51,7 +51,7 @@ export default function AddLabel({close}) {
     return (
         <div className={''}>
             <div className={'p-4'}>
-                <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center'}>Create new label</div>
+                <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Create new label</div>
 
 
                 {/*Label preview */}

@@ -30,6 +30,7 @@ export default function Description({card, edit, setEdit}) {
         return (
             <>
                 <MDEditor
+                    className={"bg-red-300"}
                     hideToolbar={true}
                     preview={"edit"}
                     value={value}
@@ -50,7 +51,7 @@ export default function Description({card, edit, setEdit}) {
         if (card.text) {
             return (
                 <div>
-                    <MDEditor.Markdown placeholder={"Add a detailed description"} className={'min-h-[6rem] !bg-transparent !prose !prose-md'} source={value}/>
+                    <MDEditor.Markdown placeholder={"Add a detailed description"} className={'min-h-[6rem] !bg-transparent !prose !text-md'} source={value}/>
                 </div>
             )
         } else {

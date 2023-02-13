@@ -133,7 +133,17 @@ export const getProjects = createAsyncThunk(
         }
     }
 )
-
+export const addField = createAsyncThunk(
+    'data/addField',
+    async (field, thunkAPI) => {
+        try {
+            const response = await axios.post("/projects/field/add", field)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
 const initialState = {
     projects: [],
@@ -174,6 +184,9 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(addField.fulfilled, (state, action) => {
+                state.project.project_fields.unshift(action.payload)
+            })
             .addCase(getProject.fulfilled, (state, action) => {
                 state.project = action.payload
             })

@@ -134,7 +134,7 @@ const Kanban2 = ({project}) => {
                                                  ref={provided.innerRef}
                                                  {...provided.droppableProps}>
                                                 <AddTask column={column} project={project} addCard={addCard}/>
-                                                <div className={'rounded-box mb-1 px-2.5 pb-2.5 max-h-[calc(100vh-11rem)] overflow-y-auto overflow-x-hidden'}>
+                                                <div className={'rounded-box mb-1 px-2.5 pb-2.5 max-h-[calc(100vh-13rem)] overflow-y-auto overflow-x-hidden'}>
                                                     {column.cards.map((card, index) => {
                                                         return <Card key={card.id} card={card} index={index}/>
                                                     })}
