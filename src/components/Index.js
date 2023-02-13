@@ -26,9 +26,8 @@ export default function Index() {
         <div className={'flex h-screen bg-modal justify-center'}>
             <div className={'grid grid-cols-4 gap-2 m-auto '}>
                 {projects?.map(project => {
-                    return <ProjectBox project={project}/>
+                    return <ProjectBox key={project.id} project={project}/>
                 })}
-                <div></div>
             </div>
         </div>
 

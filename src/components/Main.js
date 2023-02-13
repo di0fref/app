@@ -14,12 +14,10 @@ import {useDispatch, useSelector} from "react-redux";
 import Sidebar from "./Sidebar";
 import {signOutFireBase} from "../auth/firebase";
 import {useNavigate, useParams} from "react-router-dom";
-import Kanban from "./Kanban";
+import Kanban2 from "./Kanban2";
 import Index from "./Index";
 import {store} from "../redux/store";
-
-// "@di0fref/react-kanban": "file:../react-kanban/dist",
-
+import Navbar from "./Navbar";
 
 export default function Main() {
 
@@ -39,13 +37,10 @@ export default function Main() {
             dispatch(setAccessToken(localStorage.getItem("accessToken")))
             dispatch(setUser(JSON.parse(localStorage.getItem("user"))))
             dispatch(startConnecting())
-            console.log(params);
         }
     }, [])
-
-
     useEffect(() => {
-        params.projectId && dispatch(getProject(params.projectId))
+        params.projectId ? dispatch(getProject(params.projectId)):dispatch(setCurrentProject({}))
     }, [params.projectId])
 
     useEffect(() => {
@@ -61,11 +56,12 @@ export default function Main() {
 
     return (
 
-
-        <div className={'h-screen'}>
-            <div className={'p-8'}>
-                {params.projectId ? <Kanban project={project}/> : <Index/>}
+        <>
+            <Navbar/>
+            <div className={'h-full'}>
+                {project?.id ? <Kanban2 project={project}/> : <Index/>}
             </div>
-        </div>
+        </>
+
     )
 }

@@ -1,57 +1,96 @@
-<nav class="
-relative
-w-full
-flex flex-wrap
-items-center
-justify-between
-py-4
-bg-gray-100
-text-gray-500
-hover:text-gray-700
-focus:text-gray-700
-shadow-lg
-navbar navbar-expand-lg navbar-light
-">
-    <div class="container-fluid w-full flex flex-wrap items-center justify-between px-6">
-        <button class="
-    navbar-toggler
-    text-gray-500
-    border-0
-    hover:shadow-none hover:no-underline
-    py-2
-    px-2.5
-    bg-transparent
-    focus:outline-none focus:ring-0 focus:shadow-none focus:no-underline
-  " type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars"
-                 class="w-6" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path fill="currentColor"
-                      d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z">
-                </path>
-            </svg>
-        </button>
-        <div class="collapse navbar-collapse flex-grow items-center" id="navbarSupportedContent">
-            <a class="text-xl text-black" href="#">Navbar</a>
-            <!-- Left links -->
-            <ul class="navbar-nav flex flex-col pl-0 list-style-none mr-auto">
-                <li class="nav-item px-2">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item pr-2">
-                    <a class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" href="#">Features</a>
-                </li>
-                <li class="nav-item pr-2">
-                    <a class="nav-link text-gray-500 hover:text-gray-700 focus:text-gray-700 p-0" href="#">Pricing</a>
-                </li>
-                <li class="nav-item pr-2">
-                    <a class="nav-link disabled text-gray-300 p-0"
-                    >Disabled</a
-                    >
-                </li>
-            </ul>
-            <!-- Left links -->
-        </div>
-        <!-- Collapsible wrapper -->
-    </div>
-</nav>
+import {Fragment, useEffect} from 'react'
+import {Disclosure, Menu, Transition} from '@headlessui/react'
+import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
+import {getProject} from "../redux/dataSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {Link, useNavigate, useParams} from "react-router-dom";
+import {BsChevronDown} from "react-icons/bs";
+import {ChevronDownIcon} from '@heroicons/react/20/solid'
+import {HiPlus} from "react-icons/hi";
+
+const navigation = [
+    {name: 'Dashboard', href: '/', current: true},
+//     {
+//     name: 'Team',
+//     href: '#',
+//     current: false
+// },
+    // {name: 'Projects', href: '#', current: false},
+]
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ')
+}
+
+export default function Navbar() {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const params = useParams()
+    const projects = useSelector(state => state.data.projects)
+
+    useEffect(() => {
+        params.projectId && dispatch(getProject(params.projectId))
+    }, [params.projectId])
+
+    return (
+        <Disclosure as="nav" className="bg-[#2C659B] border-b border-b-[#4E7EAC]">
+        {({open}) => (<>
+            <div className="mx-auto px-2">
+                <div className="relative flex h-12 items-center justify-between">
+
+                    <div className="flex flex-1 items-center justify-start">
+                        <div className="">
+                            <div className="flex space-x-4">
+                                {navigation.map((item) => (
+                                    <Link
+                                        key={item.name}
+                                        to={item.href}
+                                        className={'text-white hover:bg-[#537DA4] hover:text-white px-3 py-2 rounded-md text-sm font-medium'}>
+                                        {item.name}
+                                    </Link>))}
+
+                                <div className={'relative'}>
+                                    <Menu>
+                                        <Menu.Button className={'text-white hover:bg-[#537DA4] hover:text-white px-3 py-2 rounded-md text-sm font-medium'}>
+                                            <div className={'flex items-center space-x-2'}>
+                                                <div>Projects</div>
+                                                <ChevronDownIcon
+                                                    className="ml-2 -mr-1 h-5 w-5 "
+                                                    aria-hidden="true"/>
+                                            </div>
+                                        </Menu.Button>
+                                        <Menu.Items static={false} className="absolute left-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-box bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                            <div className="px-1 py-1 ">
+
+                                                {projects.map(project => {
+                                                    return (
+                                                        <Menu.Item as={"div"} key={project.id}>
+                                                            {({close}) => (
+
+                                                                <Link to={"/project/" + project.id} onClick={close} className={'flex items-center space-x-2 mb-2 hover:bg-modal-dark  w-full py-1 px-1'}>
+                                                                    <div className={'w-10 h-10 font-bold text-lg bg-red-300 rounded-box flex items-center justify-center'}>{project.title.charAt(0)}</div>
+                                                                    <div className={'font-bold text-md'}>{project.title}</div>
+                                                                </Link>
+                                                            )}
+
+                                                        </Menu.Item>
+                                                    )
+                                                })}
+                                            </div>
+                                        </Menu.Items>
+                                    </Menu>
+                                </div>
+
+                                <button className={'text-white font-bold text-lg rounded-box flex h-8 w-8 items-center justify-center bg-[#537DA4]'}><HiPlus/></button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </>)}
+    </Disclosure>)
+}

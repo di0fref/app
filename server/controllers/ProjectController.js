@@ -25,31 +25,26 @@ export const getProjectsById = async (req, res) => {
         const project = await Project.findByPk(req.params.id, {
             include: [
                 {
-                    model: Label
-                },
-                {
                     model: Column,
                     order: [["order", "asc"]],
-                    separate: true,
-                    include: {
-                        model: Card,
-                        order: [["position", "asc"]],
-                        include: [
-                            {
-                                model: Column,
-                                attributes: ["title"],
-                            },
-                            {
-                                model: Label,
-                                attributes: ["title", "id", "color"],
-                            }
-                        ],
-                        separate: true
-                    }
-                }]
+                    include: [
+                        {
+                            model: Card,
+                            order: [["position", "asc"]],
+                            include: [
+                                {
+                                    model: Label,
+                                    attributes: ["title", "id", "color"],
+                                }, {
+                                    model: Column,
+                                    attributes: ["title"],
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
         })
-
-
         res.status(200).json(project);
     } catch
         (error) {
@@ -76,7 +71,7 @@ export const addColumn = async (req, res) => {
     try {
         const col = await Column.create({
             ...req.body,
-            order: maxOrder.maxOrder+1
+            order: maxOrder.maxOrder + 1
         })
 
 

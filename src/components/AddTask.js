@@ -2,7 +2,7 @@ import {useRef, useState, useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {addTask} from "../redux/dataSlice";
 
-export default function AddTask({title, addNewCard, ...props}) {
+export default function AddTask({column, project, addCard}) {
 
     const [value, setValue] = useState("")
     const dispatch = useDispatch()
@@ -11,14 +11,13 @@ export default function AddTask({title, addNewCard, ...props}) {
 
     const submit = async () => {
 
-        const card = await dispatch(addTask({
-            projectId: props.projectId,
-            columnId: props.id,
+        const card = dispatch(addTask({
+            projectId: project.id,
+            columnId: column.id,
             title: value
-        }))
-
-        addNewCard(card.payload, props.id)
-
+        })).unwrap().then(response => {
+            addCard(response)
+        })
     }
     useEffect(() => {
         if (editing) {
@@ -38,12 +37,14 @@ export default function AddTask({title, addNewCard, ...props}) {
         }
     }
     return (
-        <div className={'w-full'}>
-            <div className={'font-semibold text-md'}>{title}</div>
+        <div className={'w-full p-2'}>
+            <div className={'font-semibold text-md'}>{column.title}</div>
             {!editing
                 ? (
                     <div>
-                        <button onClick={e => setEditing(true)} className={'rounded-box text-left text-sm text-neutral-500 px-1 py-1 hover:bg-neutral-200 w-full'}>+ Add card</button>
+                        <button onClick={e => setEditing(true)} className={'rounded-box text-left text-sm text-neutral-500 px-1 py-1 hover:bg-neutral-200 w-full'}>+
+                            Add card
+                        </button>
                     </div>
                 )
                 : (

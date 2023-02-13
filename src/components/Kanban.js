@@ -17,6 +17,7 @@ import {delay, sortF} from "../helper.js"
 import CardModal from "./CardModal";
 import {store} from "../redux/store";
 import ColumnAdder from "./ColumnAdder";
+import Card2 from "./Card2";
 
 
 export default function Kanban({project}) {
@@ -70,7 +71,7 @@ export default function Kanban({project}) {
     try {
         if (board.columns && board.columns.length) {
             return (
-                <>
+                <div className={'p-3'}>
                     <Board
                         allowAddColumn
                         onNewColumnConfirm={onNewColumnConfirm}
@@ -81,12 +82,12 @@ export default function Kanban({project}) {
                         )}
                         allowAddCard={{on: 'top'}}
                         renderCard={(card, index) => {
-                            return <Card key={card.id} card={card}/>
+                            return <Card2 key={card.id} card={card}/>
                         }}>
                         {board}
                     </Board>
                     <CardModal project={project}/>
-                </>
+                </div>
 
             )
         } else {

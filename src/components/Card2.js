@@ -5,17 +5,11 @@ import SmallLabel from "./SmallLabel";
 import DateBadge from "./DateBadge";
 import {Draggable} from 'react-beautiful-dnd';
 
-export default function Card({card, index}) {
+export default function Card2({card, index}) {
 
     // console.log(card.id)
 
     return (
-        <Draggable key={card.id} draggableId={card.id} index={index}>
-            {(provided) => (
-                <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}>
                     <Link  to={"card/" + card.id} className={'group'}>
 
                         <div className={'mx-1_ hover:shadow-md p-2 mt-2 rounded-box bg-white shadow w-64_ _min-h-[6rem] hover:bg-neutral-50 relative'}>
@@ -39,8 +33,6 @@ export default function Card({card, index}) {
                                 <div className={'text-xs'}><DateBadge date={card.due}/></div>
                             </div>
                         </div>
-                    </Link></div>
-            )}
-        </Draggable>
+                    </Link>
     )
 }

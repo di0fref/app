@@ -12,7 +12,8 @@ module.exports = {
     },
     theme: {
         fontFamily: {
-            sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+            // sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+            // sans :"-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif"
         },
         extend: {
             borderRadius:{

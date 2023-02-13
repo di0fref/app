@@ -1,7 +1,8 @@
 import {useEffect, useRef, useState} from "react";
 import {useDispatch} from "react-redux";
+import {addColumn} from "../redux/dataSlice";
 
-export default function ColumnAdder({onNewColumnConfirm}) {
+export default function ColumnAdder({project}) {
     const [value, setValue] = useState("")
     const dispatch = useDispatch()
     const [editing, setEditing] = useState(false)
@@ -21,12 +22,16 @@ export default function ColumnAdder({onNewColumnConfirm}) {
             e.preventDefault()
             setValue("")
             setEditing(false)
-            onNewColumnConfirm(value)
+
+            dispatch(addColumn({
+                projectId: project.id,
+                title: e.target.value
+            }))
         }
     }
 
     return (
-        <div className={'ml-1 mt-1 rounded-box'}>
+        <div className={' rounded-box'}>
             {!editing
                 ? (
 
