@@ -7,10 +7,9 @@ import {Lane} from "react-trello";
 import Label from "../models/Label.js";
 import db from "../config/Database.js"
 import ProjectField from "../models/ProjectField.js";
+import CardField from "../models/CardField.js";
 
 export const getProjects = async (req, res) => {
-
-    console.log(req.user)
     try {
         const response = await Project.findAll()
 
@@ -24,9 +23,34 @@ export const getProjects = async (req, res) => {
 
 export const addField = async (req, res) => {
     try {
-        const response = await ProjectField.create(req.body)
+        const projectField = await ProjectField.create(req.body)
 
-        res.status(200).json(response);
+console.log(response.id);
+        /* All cards need to have this field */
+        const cards = await Card.findAll(
+            {
+                where: {
+                    projectId: req.body.projectId
+                }
+            });
+
+
+        Promise.all(
+            Object.values(cards).map(card => {
+
+                console.log(card.id);
+                CardField.create({
+                    cardId: card.id,
+                    name: req.body.title,
+                    value: null,
+                    fieldId: response.id
+                })
+            })
+        ).then(res2 => {
+            res.status(200).json(response);
+        })
+
+
     } catch
         (error) {
         console.log(error.message);

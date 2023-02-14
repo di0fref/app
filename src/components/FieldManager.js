@@ -63,7 +63,7 @@ export default function FieldManager({project__}) {
 
                     {/*</div>*/}
 
-                    <Popover.Panel className="absolute top-4 right-4 z-10 mt-1 w-screen w-80 ">
+                    <Popover.Panel className="absolute top-4 right-4 z-10 mt-1 w-80 ">
 
                         {({close}) => (
                             <div className="overflow-hidden rounded shadow-lg min-h-[24rem] ring-1 ring-black ring-opacity-5 bg-white">
