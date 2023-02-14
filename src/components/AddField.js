@@ -27,7 +27,6 @@ export default function AddField({close}) {
             type: selected.toLowerCase()
         }
 
-
         dispatch(addField(data)).unwrap()
         // if (name === "") {
         //     setError("Please add a title")

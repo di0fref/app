@@ -4,6 +4,7 @@ import Project from "./Project.js";
 import Column from "./Column.js";
 import Label from "./Label.js";
 import ProjectField from "./ProjectField.js";
+import CardField from "./CardField.js";
 
 Card.belongsTo(User);
 Card.belongsTo(Project)
@@ -27,3 +28,7 @@ Card.belongsToMany(Label, {through: 'CardLabels'})
 
 ProjectField.belongsTo(Project)
 Project.hasMany(ProjectField)
+
+CardField.belongsTo(ProjectField)
+CardField.belongsTo(Card)
+Card.hasMany(CardField)

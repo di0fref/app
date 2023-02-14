@@ -13,6 +13,7 @@ import {format} from "date-fns";
 import {dbDateFormat} from "../helper";
 import TextareaAutosize from "react-textarea-autosize"
 import FieldManager from "./FieldManager";
+import CardFields from "./CardFields";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -104,9 +105,22 @@ export default function CardModal({project, ...props}) {
                         
                             `} value={title}/>
                                     </div>
-                                    <div className={'text-sm pl-1 mb-4 text-neutral-500'}>In list {currentCard?.column.title}</div>
+                                    <div className={'text-sm pl-1 mb-4 text-neutral-500'}>In
+                                        list {currentCard?.column.title}
+                                    </div>
+
                                     <div className={'pl-1'}>
                                         <LabelManager card={currentCard} project={project}/>
+                                    </div>
+
+                                    <div className={'flex items-center pl-1'}>
+                                        <div className={'absolute left-6'}><BsTextLeft className={'h-5 w-5'}/></div>
+                                        <div className={'flex items-center space-x-2'}>
+                                            <div className={'font-semibold text-base'}>Custom fields</div>
+                                        </div>
+                                    </div>
+                                    <div className={"my-4 pl-1"}>
+                                    <CardFields/>
                                     </div>
 
                                     <div>
@@ -131,7 +145,9 @@ export default function CardModal({project, ...props}) {
                                 </div>
                                 <div className={'bg-green-600_ w-44'}>
                                     <div className={'mb-4'}>
-                                        <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Due date</div>
+                                        <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Due
+                                            date
+                                        </div>
                                         <CustomDatePicker onDateChange={onDateChange} _date={currentCard?.due}/>
                                     </div>
                                     <FieldManager/>

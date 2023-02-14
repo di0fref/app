@@ -25,7 +25,8 @@ export const addField = async (req, res) => {
     try {
         const projectField = await ProjectField.create(req.body)
 
-console.log(response.id);
+        console.log(projectField.id);
+
         /* All cards need to have this field */
         const cards = await Card.findAll(
             {
@@ -33,23 +34,20 @@ console.log(response.id);
                     projectId: req.body.projectId
                 }
             });
-
-
         Promise.all(
             Object.values(cards).map(card => {
 
-                console.log(card.id);
+                console.log(card.title)
                 CardField.create({
                     cardId: card.id,
                     name: req.body.title,
                     value: null,
-                    fieldId: response.id
+                    projectFieldId: projectField.id
                 })
             })
         ).then(res2 => {
-            res.status(200).json(response);
+            res.status(200).json(projectField);
         })
-
 
     } catch
         (error) {
@@ -81,6 +79,9 @@ export const getProjectsById = async (req, res) => {
                                 }, {
                                     model: Column,
                                     attributes: ["title"],
+                                },
+                                {
+                                    model: CardField,
                                 }
                             ]
                         }

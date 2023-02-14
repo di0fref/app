@@ -80,7 +80,7 @@ export const reorderTasks = createAsyncThunk(
     'data/reorderTasks',
     async (cards, thunkAPI) => {
         try {
-            const response= await axios.post("/cards/reorder", cards)
+            const response = await axios.post("/cards/reorder", cards)
             return response.data
         } catch (error) {
             throw thunkAPI.rejectWithValue(error.message)
@@ -145,6 +145,19 @@ export const addField = createAsyncThunk(
     }
 )
 
+export const updateField = createAsyncThunk(
+    'data/updateField',
+    async (field, thunkAPI) => {
+        try {
+            const response = await axios.put("/cards/field/update", field)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
+
 const initialState = {
     projects: [],
     project: [],
@@ -179,11 +192,24 @@ export const dataSlice = createSlice({
             state.currentCard = action.payload
         },
         setCurrentProject: (state, action) => {
-           state.project = action.payload;
+            state.project = action.payload;
         },
     },
     extraReducers: (builder) => {
         builder
+
+            .addCase(updateField.fulfilled, (state, action) => {
+
+                /* Find the card */
+                const columnIndex = state.project.columns.findIndex(column => column.id === action.payload.card.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.card.id)
+                const fieldIndex = state.project.columns[columnIndex].cards[cardIndex].card_fields.findIndex(field => field.id === action.payload.id)
+
+                state.project.columns[columnIndex].cards[cardIndex].card_fields[fieldIndex] = {
+                    ...state.project.columns[columnIndex].cards[cardIndex].card_fields[fieldIndex],
+                    value: action.payload.value
+                }
+            })
             .addCase(addField.fulfilled, (state, action) => {
                 state.project.project_fields.unshift(action.payload)
             })
@@ -194,6 +220,9 @@ export const dataSlice = createSlice({
                 state.projects = action.payload
             })
             .addCase(addTask.fulfilled, (state, action) => {
+
+                console.log(action.payload)
+
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
 
@@ -234,11 +263,11 @@ export const dataSlice = createSlice({
                 //
                 //
                 //     console.log(columnIndex.title);
-                    //
-                    // state.project.columns[columnIndex].cards[cardIndex] = {
-                    //     ...state.project.columns[columnIndex].cards[cardIndex],
-                    //     ...data
-                    // }
+                //
+                // state.project.columns[columnIndex].cards[cardIndex] = {
+                //     ...state.project.columns[columnIndex].cards[cardIndex],
+                //     ...data
+                // }
                 // })
 
             })

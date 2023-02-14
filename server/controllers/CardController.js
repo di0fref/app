@@ -5,6 +5,9 @@ import Label from "../models/Label.js";
 import {Sequelize} from "sequelize";
 import db from "../config/Database.js"
 import {response} from "express";
+import Field from "../models/Field.js";
+import CardField from "../models/CardField.js";
+import ProjectField from "../models/ProjectField.js";
 
 export const getCards = async (req, res) => {
     try {
@@ -44,6 +47,31 @@ export const reorderCards = async (req, res) => {
     }
 }
 
+export const updateField = async (req, res) => {
+    try {
+        const cardField = await CardField.update(req.body, {
+            where: {
+                id: req.body.id
+            }
+        })
+
+        res.status(200).json(await CardField.findOne({
+            where: {
+                id: req.body.id
+            },
+            include: [
+                {
+                    model: Card,
+                    attributes: ["id", "columnId"]
+                }
+            ]
+        }))
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 export const updateCard = async (req, res) => {
     try {
         const response = await Card.update(req.body, {
@@ -75,27 +103,50 @@ export const createCard = async (req, res) => {
     try {
         const newCard = await Card.create({
             ...req.body,
-            position: 0
+            position: 0,
         });
 
+        /* Create the fields */
 
-        const card = await Card.findByPk(newCard.id, {
-            include: [
-                {
-                    model: Column,
-                    attributes: ["title"],
-                },
-                {
-                    model: Label,
-                    attributes: ["title", "id", "color"],
-                }
-            ],
-        });
-        io.emit("new card", {
-            card
+        const projectFields = await ProjectField.findAll({
+            where: {
+                projectId: newCard.projectId
+            }
         })
 
-        res.status(201).json(card);
+
+        Promise.all(
+            Object.values(projectFields).map(projectField => {
+                CardField.create({
+                    cardId: newCard.id,
+                    name: projectField.title,
+                    projectFieldId: projectField.id
+                })
+            })
+        ).then(r => {
+            Card.findByPk(newCard.id, {
+                include: [
+                    {
+                        model: Column,
+                        attributes: ["title"],
+                    },
+                    {
+                        model: Label,
+                        attributes: ["title", "id", "color"],
+                    },
+                    {
+                        model: CardField
+                    }
+                ],
+            }).then(card => {
+                io.emit("new card", {
+                    card
+                })
+                res.status(201).json(card);
+            })
+
+        })
+
     } catch (error) {
         console.log(error.message);
     }
