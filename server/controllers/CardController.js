@@ -98,7 +98,8 @@ export const getCardById = async (req, res) => {
     }
 }
 export const createCard = async (req, res) => {
-    const cards = await db.query("update cards set position = position+1 where columnId = '" + req.body.columnId + "'")
+
+    const cards = await db.query("update cards set position = position + 1 where columnId = '" + req.body.columnId + "'")
 
     try {
         const newCard = await Card.create({
@@ -107,45 +108,67 @@ export const createCard = async (req, res) => {
         });
 
         /* Create the fields */
-
         const projectFields = await ProjectField.findAll({
             where: {
-                projectId: newCard.projectId
+                projectId: req.body.projectId
             }
         })
 
+        console.log("starting loop")
 
-        Promise.all(
-            Object.values(projectFields).map(projectField => {
-                CardField.create({
+        await Promise.all(
+            Object.values(projectFields).map(async projectField => {
+               await CardField.create({
                     cardId: newCard.id,
                     name: projectField.title,
                     projectFieldId: projectField.id
                 })
             })
-        ).then(r => {
+        ).then(result => {
+
             Card.findByPk(newCard.id, {
-                include: [
-                    {
-                        model: Column,
-                        attributes: ["title"],
-                    },
-                    {
-                        model: Label,
-                        attributes: ["title", "id", "color"],
-                    },
-                    {
-                        model: CardField
-                    }
-                ],
-            }).then(card => {
-                io.emit("new card", {
-                    card
-                })
+                 include: [
+                     {
+                         model: Column,
+                         attributes: ["title"],
+                     },
+                     {
+                         model: Label,
+                         attributes: ["title", "id", "color"],
+                     },
+                     {
+                         model: CardField
+                     }
+                 ],
+             }).then(card => {
                 res.status(201).json(card);
             })
 
         })
+
+        //  console.log("loop done")
+        //
+        //  console.log("fetching model")
+        // const card = await Card.findByPk(newCard.id, {
+        //      include: [
+        //          {
+        //              model: Column,
+        //              attributes: ["title"],
+        //          },
+        //          {
+        //              model: Label,
+        //              attributes: ["title", "id", "color"],
+        //          },
+        //          {
+        //              model: CardField
+        //          }
+        //      ],
+        //  })
+        //  io.emit("new card", {
+        //      card
+        //  })
+        //  console.log("returning model")
+        //  res.status(201).json(card);
 
     } catch (error) {
         console.log(error.message);
