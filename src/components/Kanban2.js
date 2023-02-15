@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {DragDropContext, Droppable} from 'react-beautiful-dnd';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd';
 import {store} from "../redux/store";
 import AddTask from "./AddTask";
 import Card from "./Card";
@@ -21,86 +21,86 @@ const Kanban2 = ({project}) => {
     let cols = []
 
     const onDragEnd = (result, columns) => {
-        if (!result.destination) return;
-        const {source, destination} = result;
-
-        if (source.droppableId !== destination.droppableId) {
-
-            const sourceColumn = columns.find(col => source.droppableId === col.id)
-            const destColumn = columns.find(col => destination.droppableId === col.id)
-
-            const sourceColumnIndex = columns.findIndex(col => source.droppableId === col.id)
-            const destColumnIndex = columns.findIndex(col => destination.droppableId === col.id)
-
-            const sourceItems = [...sourceColumn.cards];
-            const destItems = [...destColumn.cards];
-            const [removed] = sourceItems.splice(source.index, 1);
-            destItems.splice(destination.index, 0, removed);
-
-
-            cols = Object.values([...columns])
-
-            cols[sourceColumnIndex] = {
-                ...cols[sourceColumnIndex],
-                cards: sourceItems
-            }
-
-            cols[destColumnIndex] = {
-                ...cols[destColumnIndex],
-                cards: destItems
-            }
-
-            setBoard({columns: cols})
-
-            const sourceCards = cols[sourceColumnIndex].cards
-            const destCards = cols[destColumnIndex].cards
-
-            const sCards = sourceCards.map((card, index) => {
-                return {
-                    id: card.id,
-                    columnId: source.droppableId,
-                    position: index
-                }
-            })
-
-            const dCards = destCards.map((card, index) => {
-                return {
-                    id: card.id,
-                    columnId: destination.droppableId,
-                    position: index
-
-                }
-            })
-            dispatch(reorderTasks(sCards)).unwrap().then(r => {
-                dispatch(reorderTasks(dCards)).unwrap()
-            })
-
-
-        } else {
-            const column = columns.find(col => source.droppableId === col.id)
-            const columnIndex = columns.findIndex(col => source.droppableId === col.id)
-
-            const copiedItems = [...column.cards];
-            const [removed] = copiedItems.splice(source.index, 1);
-            copiedItems.splice(destination.index, 0, removed);
-
-            cols = Object.values([...columns])
-
-            cols[columnIndex] = {
-                ...cols[columnIndex],
-                cards: copiedItems
-            }
-            setBoard({columns: cols})
-
-            const cards = cols[columnIndex].cards
-            const orderedCards = cards.map((card, index) => {
-                return {
-                    id: card.id,
-                    position: index,
-                };
-            })
-            dispatch(reorderTasks(orderedCards)).unwrap()
-        }
+        // if (!result.destination) return;
+        // const {source, destination} = result;
+        //
+        // if (source.droppableId !== destination.droppableId) {
+        //
+        //     const sourceColumn = columns.find(col => source.droppableId === col.id)
+        //     const destColumn = columns.find(col => destination.droppableId === col.id)
+        //
+        //     const sourceColumnIndex = columns.findIndex(col => source.droppableId === col.id)
+        //     const destColumnIndex = columns.findIndex(col => destination.droppableId === col.id)
+        //
+        //     const sourceItems = [...sourceColumn.cards];
+        //     const destItems = [...destColumn.cards];
+        //     const [removed] = sourceItems.splice(source.index, 1);
+        //     destItems.splice(destination.index, 0, removed);
+        //
+        //
+        //     cols = Object.values([...columns])
+        //
+        //     cols[sourceColumnIndex] = {
+        //         ...cols[sourceColumnIndex],
+        //         cards: sourceItems
+        //     }
+        //
+        //     cols[destColumnIndex] = {
+        //         ...cols[destColumnIndex],
+        //         cards: destItems
+        //     }
+        //
+        //     setBoard({columns: cols})
+        //
+        //     const sourceCards = cols[sourceColumnIndex].cards
+        //     const destCards = cols[destColumnIndex].cards
+        //
+        //     const sCards = sourceCards.map((card, index) => {
+        //         return {
+        //             id: card.id,
+        //             columnId: source.droppableId,
+        //             position: index
+        //         }
+        //     })
+        //
+        //     const dCards = destCards.map((card, index) => {
+        //         return {
+        //             id: card.id,
+        //             columnId: destination.droppableId,
+        //             position: index
+        //
+        //         }
+        //     })
+        //     dispatch(reorderTasks(sCards)).unwrap().then(r => {
+        //         dispatch(reorderTasks(dCards)).unwrap()
+        //     })
+        //
+        //
+        // } else {
+        //     const column = columns.find(col => source.droppableId === col.id)
+        //     const columnIndex = columns.findIndex(col => source.droppableId === col.id)
+        //
+        //     const copiedItems = [...column.cards];
+        //     const [removed] = copiedItems.splice(source.index, 1);
+        //     copiedItems.splice(destination.index, 0, removed);
+        //
+        //     cols = Object.values([...columns])
+        //
+        //     cols[columnIndex] = {
+        //         ...cols[columnIndex],
+        //         cards: copiedItems
+        //     }
+        //     setBoard({columns: cols})
+        //
+        //     const cards = cols[columnIndex].cards
+        //     const orderedCards = cards.map((card, index) => {
+        //         return {
+        //             id: card.id,
+        //             position: index,
+        //         };
+        //     })
+        //     dispatch(reorderTasks(orderedCards)).unwrap()
+        // }
     };
 
     const addCard = (card) => {
@@ -116,6 +116,16 @@ const Kanban2 = ({project}) => {
         dispatch(reorderTasks(orderedCards)).unwrap()
     }
 
+    const Column = () => {
+        return (
+            <Draggable draggableId={"Title"} index={1}>
+                {(provided, snapshot) => (
+                    <div>KAlle</div>
+                )}
+            </Draggable>
+        )
+    }
+
     if (board.columns && board.columns.length) {
 
         return (
@@ -123,13 +133,13 @@ const Kanban2 = ({project}) => {
                 <div className={'text-white font-bold text-lg mb-2 px-4 pt-2'}>{project.title}</div>
                 <div className={'overflow-x-auto h-[calc(100vh-6rem)] px-4'}>
                     <DragDropContext onDragEnd={(result) => onDragEnd(result, board.columns)}>
-                        {/*<div className={'overflow-auto h-full'}>*/}
                         <div className={'grid grid-flow-col col-start-1 gap-x-4 auto-cols-[292px] items-start rounded-box'}>
+
 
                             {board.columns.map(column => {
                                 return (
                                     <Droppable key={column.title} droppableId={column.id}>
-                                        {(provided, snapshot) => (
+                                        {(provided) => (
                                             <div className={'bg-modal rounded-box'}
                                                  ref={provided.innerRef}
                                                  {...provided.droppableProps}>
@@ -147,17 +157,14 @@ const Kanban2 = ({project}) => {
                                 );
                             })}
 
-
                             <ColumnAdder projext={project}/>
                         </div>
-                        {/*</div>*/}
                     </DragDropContext>
                     <CardModal project={project}/>
                 </div>
             </div>
         )
-    }
-    else {
+    } else {
         return (
             <div>
                 <div className={'text-white font-bold text-lg mb-2 px-4 pt-2'}>{project.title}</div>

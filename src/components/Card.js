@@ -13,6 +13,7 @@ export default function Card({card, index}) {
         <Draggable key={card.id} draggableId={card.id} index={index}>
             {(provided) => (
                 <div
+                    type={"card"}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}>
@@ -39,7 +40,8 @@ export default function Card({card, index}) {
                                 <div className={'text-xs'}><DateBadge date={card.due}/></div>
                             </div>
                         </div>
-                    </Link></div>
+                    </Link>
+                </div>
             )}
         </Draggable>
     )

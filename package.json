@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@di0fref/react-kanban": "^2.1.6",
+    "@lourenci/react-kanban": "latest",
     "@headlessui/react": "^1.7.8",
     "@heroicons/react": "^2.0.15",
     "@reduxjs/toolkit": "^1.9.1",

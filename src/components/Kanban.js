@@ -11,7 +11,7 @@ import {
 } from "../redux/dataSlice";
 import Card from "./Card";
 import Login from "./Login";
-import Board, {addCard, moveCard} from '@di0fref/react-kanban'
+import Board, {addCard, moveCard} from '@lourenci/react-kanban'
 import AddTask from "./AddTask";
 import {delay, sortF} from "../helper.js"
 import CardModal from "./CardModal";

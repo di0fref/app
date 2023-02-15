@@ -38,7 +38,7 @@ export default function AddTask({column, project, addCard}) {
     }
     return (
         <div className={'w-full p-2'}>
-            <div className={'font-semibold text-md'}>{column.title}</div>
+            <div className={'font-semibold text-md'}>{column?.title}</div>
             {!editing
                 ? (
                     <div>

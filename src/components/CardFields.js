@@ -22,7 +22,7 @@ const Field = ({field}) => {
     }
 
     return (
-        <div className={'border'}>
+        <div className={'border_'}>
             <div className={'text-xs text-neutral-500 font-semibold mb-2 '}>{field.name}</div>
             <input value={value} onBlur={saveField} onChange={e => setValue(e.target.value)} className={'text-md bg-modal-dark border-none h-8 focus:bg-white'} type={"text"}/>
         </div>
