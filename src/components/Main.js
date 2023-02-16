@@ -45,6 +45,10 @@ export default function Main() {
     }, [params.projectId])
 
     useEffect(() => {
+        dispatch(getProjects())
+    }, [])
+
+    useEffect(() => {
         if (params.cardId && project.columns) {
             dispatch(setCurrentCard(
                 project.columns

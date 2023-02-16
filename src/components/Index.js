@@ -18,9 +18,9 @@ export default function Index() {
     const projects = useSelector(state => state.data.projects)
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(getProjects())
-    }, [])
+    // useEffect(() => {
+    //     dispatch(getProjects())
+    // }, [])
 
     return (
         <div className={'flex h-screen bg-modal justify-center'}>

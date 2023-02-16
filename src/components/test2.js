@@ -107,6 +107,19 @@ export default function Test({project}) {
         }
     }
 
+    const addCard = (card) => {
+
+        const column = store.getState().data.project.columns.find(col => col.id === card.columnId)
+        const cards = column.cards
+        const orderedCards = cards.map((card, index) => {
+            return {
+                id: card.id,
+                position: index,
+            };
+        })
+        dispatch(reorderTasks(orderedCards)).unwrap()
+    }
+
     if (board.columns && board.columns.length) {
 
 
@@ -121,10 +134,10 @@ export default function Test({project}) {
                                     <div className={'grid grid-flow-col col-start-1 gap-x-4 auto-cols-[292px] items-start rounded-box'}>
                                         {board.columns.map((column, i) => {
                                             return (
-                                                <Draggable draggableId={column.id} index={i} type={"col"}>
+                                                <Draggable key={column.id} draggableId={column.id} index={i} type={"col"}>
                                                     {(provided) => (
                                                         <div className={'bg-modal rounded-box'} ref={provided.innerRef}{...provided.draggableProps}{...provided.dragHandleProps}>
-                                                            <AddTask column={column} project={project}/>
+                                                            <AddTask column={column} project={project} addCard={addCard}/>
                                                             <Droppable droppableId={column.id} type={"card"}>
                                                                 {(provided) => (
                                                                     <div ref={provided.innerRef}{...provided.droppableProps}>
