@@ -61,7 +61,7 @@ export default function Main() {
             <Navbar/>
             <div className={'h-full'}>
                 {/*{project?.id ? <Kanban2 project={project}/> : <Index/>}*/}
-                <Test/>
+                <Test project={project}/>
             </div>
         </>
 

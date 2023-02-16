@@ -116,16 +116,6 @@ const Kanban2 = ({project}) => {
         dispatch(reorderTasks(orderedCards)).unwrap()
     }
 
-    const Column = () => {
-        return (
-            <Draggable draggableId={"Title"} index={1}>
-                {(provided, snapshot) => (
-                    <div>KAlle</div>
-                )}
-            </Draggable>
-        )
-    }
-
     if (board.columns && board.columns.length) {
 
         return (
