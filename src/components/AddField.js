@@ -1,7 +1,7 @@
 import {TwitterPicker, AlphaPicker, CirclePicker} from "react-color";
 import {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addLabel, addField} from "../redux/dataSlice";
+import {addLabel, addField, getProject} from "../redux/dataSlice";
 import Label from "./Label";
 import color from "color";
 import {Listbox} from "@headlessui/react"
@@ -27,7 +27,9 @@ export default function AddField({close}) {
             type: selected.toLowerCase()
         }
 
-        dispatch(addField(data)).unwrap()
+        dispatch(addField(data)).unwrap().then(r => {
+            dispatch(getProject(project.id))
+        })
         // if (name === "") {
         //     setError("Please add a title")
         //     return false

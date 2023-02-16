@@ -16,7 +16,7 @@ export default function DateBadge({date}){
     return (
         <div className={`flex items-center space-x-1  ${color}`}>
             <FiClock className={`h-3 w-3`}/>
-            <div className={`text-xs`}>{formatDate(date)}</div>
+            <div className={`text-sm`}>{formatDate(date)}</div>
         </div>
     )
 }

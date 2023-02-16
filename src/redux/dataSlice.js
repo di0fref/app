@@ -221,8 +221,6 @@ export const dataSlice = createSlice({
             })
             .addCase(addTask.fulfilled, (state, action) => {
 
-                console.log(action.payload)
-
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
 

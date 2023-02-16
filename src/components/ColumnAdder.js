@@ -31,7 +31,7 @@ export default function ColumnAdder({project}) {
     }
 
     return (
-        <div className={' rounded-box'}>
+        <div className={'rounded-box'}>
             {!editing
                 ? (
 

@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {HiOutlineXMark} from "react-icons/hi2";
 import {useNavigate, useParams} from "react-router-dom";
 import {setCurrentCard, updateTask} from "../redux/dataSlice";
-import {BsCalendar, BsCardText, BsTextLeft, BsX} from "react-icons/bs";
+import {BsCalendar, BsCardText, BsTextLeft, BsX, BsCheck} from "react-icons/bs";
 import Description from "./Description";
 import LabelManager from "./LabelManager";
 import DatePicker from "react-datepicker";
@@ -75,8 +75,8 @@ export default function CardModal({project, ...props}) {
                 <div className="flex min-h-full items-center justify-center p-4">
 
 
-                    <Dialog.Panel className="md:max-w-3xl w-11/12 transform rounded-sm bg-modal __dark:bg-gray-800 text-left align-middle shadow-xl transition-all">
-                        <div className={'min-h-[90vh] pl-12 pr-8 py-8'}>
+                    <Dialog.Panel className="md:max-w-3xl w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all">
+                        <div className={'min-h-[90vh] pl-12 pr-4 py-8'}>
                             <button onClick={closeModal} className={'absolute top-2 right-2'}>
                                 <BsX className={'h-6 w-6'}/>
                             </button>
@@ -113,15 +113,20 @@ export default function CardModal({project, ...props}) {
                                         <LabelManager card={currentCard} project={project}/>
                                     </div>
 
-                                    <div className={'flex items-center pl-1'}>
-                                        <div className={'absolute left-6'}><BsTextLeft className={'h-5 w-5'}/></div>
-                                        <div className={'flex items-center space-x-2'}>
-                                            <div className={'font-semibold text-base'}>Custom fields</div>
-                                        </div>
-                                    </div>
-                                    <div className={"my-4 pl-1"}>
-                                    <CardFields/>
-                                    </div>
+                                    {currentCard?.card_fields.length ?
+                                        <>
+                                            <div className={'flex items-center pl-1'}>
+                                                <div className={'absolute left-6'}><BsCheck className={'h-5 w-5'}/>
+                                                </div>
+                                                <div className={'flex items-center space-x-2'}>
+                                                    <div className={'font-semibold text-base'}>Custom fields</div>
+                                                </div>
+                                            </div>
+                                            <div className={"my-4 pl-1"}>
+                                                <CardFields/>
+                                            </div>
+                                        </>
+                                        : ""}
 
                                     <div>
 

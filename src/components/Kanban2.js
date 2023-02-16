@@ -119,39 +119,37 @@ const Kanban2 = ({project}) => {
     if (board.columns && board.columns.length) {
 
         return (
-            <div>
-                <div className={'text-white font-bold text-lg mb-2 px-4 pt-2'}>{project.title}</div>
-                <div className={'overflow-x-auto h-[calc(100vh-6rem)] px-4'}>
-                    <DragDropContext onDragEnd={(result) => onDragEnd(result, board.columns)}>
-                        <div className={'grid grid-flow-col col-start-1 gap-x-4 auto-cols-[292px] items-start rounded-box'}>
-
-
-                            {board.columns.map(column => {
-                                return (
-                                    <Droppable key={column.title} droppableId={column.id}>
-                                        {(provided) => (
-                                            <div className={'bg-modal rounded-box'}
-                                                 ref={provided.innerRef}
-                                                 {...provided.droppableProps}>
-                                                <AddTask column={column} project={project} addCard={addCard}/>
-                                                <div className={'rounded-box mb-1 px-2.5 pb-2.5 max-h-[calc(100vh-13rem)] overflow-y-auto overflow-x-hidden'}>
-                                                    {column.cards.map((card, index) => {
-                                                        return <Card key={card.id} card={card} index={index}/>
-                                                    })}
-                                                    {provided.placeholder}
-                                                </div>
+            // <div>
+            //     <div className={'text-white font-bold text-lg mb-2 px-4 pt-2'}>{project.title}</div>
+            <div className={'overflow-x-auto h-[calc(100vh-6rem)] px-4'}>
+                <DragDropContext onDragEnd={(result) => onDragEnd(result, board.columns)}>
+                    <div className={'grid grid-flow-col col-start-1 gap-x-4 auto-cols-[292px] items-start rounded-box'}>
+                        {board.columns.map(column => {
+                            return (
+                                <Droppable key={column.title} droppableId={column.id}>
+                                    {(provided) => (
+                                        <div className={'bg-modal rounded-box'}
+                                             ref={provided.innerRef}
+                                             {...provided.droppableProps}>
+                                            <AddTask column={column} project={project} addCard={addCard}/>
+                                            <div className={'rounded-box mb-1 px-2.5 pb-2.5 max-h-[calc(100vh-13rem)] overflow-y-auto overflow-x-hidden'}>
+                                                {column.cards.map((card, index) => {
+                                                    return <Card key={card.id} card={card} index={index}/>
+                                                })}
+                                                {provided.placeholder}
                                             </div>
+                                        </div>
 
-                                        )}
-                                    </Droppable>
-                                );
-                            })}
+                                    )}
+                                </Droppable>
+                            );
+                        })}
 
-                            <ColumnAdder projext={project}/>
-                        </div>
-                    </DragDropContext>
-                    <CardModal project={project}/>
-                </div>
+                        <ColumnAdder projext={project}/>
+                    </div>
+                </DragDropContext>
+                <CardModal project={project}/>
+                {/*</div>*/}
             </div>
         )
     } else {

@@ -72,6 +72,7 @@ export const getProjectsById = async (req, res) => {
                         {
                             model: Card,
                             order: [["position", "asc"]],
+                            separate: true,
                             include: [
                                 {
                                     model: Label,

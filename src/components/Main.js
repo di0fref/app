@@ -19,6 +19,7 @@ import Index from "./Index";
 import {store} from "../redux/store";
 import Navbar from "./Navbar";
 import Test from "./test2";
+import Kanban from "./Kanban";
 
 export default function Main() {
 
@@ -64,7 +65,7 @@ export default function Main() {
         <>
             <Navbar/>
             <div className={'h-full'}>
-                {/*{project?.id ? <Kanban2 project={project}/> : <Index/>}*/}
+                {/*{project?.id ? <Kanban project={project}/> : <Index/>}*/}
                 <Test project={project}/>
             </div>
         </>
