@@ -21,33 +21,41 @@ export default function Board({project}) {
 
     const filters = useReadLocalStorage("filters");
 
-    function searchWithParents(tree, query) {
-        let results = [];
-        for (const {name, children} of tree) {
-            if (name === query) {
-                results.push({name});
+    const search = (query, data) => {
+
+
+        console.log(data, data.length);
+        let columns = [];
+
+        data && data.length && data.map((column, colIndex) => column.cards.map(card => {
+
+            columns[colIndex] = {
+                ...column,
+                cards: []
             }
-            if (children) {
-                const subtreeResults = searchWithParents(children, query);
-                const mappedResults = subtreeResults.map(child => ({name, children: [child]}))
-                results = results.concat(mappedResults);
+
+            if (card.title === "TYR") {
+                columns[colIndex].cards.push(card)
+                return null
             }
-        }
-        return results;
+
+        }))
+
+        return columns;
     }
 
     useEffect(() => {
 
         if (store.getState().data.project.columns) {
 
-            const columns = searchWithParents(store.getState().data.project.columns, 'TYR')
+            const columns = search("TYR", store.getState().data.project.columns)
 
             console.log(columns);
 
             // const columns = store.getState().data.project.columns.map(col => col.cards.map(card => {
             //     return new Date(card.due) === new Date()
             // }))
-            // setBoard({columns: columns})
+            setBoard({columns: columns})
         }
 
     }, [filters])
