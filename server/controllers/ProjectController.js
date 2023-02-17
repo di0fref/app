@@ -78,12 +78,16 @@ export const getProjectsById = async (req, res) => {
                                 {
                                     model: Label,
                                     attributes: ["title", "id", "color"],
+                                    order: [["title", "asc"]],
+                                    // separate: true
                                 }, {
                                     model: Column,
                                     attributes: ["title"],
                                 },
                                 {
                                     model: CardField,
+                                    order: [["name", "asc"]],
+                                    separate: true,
                                 }
                             ]
                         }

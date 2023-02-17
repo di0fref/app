@@ -52,7 +52,7 @@ export default function Navbar() {
 
                                 <div className={'relative'}>
                                     <Menu>
-                                        <Menu.Button className={'text-white hover:bg-[#537DA4] hover:text-white px-3 py-2 rounded-md text-sm font-medium'}>
+                                        <Menu.Button className={'z-40 text-white hover:bg-[#537DA4] hover:text-white px-3 py-2 rounded-md text-sm font-medium'}>
                                             <div className={'flex items-center space-x-2'}>
                                                 <div>Projects</div>
                                                 <ChevronDownIcon
@@ -60,7 +60,7 @@ export default function Navbar() {
                                                     aria-hidden="true"/>
                                             </div>
                                         </Menu.Button>
-                                        <Menu.Items static={false} className="absolute left-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-box bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                        <Menu.Items static={false} className="z-40  absolute left-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-box bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                             <div className="px-1 py-1 ">
 
                                                 {projects.map(project => {

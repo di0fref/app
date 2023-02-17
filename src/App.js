@@ -5,7 +5,6 @@ import Login from "./components/Login";
 import {Navigate, Route, Routes} from "react-router-dom";
 import Main from "./components/Main";
 import "./auth/firebase.js"
-import Project from "./components/Project";
 import {useDispatch, useSelector} from "react-redux";
 import {getProjects, setUser} from "./redux/dataSlice";
 import {useEffect} from "react";

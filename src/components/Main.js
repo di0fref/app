@@ -9,7 +9,6 @@ import {
     setUser,
     startConnecting
 } from "../redux/dataSlice";
-import Project from "./Project";
 import {useDispatch, useSelector} from "react-redux";
 import Sidebar from "./Sidebar";
 import {signOutFireBase} from "../auth/firebase";

@@ -194,6 +194,9 @@ export const dataSlice = createSlice({
         setCurrentProject: (state, action) => {
             state.project = action.payload;
         },
+        setBoard: (state, action) => {
+            state.project.columns = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -294,7 +297,8 @@ export const {
     setUser,
     setAccessToken,
     setCurrentCard,
-    setCurrentProject
+    setCurrentProject,
+    setBoard
 } = dataSlice.actions
 
 export default dataSlice.reducer

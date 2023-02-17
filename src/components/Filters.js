@@ -2,22 +2,83 @@ import {Popover} from "@headlessui/react";
 import {BsClock, BsFilter, BsX} from "react-icons/bs";
 import {FiClock} from "react-icons/fi";
 import {useLocalStorage} from "usehooks-ts"
+import {useState, useEffect} from "react";
+import Label from "./Label";
 
-export default function Filters() {
+export default function Filters({project}) {
 
     const [filters, setFilters] = useLocalStorage("filters", {
-        "tomorrow": false,
-        "today": false,
-        "overdue": false,
-        "labels": []
+        due: {
+            today: false,
+            tomorrow: false,
+            overdue: false
+        },
+        labels: []
     })
-    const setFilter = (e, type) => {
+
+    const [enabledCount, setEnabledCount] = useState(0)
+
+    useEffect(() => {
+        let count = 0;
+        Object.entries(filters.due).map(([key, val], index) => {
+            count = val ? count = count + 1 : count
+        })
+        setEnabledCount(count + filters.labels.length)
+    }, [filters])
+
+
+    const setLabelFilter = (e, id) => {
+
+        const labels = filters.labels
+
+        /* Find the label */
+        const labelIndex = labels.findIndex(label => label.id == id)
+
+        switch (e.target.checked){
+            case true:
+                labels.push(id)
+                break;
+            case false:
+                labels.splice(labelIndex, 1)
+                break;
+        }
+
         const data = {
             ...filters,
-            [type]: e.target.checked
+            labels: [
+                ...labels
+            ]
         }
         setFilters(data)
 
+    }
+
+    useEffect(() => {
+        console.log(filters)
+    }, [filters])
+
+    const setFilter = (e, type) => {
+
+        const data = {
+            ...filters,
+            due: {
+                ...filters.due,
+                [type]: e.target.checked
+            }
+        }
+        setFilters(data)
+    }
+
+    const resetFilter = () => {
+        setEnabledCount(0)
+        setFilters({
+            due: {
+                today: false,
+                tomorrow: false,
+                overdue: false
+            },
+            labels: []
+        })
     }
     return (
         <div className={'relative'}>
@@ -25,13 +86,25 @@ export default function Filters() {
             <Popover>
                 {({open, close}) => (
                     <>
-                        <Popover.Button as={"div"} className={`${open ? "bg-modal" : "bg-[#3E7EA6] text-neutral-200"} hover:cursor-pointer ring-0  border-0 !active:border-0 !active:border-0 !focus:ring-0 !focus:border-0  py-1 px-2 rounded-box`}>
-                            <div className={`flex items-center space-x-2 text-sm`}>
-                                <div><BsFilter/></div>
-                                <div>Filters</div>
-                            </div>
-                        </Popover.Button>
+                        <div className={'flex'}>
+                            <Popover.Button as={"div"} className={`${open || enabledCount ? "bg-modal-darker" : "bg-[#3E7EA6] text-neutral-200"} z-10 hover:bg-modal rounded-box hover:cursor-pointer ring-0  border-0 !active:border-0 !active:border-0 !focus:ring-0 !focus:border-0  py-1 px-2 ${filters.due ? "rounded-l-box rounded-r-none" : ""}`}>
 
+                                <div className={`flex items-center space-x-2 `}>
+                                    <div><BsFilter/></div>
+                                    <div className={'text-sm'}>Filters</div>
+                                    {enabledCount ?
+                                        <div className={'rounded-full w-5 h-5 bg-white flex items-center justify-center text-xs'}>{enabledCount}</div> : ""}
+                                </div>
+                            </Popover.Button>
+                            {enabledCount
+                                ? (
+                                    <div className={'flex items-center bg-modal-darker rounded-r-box hover:bg-modal'}>
+                                        <button onClick={resetFilter}><BsX className={'h-5 w-6'}/>
+                                        </button>
+                                    </div>
+                                )
+                                : ""}
+                        </div>
                         <Popover.Panel static={true} className="absolute left-0 z-10 mt-3 w-80 _px-4 sm:px-0 lg:max-w-3xl">
                             <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white">
                                 <div className="relative bg-white p-4 ">
@@ -44,35 +117,60 @@ export default function Filters() {
 
                                     <div className={'text-md'}>
                                         <div className={'text-sm text-neutral-500 font-semibold mb-2'}>Due date</div>
+
+
                                         <div className={'mb-2'}>
+
+                                            {/*<div className={'flex items-center space-x-2 mb-2'}>*/}
+                                            {/*    <input name={"noDue"} type={"checkbox"}*/}
+                                            {/*        // checked={filters["due"][] == null}*/}
+                                            {/*           onChange={(e) => setFilter(e, null)}*/}
+                                            {/*    />*/}
+                                            {/*    <div>No filter</div>*/}
+                                            {/*</div>*/}
+
                                             <div className={'flex items-center space-x-2 mb-2'}>
-                                                <input type={"checkbox"} checked={filters["today"]} onChange={(e) => setFilter(e, "today")}/>
+                                                <input name={"today"} type={"checkbox"}
+                                                       checked={filters["due"]["today"]}
+                                                       onChange={(e) => setFilter(e, "today")}/>
                                                 <div>Today</div>
                                             </div>
 
 
                                             <div className={'flex items-center space-x-2 mb-2'}>
-                                                <input checked={filters["tomorrow"]}  type={"checkbox"} onChange={(e) => setFilter(e, "tomorrow")}/>
+                                                <input name={"tomorrow"} type={"checkbox"}
+                                                       checked={filters["due"]["tomorrow"]}
+                                                       onChange={(e) => setFilter(e, "tomorrow")}/>
                                                 <div className={'flex items-center justify-start space-x-2'}>
-                                                    <FiClock className={'bg-yellow-500 rounded-full text-white '}/>
+                                                    <FiClock className={'bg-[#EDD747] rounded-full text-white h-5 w-5'}/>
                                                     <div>Tomorrow</div>
                                                 </div>
                                             </div>
 
 
-
                                             <div className={'flex items-center space-x-2 mb-2'}>
-                                                <input type={"checkbox"} checked={filters["overdue"]} onChange={(e) => setFilter(e, "overdue")}/>
+                                                <input name={"overdue"} type={"checkbox"}
+                                                       checked={filters["due"["overdue"]]}
+                                                       onChange={(e) => setFilter(e, "overdue")}/>
                                                 <div className={'flex items-center justify-start space-x-2'}>
-                                                    <FiClock className={'bg-red-600 rounded-full text-white'}/>
+                                                    <FiClock className={'bg-red-600 rounded-full text-white  h-5 w-5'}/>
                                                     <div>Overdue</div>
                                                 </div>
                                             </div>
-                                            <div className={'text-sm text-neutral-500 font-semibold mt-3 mb-2 '}>Labels</div>
 
-                                            <div>
-                                                Labels
-                                            </div>
+
+                                            <div className={'text-sm text-neutral-500 font-semibold mt-3 mb-2 '}>Labels</div>
+                                            {project.labels.map(label => {
+                                                return (
+                                                    <div className={'mb-2 flex items-center space-x-2'}>
+                                                        <div>
+                                                            <input type={"checkbox"} onClick={(e) => setLabelFilter(e, label.id)}/>
+                                                        </div>
+                                                        <div className={'w-full'}><Label label={label}/></div>
+                                                    </div>
+                                                )
+                                            })}
+
                                         </div>
 
 

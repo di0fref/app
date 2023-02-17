@@ -3,80 +3,90 @@ import AddField from "./AddField";
 import AddTask from "./AddTask";
 import Card from "./Card";
 import {useEffect, useState} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {store} from "../redux/store";
 import React from "react";
 import ColumnAdder from "./ColumnAdder";
-import {getProject, reorderTasks} from "../redux/dataSlice";
+import {getProject, reorderTasks, setBoard} from "../redux/dataSlice";
 import CardModal from "./CardModal";
 import Filters from "./Filters";
 import {useReadLocalStorage} from "usehooks-ts";
-import Da from "flowbite-datepicker/locales/da";
+import {createSelector} from "@reduxjs/toolkit";
+
+const applyFilter = createSelector(
+    state => state.data.project,
+    (state, filters) => filters,
+    (project, filters) => {
+
+        if (filters?.due.today || filters?.due.tomorrow || filters?.due.overdue) {
+
+            let newBoard = [];
+
+            project.columns.map((column, columnIndex) => {
+
+                newBoard[columnIndex] = {
+                    ...column,
+                    cards: []
+                }
+
+
+                Object.entries(filters.due).map(([key, val], index) => {
+
+                    column.cards.map(card => {
+
+                        switch (key) {
+                            case "today":
+                                if (val && new Date(card.due).setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0)) {
+                                    newBoard[columnIndex].cards.push(card)
+                                }
+                                break;
+                            case "overdue":
+                                if (val && new Date(card.due).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
+                                    newBoard[columnIndex].cards.push(card)
+                                }
+                                break;
+                            case "tomorrow":
+                                if (val && new Date(card.due).setHours(0, 0, 0, 0) == new Date(new Date().setDate(new Date().getDate() + 1)).setHours(0, 0, 0, 0)) {
+                                    newBoard[columnIndex].cards.push(card)
+                                }
+                                break;
+                            default:
+                                newBoard[columnIndex].cards.push(card)
+                        }
+
+                        newBoard[columnIndex].cards = [...new Set(newBoard[columnIndex].cards)]
+
+                    })
+                })
+
+            })
+            return {
+                ...project,
+                columns: newBoard
+            }
+        }
+
+        return project
+    }
+)
+
 
 export default function Board({project}) {
 
-
-    const [board, setBoard] = useState([])
     const dispatch = useDispatch();
-
     const filters = useReadLocalStorage("filters");
-
-    const search = (query, data) => {
-
-
-        console.log(data, data.length);
-        let columns = [];
-
-        data && data.length && data.map((column, colIndex) => column.cards.map(card => {
-
-            columns[colIndex] = {
-                ...column,
-                cards: []
-            }
-
-            if (card.title === "TYR") {
-                columns[colIndex].cards.push(card)
-                return null
-            }
-
-        }))
-
-        return columns;
-    }
-
-    useEffect(() => {
-
-        if (store.getState().data.project.columns) {
-
-            const columns = search("TYR", store.getState().data.project.columns)
-
-            console.log(columns);
-
-            // const columns = store.getState().data.project.columns.map(col => col.cards.map(card => {
-            //     return new Date(card.due) === new Date()
-            // }))
-            setBoard({columns: columns})
-        }
-
-    }, [filters])
-
-    useEffect(() => {
-        setBoard({columns: store.getState().data.project.columns})
-    }, [project])
-
-    let cols = []
-
+    const board = useSelector(state => applyFilter(state, filters))
 
     const onDragEnd = (result, columns) => {
 
         const {type} = result;
 
         if (type === "card") {
+            let cols = []
             if (!result.destination) return;
             const {source, destination} = result;
 
-
-            if (source.index === destination.index) {
+            if (source.droppableId === destination.droppableId && source.index === destination.index) {
                 /* Bail early */
                 return
             }
@@ -129,7 +139,9 @@ export default function Board({project}) {
                     }
                 })
                 dispatch(reorderTasks(sCards)).unwrap().then(r => {
-                    dispatch(reorderTasks(dCards)).unwrap()
+                    dispatch(reorderTasks(dCards)).unwrap().then(t => {
+                        dispatch(setBoard(cols))
+                    })
                 })
 
 
@@ -157,6 +169,7 @@ export default function Board({project}) {
                     };
                 })
                 dispatch(reorderTasks(orderedCards)).unwrap()
+                dispatch(setBoard(cols))
             }
         }
     }
@@ -176,12 +189,11 @@ export default function Board({project}) {
 
     if (board.columns && board.columns.length) {
 
-
         return (
             <div>
                 <div className={'flex items-center space-x-6'}>
                     <div className={'text-white font-bold text-lg mb-2 px-4 pt-2'}>{project.title}</div>
-                    <Filters/>
+                    <Filters project={project}/>
                 </div>
 
                 <div className={'overflow-x-auto h-[calc(100vh-6rem)] px-4 '}>
@@ -224,8 +236,6 @@ export default function Board({project}) {
                         </DragDropContext>
                         <ColumnAdder projext={project}/>
                     </div>
-
-
                 </div>
             </div>
         )

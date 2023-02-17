@@ -14,16 +14,9 @@ const Card = db.define('cards', {
             autoIncrement: true,
             unique: true
         },
-        // columnTitle: {
-        //     type: Sequelize.STRING,
-        //     set(value) {
-        //         this.setDataValue("columnTitle", this.getColumn().then(col => col.title))
-        //
-        //     },
-        // },
         title: Sequelize.TEXT,
         text: Sequelize.TEXT,
-        due: Sequelize.DATE,
+        due: Sequelize.DATEONLY,
         prio: Sequelize.STRING,
         status: Sequelize.STRING,
         position: {

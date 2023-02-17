@@ -1,17 +1,19 @@
 import {formatDate} from "../helper";
 import {FiClock} from "react-icons/fi";
 
-export default function DateBadge({date}){
+export default function DateBadge({date}) {
 
-    if(!date){
+    if (!date) {
         return <></>
     }
 
- const color = new Date(date).setHours(0, 0, 0, 0) <= new Date().setHours(0, 0, 0, 0)
-        ? "whitespace-nowrap bg-warning  text-white rounded px-2 py-1"
-        : new Date(date).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0)
+    const color = new Date(date).setHours(0, 0, 0, 0) <= new Date().setHours(0, 0, 0, 0)
+        ? "whitespace-nowrap bg-warning text-white rounded px-2 py-1"
+        : new Date(date).setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0)
             ? "whitespace-nowrap bg-green-500 text-white rounded px-2 py-1"
-            : "whitespace-nowrap text-primary "
+            : new Date(date).setHours(0, 0, 0, 0) == new Date(new Date().setDate(new Date().getDate() + 1)).setHours(0, 0, 0, 0)
+                ? "whitespace-nowrap bg-[#EDD747] rounded px-2 py-1 text-white"
+                : "whitespace-nowrap text-primary "
 
     return (
         <div className={`flex items-center space-x-1  ${color}`}>
@@ -20,3 +22,4 @@ export default function DateBadge({date}){
         </div>
     )
 }
+// : "whitespace-nowrap text-primary "
