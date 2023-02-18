@@ -5,10 +5,6 @@ import Login from "./components/Login";
 import {Navigate, Route, Routes} from "react-router-dom";
 import Main from "./components/Main";
 import "./auth/firebase.js"
-import {useDispatch, useSelector} from "react-redux";
-import {getProjects, setUser} from "./redux/dataSlice";
-import {useEffect} from "react";
-import Kanban from "./components/Kanban";
 import "react-datepicker/dist/react-datepicker.css";
 
 function App() {

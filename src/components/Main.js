@@ -13,7 +13,6 @@ import {useDispatch, useSelector} from "react-redux";
 import Sidebar from "./Sidebar";
 import {signOutFireBase} from "../auth/firebase";
 import {useNavigate, useParams} from "react-router-dom";
-import Kanban2 from "./Kanban2";
 import Index from "./Index";
 import {store} from "../redux/store";
 import Navbar from "./Navbar";
@@ -39,8 +38,14 @@ export default function Main() {
             dispatch(startConnecting())
         }
     }, [])
+
     useEffect(() => {
-        params.projectId ? dispatch(getProject(params.projectId)):dispatch(setCurrentProject({}))
+        params.projectId
+            ? dispatch(getProject({
+                id: params.projectId,
+                filter: null
+            }))
+            : dispatch(setCurrentProject({}))
     }, [params.projectId])
 
     useEffect(() => {
@@ -56,15 +61,15 @@ export default function Main() {
                     .find((card) => card.id === params.cardId)
             ))
         }
-    }, [params.cardId, project.columns])
+    }, [params.cardId, project?.columns])
 
     return (
 
         <>
             <Navbar/>
             <div className={'h-full'}>
-                {/*{project?.id ? <Kanban project={project}/> : <Index/>}*/}
-                <Board project={project}/>
+                {project?.id ? <Board project={project}/> : <Index/>}
+                {/*<Board project={project}/>*/}
             </div>
         </>
 

@@ -5,10 +5,19 @@ import {da} from "date-fns/locale";
 
 export const getProject = createAsyncThunk(
     'data/getProject',
-    async (id, thunkAPI) => {
+    async (params, thunkAPI) => {
+        const {id, filter} = params
         try {
-            const response = await axios.get("/projects/" + id)
-            return response.data
+            if (filter) {
+                console.log("filtered")
+                const response = await axios.post("/projects/filtered/" + id, filter)
+                return response.data
+            } else {
+                console.log("non filtered")
+                const response = await axios.get("/projects/" + id)
+                return response.data
+            }
+
         } catch (error) {
             throw thunkAPI.rejectWithValue(error.message)
         }

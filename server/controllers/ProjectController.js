@@ -55,6 +55,61 @@ export const addField = async (req, res) => {
     }
 }
 
+export const getFilteredProjectById = async (req, res) => {
+
+    console.log(req.body)
+
+    const labelWhere = req.body.labels.length ? {id: req.body.labels.map(label => label)} : {}
+    const dueWhere = req.body.due.length ? {due: req.body.due.map(due => due)} : {}
+
+    try {
+        const project = await Project.findByPk(req.params.id, {
+            include: [
+                {
+                    model: Label
+                },
+                {
+                    model: ProjectField
+                },
+                {
+                    model: Column,
+                    order: [["order", "asc"]],
+                    separate: true,
+                    include: [
+                        {
+                            model: Card,
+                            order: [["position", "asc"]],
+                            separate: true,
+                            where: dueWhere,
+                            include: [
+                                {
+                                    model: Label,
+                                    attributes: ["title", "id", "color"],
+                                    order: [["title", "asc"]],
+                                    as: "labels",
+                                    where: labelWhere
+                                }, {
+                                    model: Column,
+                                    attributes: ["title"],
+                                },
+                                {
+                                    model: CardField,
+                                    order: [["name", "asc"]],
+                                    separate: true,
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        })
+        res.status(200).json(project);
+    } catch
+        (error) {
+        console.log(error.message);
+    }
+}
+
 export const getProjectsById = async (req, res) => {
     try {
         const project = await Project.findByPk(req.params.id, {

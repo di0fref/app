@@ -8,11 +8,7 @@ import Label from "./Label";
 export default function Filters({project}) {
 
     const [filters, setFilters] = useLocalStorage("filters", {
-        due: {
-            today: false,
-            tomorrow: false,
-            overdue: false
-        },
+        due: [],
         labels: []
     })
 
@@ -26,13 +22,33 @@ export default function Filters({project}) {
         setEnabledCount(count + filters.labels.length)
     }, [filters])
 
+    const setDueFilter = (e, id) => {
+
+        const dues = filters.due
+        const dueIndex = dues.findIndex(due => due === id)
+
+        switch (e.target.checked){
+            case true:
+                dues.push(id)
+                break;
+            case false:
+                dues.splice(dueIndex, 1)
+                break;
+        }
+
+        const data = {
+            ...filters,
+            due: [
+                ...dues
+            ]
+        }
+        setFilters(data)
+    }
 
     const setLabelFilter = (e, id) => {
 
         const labels = filters.labels
-
-        /* Find the label */
-        const labelIndex = labels.findIndex(label => label.id == id)
+        const labelIndex = labels.findIndex(label => label === id)
 
         switch (e.target.checked){
             case true:
@@ -50,33 +66,28 @@ export default function Filters({project}) {
             ]
         }
         setFilters(data)
-
     }
 
-    useEffect(() => {
-        console.log(filters)
-    }, [filters])
+    // useEffect(() => {
+    //     console.log(filters)
+    // }, [filters])
 
-    const setFilter = (e, type) => {
-
-        const data = {
-            ...filters,
-            due: {
-                ...filters.due,
-                [type]: e.target.checked
-            }
-        }
-        setFilters(data)
-    }
+    // const setFilter = (e, type) => {
+    //
+    //     const data = {
+    //         ...filters,
+    //         due: {
+    //             ...filters.due,
+    //             [type]: e.target.checked
+    //         }
+    //     }
+    //     setFilters(data)
+    // }
 
     const resetFilter = () => {
         setEnabledCount(0)
         setFilters({
-            due: {
-                today: false,
-                tomorrow: false,
-                overdue: false
-            },
+            due: [],
             labels: []
         })
     }
@@ -105,7 +116,7 @@ export default function Filters({project}) {
                                 )
                                 : ""}
                         </div>
-                        <Popover.Panel static={true} className="absolute left-0 z-10 mt-3 w-80 _px-4 sm:px-0 lg:max-w-3xl">
+                        <Popover.Panel static={false} className="absolute left-0 z-10 mt-3 w-80 _px-4 sm:px-0 lg:max-w-3xl">
                             <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white">
                                 <div className="relative bg-white p-4 ">
                                     <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>
@@ -131,16 +142,16 @@ export default function Filters({project}) {
 
                                             <div className={'flex items-center space-x-2 mb-2'}>
                                                 <input name={"today"} type={"checkbox"}
-                                                       checked={filters["due"]["today"]}
-                                                       onChange={(e) => setFilter(e, "today")}/>
+                                                       checked={filters["due"].includes("today")}
+                                                       onChange={(e) => setDueFilter(e, "today")}/>
                                                 <div>Today</div>
                                             </div>
 
 
                                             <div className={'flex items-center space-x-2 mb-2'}>
                                                 <input name={"tomorrow"} type={"checkbox"}
-                                                       checked={filters["due"]["tomorrow"]}
-                                                       onChange={(e) => setFilter(e, "tomorrow")}/>
+                                                       checked={filters["due"].includes("tomorrow")}
+                                                       onChange={(e) => setDueFilter(e, "tomorrow")}/>
                                                 <div className={'flex items-center justify-start space-x-2'}>
                                                     <FiClock className={'bg-[#EDD747] rounded-full text-white h-5 w-5'}/>
                                                     <div>Tomorrow</div>
@@ -150,8 +161,8 @@ export default function Filters({project}) {
 
                                             <div className={'flex items-center space-x-2 mb-2'}>
                                                 <input name={"overdue"} type={"checkbox"}
-                                                       checked={filters["due"["overdue"]]}
-                                                       onChange={(e) => setFilter(e, "overdue")}/>
+                                                       checked={filters["due"].includes("overdue")}
+                                                       onChange={(e) => setDueFilter(e, "overdue")}/>
                                                 <div className={'flex items-center justify-start space-x-2'}>
                                                     <FiClock className={'bg-red-600 rounded-full text-white  h-5 w-5'}/>
                                                     <div>Overdue</div>
@@ -161,19 +172,16 @@ export default function Filters({project}) {
 
                                             <div className={'text-sm text-neutral-500 font-semibold mt-3 mb-2 '}>Labels</div>
                                             {project.labels.map(label => {
+
                                                 return (
-                                                    <div className={'mb-2 flex items-center space-x-2'}>
-                                                        <div>
-                                                            <input type={"checkbox"} onClick={(e) => setLabelFilter(e, label.id)}/>
-                                                        </div>
+                                                    <div key={label.id} className={'mb-2 flex items-center space-x-2'}>
+                                                        <input checked={filters.labels.includes(label.id)} type={"checkbox"} onChange={(e) => setLabelFilter(e, label.id)}/>
                                                         <div className={'w-full'}><Label label={label}/></div>
                                                     </div>
                                                 )
                                             })}
 
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>

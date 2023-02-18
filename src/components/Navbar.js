@@ -29,9 +29,9 @@ export default function Navbar() {
     const params = useParams()
     const projects = useSelector(state => state.data.projects)
 
-    useEffect(() => {
-        params.projectId && dispatch(getProject(params.projectId))
-    }, [params.projectId])
+    // useEffect(() => {
+    //     params.projectId && dispatch(getProject(params.projectId))
+    // }, [params.projectId])
 
     return (
         <Disclosure as="nav" className="bg-[#2C659B] border-b border-b-[#4E7EAC]">
