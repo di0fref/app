@@ -45,7 +45,9 @@ export default function CardModal({project, ...props}) {
     function closeModal() {
         setIsOpen(false)
         dispatch(setCurrentCard(null))
-        nav("/project/" + params.projectId)
+        console.log(nav)
+        // nav("/project/" + params.projectId)
+        nav(-1)
     }
 
     function openModal() {

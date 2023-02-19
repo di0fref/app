@@ -15,81 +15,26 @@ import {createSelector} from "@reduxjs/toolkit";
 import {format, add} from "date-fns";
 import {dbDateFormat} from "../helper";
 import {useParams} from "react-router-dom";
+import {ArrayParam, useQueryParams} from "use-query-params";
 
 const applyFilter = createSelector(state => state.data.project, (state, filters) => filters, (project, filters) => {
-
-    // let newBoard = [];
-    //
-    // if (project?.columns && (filters?.due.length || filters?.labels.length)) {
-    //     if (filters.labels.length) {
-    //         project?.columns.map((column, columnIndex) => {
-    //             newBoard[columnIndex] = {
-    //                 ...column,
-    //                 cards: []
-    //             }
-    //             column.cards.map((card, cardIndex) => {
-    //
-    //                 Object.entries(filters.labels).map(([key, labelId]) => {
-    //                     if (card.labels.findIndex(label => label.id === labelId) !== -1) {
-    //                         newBoard[columnIndex].cards.push(card)
-    //                     }
-    //                 })
-    //
-    //                 newBoard[columnIndex].cards = [...new Set(newBoard[columnIndex].cards)]
-    //             })
-    //         })
-    //     }
-    //     let newBoard_2= {
-    //         ...project,
-    //         columns: newBoard.length ? newBoard : project.columns
-    //     }
-    //
-    //
-    //     newBoard_2?.columns && newBoard_2?.columns.map((column, columnIndex) => {
-    //             filters.due.map((val, index) => {
-    //
-    //
-    //                 column.cards.map((card, cardIndex) => {
-    //
-    //                     switch (val) {
-    //                         case "today":
-    //                             if (!(new Date(card.due).setHours(0, 0, 0, 0) == new Date().setHours(0, 0, 0, 0))) {
-    //
-    //                                 console.log("Found NOT today, removing")
-    //                                 try {
-    //                                     newBoard_2.columns[columnIndex].cards.splice(cardIndex, 1)
-    //                                     console.log(cardIndex)
-    //                                 } catch (e) {
-    //                                     console.log(e)
-    //                                 }
-    //                             }
-    //
-    //                             break;
-    //                     }
-    //                 })
-    //             })
-    //         }
-    //     )
-    //     return newBoard_2
-    //
-    // }
     return project
-
 })
 
 
 export default function Board({project}) {
 
     const dispatch = useDispatch();
-    const filters = useReadLocalStorage("filters");
-    const board = useSelector(state => applyFilter(state, filters))
+    const board = useSelector(state => state.data.project)
     const params = useParams()
+    const [filterParams, setFilterParams] = useQueryParams()
 
     useEffect(() => {
-        if(filters&&(Object.values(filters.due).length || Object.values(filters?.labels).length)){
+
+        if (filterParams && (filterParams?.due ||filterParams?.labels)) {
             const projectFilters = {
-                labels: filters.labels.map(label => label),
-                due: filters.due.map((type, index) => {
+                labels: filterParams?.labels && filterParams?.labels.map(label => label) || [],
+                due: filterParams?.due && filterParams?.due.map((type, index) => {
                     switch (type) {
                         case "today":
                             return format(new Date(), dbDateFormat)
@@ -98,21 +43,20 @@ export default function Board({project}) {
                         case "overdue":
                             return ""
                     }
-                })
+                }) || []
             }
             dispatch(getProject({
                 id: params.projectId,
                 filter: projectFilters
             })).unwrap()
-        }
-        else {
+        } else {
             dispatch(getProject({
                 id: params.projectId,
                 filter: null
             })).unwrap()
         }
 
-    }, [filters, params.projectId])
+    }, [filterParams, params.projectId])
 
 
     const onDragEnd = (result, columns) => {
