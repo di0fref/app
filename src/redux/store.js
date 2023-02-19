@@ -17,14 +17,6 @@ export let socket;
 const jwt = localStorage.getItem("accessToken")
 const socketMiddleware = store => {
 
-    // const path = matchPath({
-    //         path: "/project/:id",
-    //         exact: true
-    //     },
-    //     window.location.pathname
-    // )
-
-
     return next => action => {
         const isConnectionEstablished = socket && store.getState().data.isConnected;
 
@@ -38,7 +30,7 @@ const socketMiddleware = store => {
                 // path?.params.id && store.dispatch(getProject(path.params.id))
             })
             socket.on("new card", (data) => {
-                console.log("new card");
+                console.log("new card", data);
                 // console.log(data);
             })
 

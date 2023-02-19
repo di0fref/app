@@ -13,8 +13,8 @@ Card.belongsTo(Column)
 User.hasMany(Card)
 Project.hasMany(Card)
 
-Project.belongsToMany(User, {through: 'ProjectUsers'})
-User.belongsToMany(Project, {through: 'ProjectUsers'})
+Project.belongsToMany(User, {through: 'ProjectUsers', timestamps: false})
+User.belongsToMany(Project, {through: 'ProjectUsers', timestamps: false})
 
 Project.hasMany(Column)
 Column.belongsTo(Project)
@@ -22,8 +22,8 @@ Column.hasMany(Card)
 
 Project.hasMany(Label)
 Label.belongsTo(Project)
-Label.belongsToMany(Card, {through: 'CardLabels'})
-Card.belongsToMany(Label, {through: 'CardLabels'})
+Label.belongsToMany(Card, {through: 'CardLabels', timestamps: false})
+Card.belongsToMany(Label, {through: 'CardLabels', timestamps: false})
 
 
 ProjectField.belongsTo(Project)

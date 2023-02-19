@@ -8,12 +8,12 @@ export const getProject = createAsyncThunk(
     async (params, thunkAPI) => {
         const {id, filter} = params
         try {
-            if (filter) {
-                // console.log("filtered")
+            if (filter?.due.length || filter?.labels.length) {
+                console.log("filtered")
                 const response = await axios.post("/projects/filtered/" + id, filter)
                 return response.data
             } else {
-                // console.log("non filtered")
+                console.log("non filtered")
                 const response = await axios.get("/projects/" + id)
                 return response.data
             }

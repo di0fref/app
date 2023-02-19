@@ -54,7 +54,7 @@ export default function Board({project}) {
             })).unwrap()
         }
 
-    }, [dueParams, labelParams, params.projectId])
+    }, [dueParams, labelParams])
 
 
     const onDragEnd = (result, columns) => {
@@ -199,7 +199,7 @@ export default function Board({project}) {
                         </Droppable>
                         <CardModal project={project}/>
                     </DragDropContext>
-                    <ColumnAdder projext={project}/>
+                    <ColumnAdder project={project}/>
                 </div>
             </div>
         </div>)

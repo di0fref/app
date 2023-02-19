@@ -114,8 +114,6 @@ export const createCard = async (req, res) => {
             }
         })
 
-        console.log("starting loop")
-
         await Promise.all(
             Object.values(projectFields).map(async projectField => {
                await CardField.create({
@@ -141,35 +139,12 @@ export const createCard = async (req, res) => {
                      }
                  ],
              }).then(card => {
+                io.emit("new card", {
+                    card
+                })
                 res.status(201).json(card);
             })
-
         })
-
-        //  console.log("loop done")
-        //
-        //  console.log("fetching model")
-        // const card = await Card.findByPk(newCard.id, {
-        //      include: [
-        //          {
-        //              model: Column,
-        //              attributes: ["title"],
-        //          },
-        //          {
-        //              model: Label,
-        //              attributes: ["title", "id", "color"],
-        //          },
-        //          {
-        //              model: CardField
-        //          }
-        //      ],
-        //  })
-        //  io.emit("new card", {
-        //      card
-        //  })
-        //  console.log("returning model")
-        //  res.status(201).json(card);
-
     } catch (error) {
         console.log(error.message);
     }

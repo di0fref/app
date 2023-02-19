@@ -11,7 +11,17 @@ import CardField from "../models/CardField.js";
 
 export const getProjects = async (req, res) => {
     try {
-        const response = await Project.findAll()
+        const response = await Project.findAll({
+            include:{
+                model: User,
+                where:{
+                    id: req.user.id
+                }
+            },
+           where:{
+
+           }
+        })
 
         res.status(200).json(response);
     } catch
@@ -24,9 +34,6 @@ export const getProjects = async (req, res) => {
 export const addField = async (req, res) => {
     try {
         const projectField = await ProjectField.create(req.body)
-
-        console.log(projectField.id);
-
         /* All cards need to have this field */
         const cards = await Card.findAll(
             {
@@ -36,8 +43,6 @@ export const addField = async (req, res) => {
             });
         Promise.all(
             Object.values(cards).map(card => {
-
-                console.log(card.title)
                 CardField.create({
                     cardId: card.id,
                     name: req.body.title,
@@ -86,7 +91,6 @@ export const getFilteredProjectById = async (req, res) => {
                                     model: Label,
                                     attributes: ["title", "id", "color"],
                                     order: [["title", "asc"]],
-                                    as: "labels",
                                     where: labelWhere
                                 }, {
                                     model: Column,
@@ -190,7 +194,15 @@ export const addColumn = async (req, res) => {
         console.log(error.message);
     }
 }
-
+export const createProject = async (req, res) => {
+    try {
+        const project = await Project.create(req.body)
+        res.status(200).json(project);
+    } catch
+        (error) {
+        console.log(error.message);
+    }
+}
 
 export const updateProject = async (req, res) => {
     try {

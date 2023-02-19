@@ -66,7 +66,7 @@ export default function Filters({project}) {
                                 className={`${open || enabledCount ? "bg-modal-darker" : "bg-[#3E7EA6] text-neutral-200"} z-10 hover:bg-modal
                                 rounded-box hover:cursor-pointer ring-0  border-0 !active:border-0
                                 !active:border-0 !focus:ring-0 !focus:border-0  py-1 px-2
-                                ${(dueParams || labelParams) ? "rounded-l-box rounded-r-none" : ""}`}
+                                ${(enabledCount) ? "rounded-l-box rounded-r-none" : ""}`}
                             >
 
                                 <div className={`flex items-center space-x-2 `}>

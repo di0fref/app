@@ -27,9 +27,9 @@ export default function AddField({close}) {
             type: selected.toLowerCase()
         }
 
-        // dispatch(addField(data)).unwrap().then(r => {
-        //     dispatch(getProject(project.id))
-        // })
+        dispatch(addField(data)).unwrap().then(r => {
+            dispatch(getProject(project.id))
+        })
         // if (name === "") {
         //     setError("Please add a title")
         //     return false
