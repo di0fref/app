@@ -14,12 +14,14 @@ function App() {
     return (
         <Provider store={store}>
             <QueryParamProvider
-                adapter={ReactRouter6Adapter} options={{
-                params: {
-                    labels: withDefault(ArrayParam, []),
-                    due: withDefault(ArrayParam, []),
-                }
-            }}>
+                adapter={ReactRouter6Adapter}
+                // options={{
+                //     params: {
+                //         labels: ArrayParam,
+                //         due: ArrayParam,
+                //     }
+                // }}
+            >
                 <Routes>
                     <Route path={"/"} element={<Main/>}/>
                     <Route path={"/project/:projectId"} element={<Main/>}/>

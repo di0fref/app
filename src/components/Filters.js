@@ -4,72 +4,55 @@ import {FiClock} from "react-icons/fi";
 import {useLocalStorage} from "usehooks-ts"
 import {useState, useEffect} from "react";
 import Label from "./Label";
-import {ArrayParam, useQueryParams} from "use-query-params";
+import {ArrayParam, useQueryParam, withDefault} from "use-query-params";
+
+export const myDueParams = withDefault(ArrayParam, [])
+export const myLabelParams = withDefault(ArrayParam, [])
 
 export default function Filters({project}) {
-    //
-    // const [filters, setFilters] = useLocalStorage("filters", {
-    //     due: [],
-    //     labels: []
-    // })
 
     const [enabledCount, setEnabledCount] = useState(0)
-    const [filterParams, setFilterParams] = useQueryParams()
+    const [labelParams, setLabelParams] = useQueryParam("labels", myLabelParams)
+    const [dueParams, setDueParams] = useQueryParam("due", myDueParams)
 
-    // useEffect(() => {
-    //     let count = 0;
-    //     filterParams && filterParams?.due && filterParams.due.map(([key, val], index) => {
-    //         count = val ? count = count + 1 : count
-    //     })
-    //     setEnabledCount(count + filterParams?.labels ? filterParams?.labels : 0)
-    //
-    //
-    // }, [filterParams])
 
     const setDueFilter = async (e, id) => {
-
-        // const params = filterParams
-        if(e.target.checked){
-            filterParams.due.push(id)
+        if (e.target) {
+            let data = [...dueParams]
+            if (e.target.checked) {
+                data.push(id)
+            } else {
+                const index = dueParams.findIndex(due => due === id)
+                data.splice(index, 1)
+            }
+            setDueParams(data, "replaceIn")
         }
-        else{
-            const labelIndex = filterParams.due.findIndex(due => due === id)
-            console.log(filterParams.due.splice(labelIndex, 1))
-        }
-
-        setFilterParams(filterParams)
-
     }
 
 
     useEffect(() => {
-
-        console.log(filterParams)
-
-    }, [filterParams])
+        setEnabledCount(dueParams.length + labelParams.length)
+    }, [dueParams, labelParams])
 
 
     const setLabelFilter = (e, id) => {
 
-        const labels = filterParams.labels || []
-        if(e.target.checked){
-            filterParams.labels.push(id)
+        if (e) {
+            let data = [...labelParams]
+            if (e.target.checked) {
+                data.push(id)
+            } else {
+                const index = labelParams.findIndex(due => due === id)
+                data.splice(index, 1)
+            }
+            setLabelParams(data, "replaceIn")
         }
-        else{
-            const labelIndex = labels.findIndex(label => label === id)
-            labels.splice(labelIndex, 1)
-        }
-
-        setFilterParams({
-            ...filterParams,
-            labels: labels
-        })
-
     }
 
     const resetFilter = () => {
         setEnabledCount(0)
-        setFilterParams({})
+        setDueParams([])
+        setLabelParams([])
     }
     return (
         <div className={'relative'}>
@@ -78,7 +61,13 @@ export default function Filters({project}) {
                 {({open, close}) => (
                     <>
                         <div className={'flex'}>
-                            <Popover.Button as={"div"} className={`${open || enabledCount ? "bg-modal-darker" : "bg-[#3E7EA6] text-neutral-200"} z-10 hover:bg-modal rounded-box hover:cursor-pointer ring-0  border-0 !active:border-0 !active:border-0 !focus:ring-0 !focus:border-0  py-1 px-2 ${filterParams.due ? "rounded-l-box rounded-r-none" : ""}`}>
+                            <Popover.Button
+                                as={"div"}
+                                className={`${open || enabledCount ? "bg-modal-darker" : "bg-[#3E7EA6] text-neutral-200"} z-10 hover:bg-modal
+                                rounded-box hover:cursor-pointer ring-0  border-0 !active:border-0
+                                !active:border-0 !focus:ring-0 !focus:border-0  py-1 px-2
+                                ${(dueParams || labelParams) ? "rounded-l-box rounded-r-none" : ""}`}
+                            >
 
                                 <div className={`flex items-center space-x-2 `}>
                                     <div><BsFilter/></div>
@@ -122,23 +111,23 @@ export default function Filters({project}) {
 
                                             <div className={'flex items-center space-x-2 mb-2'}>
                                                 <input name={"today"} type={"checkbox"}
-                                                       // checked={filterParams.due.includes("today") }
-                                                       onClick={(e) => {
+                                                       checked={dueParams && dueParams.includes("today")}
+                                                       onChange={(e) => {
                                                            setDueFilter(e, "today")
                                                        }}/>
                                                 <div>Today</div>
                                             </div>
 
 
-                                            {/*<div className={'flex items-center space-x-2 mb-2'}>*/}
-                                            {/*    <input name={"tomorrow"} type={"checkbox"}*/}
-                                            {/*           checked={filterParams && filterParams?.due && filterParams.due.includes("tomorrow")}*/}
-                                            {/*           onChange={(e) => setDueFilter(e, "tomorrow")}/>*/}
-                                            {/*    <div className={'flex items-center justify-start space-x-2'}>*/}
-                                            {/*        <FiClock className={'bg-[#EDD747] rounded-full text-white h-5 w-5'}/>*/}
-                                            {/*        <div>Tomorrow</div>*/}
-                                            {/*    </div>*/}
-                                            {/*</div>*/}
+                                            <div className={'flex items-center space-x-2 mb-2'}>
+                                                <input name={"tomorrow"} type={"checkbox"}
+                                                       checked={dueParams && dueParams.includes("tomorrow")}
+                                                       onChange={(e) => setDueFilter(e, "tomorrow")}/>
+                                                <div className={'flex items-center justify-start space-x-2'}>
+                                                    <FiClock className={'bg-[#EDD747] rounded-full text-white h-5 w-5'}/>
+                                                    <div>Tomorrow</div>
+                                                </div>
+                                            </div>
 
 
                                             {/*<div className={'flex items-center space-x-2 mb-2'}>*/}
@@ -152,16 +141,18 @@ export default function Filters({project}) {
                                             {/*</div>*/}
 
 
-                                            {/*<div className={'text-sm text-neutral-500 font-semibold mt-3 mb-2 '}>Labels</div>*/}
-                                            {/*{project.labels.map(label => {*/}
+                                            <div className={'text-sm text-neutral-500 font-semibold mt-3 mb-2 '}>Labels</div>
+                                            {project.labels.map(label => {
 
-                                            {/*    return (*/}
-                                            {/*        <div key={label.id} className={'mb-2 flex items-center space-x-2'}>*/}
-                                            {/*            <input checked={filterParams && filterParams?.labels && filterParams.labels.includes(label.id)} type={"checkbox"} onChange={(e) => setLabelFilter(e, label.id)}/>*/}
-                                            {/*            <div className={'w-full'}><Label label={label}/></div>*/}
-                                            {/*        </div>*/}
-                                            {/*    )*/}
-                                            {/*})}*/}
+                                                return (
+                                                    <div key={label.id} className={'mb-2 flex items-center space-x-2'}>
+                                                        <input
+                                                            checked={labelParams && labelParams.includes(label.id)}
+                                                            type={"checkbox"} onChange={(e) => setLabelFilter(e, label.id)}/>
+                                                        <div className={'w-full'}><Label label={label}/></div>
+                                                    </div>
+                                                )
+                                            })}
 
                                         </div>
                                     </div>

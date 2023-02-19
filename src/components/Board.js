@@ -15,26 +15,24 @@ import {createSelector} from "@reduxjs/toolkit";
 import {format, add} from "date-fns";
 import {dbDateFormat} from "../helper";
 import {useParams} from "react-router-dom";
-import {ArrayParam, useQueryParams} from "use-query-params";
-
-const applyFilter = createSelector(state => state.data.project, (state, filters) => filters, (project, filters) => {
-    return project
-})
-
+import {ArrayParam, useQueryParam, withDefault} from "use-query-params";
+import {myLabelParams, myDueParams} from "./Filters";
 
 export default function Board({project}) {
 
     const dispatch = useDispatch();
     const board = useSelector(state => state.data.project)
     const params = useParams()
-    const [filterParams, setFilterParams] = useQueryParams()
+
+    const [labelParams, setLabelParams] = useQueryParam("labels", myLabelParams)
+    const [dueParams, setDueParams] = useQueryParam("due", myDueParams)
 
     useEffect(() => {
 
-        if (filterParams && (filterParams?.due ||filterParams?.labels)) {
+        if (labelParams || dueParams) {
             const projectFilters = {
-                labels: filterParams?.labels && filterParams?.labels.map(label => label) || [],
-                due: filterParams?.due && filterParams?.due.map((type, index) => {
+                labels: labelParams.map(label => label),
+                due: dueParams.map((type, index) => {
                     switch (type) {
                         case "today":
                             return format(new Date(), dbDateFormat)
@@ -56,7 +54,7 @@ export default function Board({project}) {
             })).unwrap()
         }
 
-    }, [filterParams, params.projectId])
+    }, [dueParams, labelParams, params.projectId])
 
 
     const onDragEnd = (result, columns) => {
