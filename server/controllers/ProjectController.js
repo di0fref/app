@@ -2,7 +2,7 @@ import Project from "../models/Project.js";
 import Card from "../models/Card.js";
 import User from "../models/User.js";
 import Column from "../models/Column.js"
-import {Sequelize} from "sequelize";
+import {Sequelize, Op} from "sequelize";
 import {Lane} from "react-trello";
 import Label from "../models/Label.js";
 import db from "../config/Database.js"
@@ -12,15 +12,13 @@ import CardField from "../models/CardField.js";
 export const getProjects = async (req, res) => {
     try {
         const response = await Project.findAll({
-            include:{
+            include: {
                 model: User,
-                where:{
+                where: {
                     id: req.user.id
                 }
             },
-           where:{
-
-           }
+            where: {}
         })
 
         res.status(200).json(response);
@@ -64,8 +62,22 @@ export const getFilteredProjectById = async (req, res) => {
 
     console.log(req.body)
 
-    const labelWhere = req.body.labels.length ? {id: req.body.labels.map(label => label)} : {}
-    const dueWhere = req.body.due.length ? {due: req.body.due.map(due => due)} : {}
+    const labelWhere = req.body.labels.length ? {id: req.body.labels.map(label => label)} : null
+
+    const dueWhere = req.body.due.length ?
+        {
+            [Op.and]: {
+                due: req.body.due.map(due => due),
+                status: {
+                    [Op.ne]: "archived"
+                },
+            }
+        }
+        : {
+            status: {
+                [Op.ne]: "archived"
+            },
+        }
 
     try {
         const project = await Project.findByPk(req.params.id, {
@@ -133,6 +145,11 @@ export const getProjectsById = async (req, res) => {
                             model: Card,
                             order: [["position", "asc"]],
                             separate: true,
+                            where: {
+                                status: {
+                                    [Op.ne]: "archived"
+                                }
+                            },
                             include: [
                                 {
                                     model: Label,

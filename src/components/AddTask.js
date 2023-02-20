@@ -1,6 +1,8 @@
 import {useRef, useState, useEffect} from "react";
 import {useDispatch} from "react-redux";
 import {addTask} from "../redux/dataSlice";
+import {BsThreeDotsVertical} from "react-icons/bs";
+import ColumnMenu from "./ColumnMenu";
 
 export default function AddTask({column, project, addCard}) {
 
@@ -38,7 +40,12 @@ export default function AddTask({column, project, addCard}) {
     }
     return (
         <div className={'w-full p-2'}>
-            <div className={'font-semibold text-md'}>{column?.title}</div>
+
+            <div className={'flex items-center justify-between'}>
+                <div className={'font-semibold text-md'}>{column?.title}</div>
+                <div><ColumnMenu column={column}/></div>
+            </div>
+
             {!editing
                 ? (
                     <div>

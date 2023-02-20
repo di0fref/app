@@ -165,6 +165,18 @@ export const updateField = createAsyncThunk(
         }
     }
 )
+export const archiveCards = createAsyncThunk(
+    'data/archiveCards',
+    async (cards, thunkAPI) => {
+        console.log(cards);
+        try {
+            const response = await axios.post("/cards/archive", cards)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
 
 const initialState = {
@@ -209,7 +221,12 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(archiveCards.fulfilled, (state, action) => {
 
+
+
+                console.log(action.payload);
+            })
             .addCase(updateField.fulfilled, (state, action) => {
 
                 /* Find the card */

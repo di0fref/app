@@ -116,7 +116,7 @@ export const createCard = async (req, res) => {
 
         await Promise.all(
             Object.values(projectFields).map(async projectField => {
-               await CardField.create({
+                await CardField.create({
                     cardId: newCard.id,
                     name: projectField.title,
                     projectFieldId: projectField.id
@@ -125,20 +125,20 @@ export const createCard = async (req, res) => {
         ).then(result => {
 
             Card.findByPk(newCard.id, {
-                 include: [
-                     {
-                         model: Column,
-                         attributes: ["title"],
-                     },
-                     {
-                         model: Label,
-                         attributes: ["title", "id", "color"],
-                     },
-                     {
-                         model: CardField
-                     }
-                 ],
-             }).then(card => {
+                include: [
+                    {
+                        model: Column,
+                        attributes: ["title"],
+                    },
+                    {
+                        model: Label,
+                        attributes: ["title", "id", "color"],
+                    },
+                    {
+                        model: CardField
+                    }
+                ],
+            }).then(card => {
                 io.emit("new card", {
                     card
                 })
@@ -150,7 +150,6 @@ export const createCard = async (req, res) => {
     }
 }
 export const addLabel = async (req, res) => {
-    console.log(req.body.card_id);
     try {
         Card.findByPk(req.body.card_id).then(card => {
             card.addLabels(req.body.labelId).then(sc => {
@@ -188,4 +187,21 @@ export const removeLabel = async (req, res) => {
     }
 }
 
+export const archiveCards = async (req, res) => {
 
+    try {
+        await Promise.all(
+            req.body.map(async cardId => {
+                Card.update({status: "archived"}, {
+                    where: {
+                        id: cardId
+                    },
+                })
+            })
+        )
+        res.status(201).json(req.body);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
