@@ -40,7 +40,7 @@
   },
   "scripts": {
     "server": "nodemon ./server/server.js",
-    "client": "react-scripts start ",
+    "client": "BROWSER=none react-scripts start ",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "eslintConfig": {

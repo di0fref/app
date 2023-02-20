@@ -21,13 +21,18 @@ const socketMiddleware = store => {
         const isConnectionEstablished = socket && store.getState().data.isConnected;
 
         if (startConnecting.match(action)) {
-            socket = io("ws://localhost:8000", {
+            socket = io.connect("ws://localhost:8000", {
                 auth: {token: `Bearer ${store.getState().data.accessToken}`}
             })
 
             socket.on('connect', () => {
                 store.dispatch(connectionEstablished());
                 // path?.params.id && store.dispatch(getProject(path.params.id))
+                // console.log(store.getState().data.user.id)
+
+                socket.emit("init", {
+                    user: store.getState().data.user
+                })
             })
             socket.on("new card", (data) => {
                 console.log("new card", data);

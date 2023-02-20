@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
 import axios from "axios";
 import "../http-common.js"
-import {da} from "date-fns/locale";
+import {socket} from "./store";
 
 export const getProject = createAsyncThunk(
     'data/getProject',
@@ -195,6 +195,7 @@ export const dataSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload
+
         },
         setAccessToken: (state, action) => {
             state.accessToken = action.payload
@@ -223,9 +224,15 @@ export const dataSlice = createSlice({
         builder
             .addCase(archiveCards.fulfilled, (state, action) => {
 
+                action.payload.map(id => {
+                    state.project.columns.map((col, colIndex) => col.cards.map((card, cardIndex) => {
+                        if(card.id === id){
+                            state.project.columns[colIndex].cards.splice(cardIndex, 1)
+                        }
+                    }))
+                })
 
 
-                console.log(action.payload);
             })
             .addCase(updateField.fulfilled, (state, action) => {
 

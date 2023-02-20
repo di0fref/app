@@ -18,7 +18,10 @@ const Card = db.define('cards', {
         text: Sequelize.TEXT,
         due: Sequelize.DATEONLY,
         prio: Sequelize.STRING,
-        status: Sequelize.STRING,
+        status: {
+            type: Sequelize.STRING,
+            defaultValue: ""
+        },
         position: {
             type: Sequelize.INTEGER,
             defaultValue: 0

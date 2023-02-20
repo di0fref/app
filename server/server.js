@@ -10,12 +10,21 @@ import "./models/Associations.js"
 import authenticateJWT from "./auth/token.js";
 import {accessTokenSecret} from "./controllers/UserController.js";
 import {authorize} from '@thream/socketio-jwt'
+import {addUser, getAllUsers} from "./users.js";
 export const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, {cors: {origin: "*"}});
 
 io.on('connection', function (socket) {
     console.log('Client connected to the WebSocket');
+
+    socket.on('init', (user) => {
+
+        console.log(user.name, user.id)
+        addUser(user.id, user.name)
+
+        console.log(getAllUsers())
+    });
 
     socket.on('disconnect', () => {
         console.log('Client disconnected');

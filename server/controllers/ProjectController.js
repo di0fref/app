@@ -97,6 +97,7 @@ export const getFilteredProjectById = async (req, res) => {
                             model: Card,
                             order: [["position", "asc"]],
                             separate: true,
+                            required: false,
                             where: dueWhere,
                             include: [
                                 {
@@ -145,9 +146,10 @@ export const getProjectsById = async (req, res) => {
                             model: Card,
                             order: [["position", "asc"]],
                             separate: true,
+                            required: false,
                             where: {
                                 status: {
-                                    [Op.ne]: "archived"
+                                    [Op.ne]: "archived",
                                 }
                             },
                             include: [

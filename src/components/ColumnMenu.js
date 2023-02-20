@@ -40,10 +40,14 @@ export default function ColumnMenu({column}) {
                                 </button>
 
                                 <div className={'text-md flex flex-col space-y-1'}>
-                                    <button className={'text-left w-full hover:bg-modal px-2 py-1'}>Mark all cards as done</button>
                                     <button className={'text-left w-full hover:bg-modal px-2 py-1'}>Move all cards in this list</button>
-                                    <button className={'text-left w-full border-b'}></button>
-                                    <button onClick={archiveAllCards} className={'text-left w-full hover:bg-modal px-2 py-1'}>Archive all cards in this list</button>
+
+                                    <button onClick={e => {
+                                        archiveAllCards(e)
+                                        close()
+                                    }} className={'text-left w-full hover:bg-modal px-2 py-1'}>Archive all cards in this list</button>
+                                    <div className={'text-left w-full border-b'}/>
+
                                     <button className={'text-left w-full hover:bg-modal px-2 py-1'}>Archive this list</button>
                                 </div>
 

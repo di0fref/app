@@ -199,6 +199,7 @@ export const archiveCards = async (req, res) => {
                 })
             })
         )
+
         res.status(201).json(req.body);
 
     } catch (error) {
