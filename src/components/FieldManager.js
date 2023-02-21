@@ -39,6 +39,7 @@ export default function FieldManager({project__}) {
         }
     }
 
+
     const closeModal = () => {
 
     }
@@ -98,21 +99,21 @@ export default function FieldManager({project__}) {
                                                 <Disclosure.Button onClick={() => setModalOpen(true)} className={'cancel-btn bg-modal hover:bg-modal-dark w-full'}>
                                                     Create new field
                                                 </Disclosure.Button>
-                                                <Transition
-                                                    className={'absolute top-0 left-0 w-full h-full'}
-                                                    enter="transition ease duration-300 transform"
-                                                    enterFrom="opacity-100 -translate-x-80"
-                                                    enterTo="opacity-100 translate-x-0"
-                                                    leave="transition ease duration-300 transform"
-                                                    leaveFrom="opacity-100 translate-x-0"
-                                                    leaveTo="opacity-100 -translate-x-80">
+                                                {/*<Transition*/}
+                                                {/*    className={'absolute top-0 left-0 w-full h-full'}*/}
+                                                {/*    enter="transition ease duration-300 transform"*/}
+                                                {/*    enterFrom="opacity-100 -translate-x-80"*/}
+                                                {/*    enterTo="opacity-100 translate-x-0"*/}
+                                                {/*    leave="transition ease duration-300 transform"*/}
+                                                {/*    leaveFrom="opacity-100 translate-x-0"*/}
+                                                {/*    leaveTo="opacity-100 -translate-x-80">*/}
                                                     <Disclosure.Panel className="h-full absolute z-50 top-0 left-0 bg-white">
                                                         <button onClick={close} className={'absolute h-6 w-6 top-3 left-4'}>
                                                             <BsArrowLeft/>
                                                         </button>
                                                         <AddField close={close}/>
                                                     </Disclosure.Panel>
-                                                </Transition>
+                                                {/*</Transition>*/}
                                             </>
                                         )}
                                     </Disclosure>

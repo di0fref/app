@@ -55,8 +55,8 @@ export default function AddField({close}) {
                     field
                 </div>
 
-                <label htmlFor={"name"} className={'text-sm text-neutral-500 font-semibold mb-4'}>Title</label>
-                <input ref={ref} className={'mt-1 border-1 border-neutral-300 text-md px-2 py-1.5 w-full  rounded-box '} type={"text"} onChange={(e) => setName(e.target.value)}/>
+                <label htmlFor={"name"} className={'text-xs text-neutral-500 font-semibold mb-4'}>Title</label>
+                <input autoFocus={true} ref={ref} className={'mt-1 border-1 border-neutral-300 text-md px-2 py-1.5 w-full  rounded-box '} type={"text"} onChange={(e) => setName(e.target.value)}/>
 
                 <div className={'text-red-600 text-sm'}>{error}</div>
 
@@ -70,7 +70,7 @@ export default function AddField({close}) {
                             <div className="relative mt-1">
 
 
-                                <div  className={'text-sm text-neutral-500 font-semibold mb-2'}>Type</div>
+                                <div  className={'text-xs text-neutral-500 font-semibold mb-2'}>Type</div>
                                 <Listbox.Button className="bg-modal justify-between inline-flex w-full justify-center rounded-md border border-gray-300_ bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-0 ">
                                     {selected}
                                     <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true"/>

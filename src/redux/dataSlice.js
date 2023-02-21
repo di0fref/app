@@ -199,7 +199,18 @@ export const getNewCard = createAsyncThunk(
         }
     }
 )
-
+export const createProject = createAsyncThunk(
+    'data/createProject',
+    async (project, thunkAPI) => {
+        try {
+            const response = await axios.post("/projects/", project)
+            console.log(response)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
 const initialState = {
     projects: [],
@@ -217,7 +228,6 @@ export const dataSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload
-
         },
         setAccessToken: (state, action) => {
             state.accessToken = action.payload
@@ -244,6 +254,10 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(createProject.fulfilled, (state, action) => {
+                console.log(action.payload)
+                // return action.payload
+            })
             .addCase(getNewCard.fulfilled, (state, action) => {
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
                 state.project.columns[columnIndex].cards.unshift(action.payload)

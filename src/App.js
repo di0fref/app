@@ -6,8 +6,10 @@ import {Navigate, Route, Routes} from "react-router-dom";
 import Main from "./components/Main";
 import "./auth/firebase.js"
 import "react-datepicker/dist/react-datepicker.css";
+import 'react-toastify/dist/ReactToastify.min.css';
 import {ArrayParam, QueryParamProvider, withDefault} from 'use-query-params';
 import {ReactRouter6Adapter} from 'use-query-params/adapters/react-router-6';
+import {ToastContainer} from 'react-toastify';
 
 function App() {
 
@@ -15,13 +17,12 @@ function App() {
         <Provider store={store}>
             <QueryParamProvider
                 adapter={ReactRouter6Adapter}
-                // options={{
-                //     params: {
-                //         labels: ArrayParam,
-                //         due: ArrayParam,
-                //     }
-                // }}
             >
+                <ToastContainer
+                    hideProgressBar={true}
+                    className={""}
+                    position="top-center"/>
+
                 <Routes>
                     <Route path={"/"} element={<Main/>}/>
                     <Route path={"/project/:projectId"} element={<Main/>}/>

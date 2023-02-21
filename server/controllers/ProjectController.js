@@ -215,8 +215,34 @@ export const addColumn = async (req, res) => {
 }
 export const createProject = async (req, res) => {
     try {
-        const project = await Project.create(req.body)
+
+        console.log(req.body)
+        console.log(req.user)
+
+        const project = await Project.create({
+            title: req.body.title,
+        })
+        console.log(project.id)
+
+        project.addUsers(req.user.id)
+        /* Create default columns */
+        const colBacklog = await Column.create({
+            title: "Backlog",
+            projectId: project.id
+        })
+
+        const colStarted = await Column.create({
+            title: "Started",
+            projectId: project.id
+        })
+
+        const colDone = await Column.create({
+            title: "Done",
+            projectId: project.id
+        })
+
         res.status(200).json(project);
+
     } catch
         (error) {
         console.log(error.message);

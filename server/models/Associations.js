@@ -25,7 +25,6 @@ Label.belongsTo(Project)
 Label.belongsToMany(Card, {through: 'CardLabels', timestamps: false})
 Card.belongsToMany(Label, {through: 'CardLabels', timestamps: false})
 
-
 ProjectField.belongsTo(Project)
 Project.hasMany(ProjectField)
 
