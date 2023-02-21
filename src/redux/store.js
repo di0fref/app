@@ -1,5 +1,5 @@
 import {applyMiddleware, combineReducers, configureStore} from '@reduxjs/toolkit'
-import dataReducer, {getCard, getProject, setBoard} from "./dataSlice"
+import dataReducer, {getUpdatedCard, getProject, setBoard, getNewCard} from "./dataSlice"
 import {startConnecting, connectionEstablished} from "./dataSlice";
 import io from "socket.io-client"
 import {matchPath} from "react-router-dom";
@@ -40,26 +40,16 @@ const socketMiddleware = store => {
                     })
                 })
             })
-            socket.on("new card", (data) => {
+            socket.on("card new", (data) => {
                 console.log("new card", data);
-                // console.log(data);
+                store.dispatch(getNewCard(data.id))
             })
             socket.on("card reorder", (data) => {
-                console.log("card reorder", data);
                 store.dispatch(setBoard(data.board))
-                console.log(data.board);
             })
             socket.on("card update", (data) => {
-                console.log("card updated", data);
-                store.dispatch(getCard(data.id))
-                // console.log(data);
+                store.dispatch(getUpdatedCard(data.id))
             })
-
-            socket.on("update", (data) => {
-                console.log("update");
-                // console.log(data);
-            })
-
         }
         next(action);
     }

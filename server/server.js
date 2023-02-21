@@ -33,7 +33,7 @@ io.on('connection', function (socket) {
     })
 
 
-    socket.on("card reorder", function ({board, room}) {
+    socket.on("card reorder", function ({room, board}) {
         const user = getUser(socket.id)
         socket.broadcast.in(room).emit('card reorder', {
             board: board,
@@ -43,6 +43,14 @@ io.on('connection', function (socket) {
     socket.on("card update", function ({room, id}) {
         const user = getUser(socket.id)
         socket.broadcast.in(room).emit('card update', {
+            id: id,
+        });
+    })
+
+    socket.on("card new", function ({room, id}) {
+        console.log(room, id);
+        const user = getUser(socket.id)
+        socket.broadcast.in(room).emit('card new', {
             id: id,
         });
     })

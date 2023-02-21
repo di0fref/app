@@ -3,6 +3,7 @@ import {useDispatch} from "react-redux";
 import {addTask} from "../redux/dataSlice";
 import {BsThreeDotsVertical} from "react-icons/bs";
 import ColumnMenu from "./ColumnMenu";
+import {socket} from "../redux/store";
 
 export default function AddTask({column, project, addCard}) {
 
@@ -18,6 +19,12 @@ export default function AddTask({column, project, addCard}) {
             columnId: column.id,
             title: value
         })).unwrap().then(response => {
+
+            socket.emit("card new", {
+                id: response.id,
+                room: response.projectId
+            })
+
             addCard(response)
         })
     }
