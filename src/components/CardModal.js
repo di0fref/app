@@ -14,6 +14,7 @@ import {dbDateFormat} from "../helper";
 import TextareaAutosize from "react-textarea-autosize"
 import FieldManager from "./FieldManager";
 import CardFields from "./CardFields";
+import {socket} from "../redux/store";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -45,7 +46,6 @@ export default function CardModal({project, ...props}) {
     function closeModal() {
         setIsOpen(false)
         dispatch(setCurrentCard(null))
-        console.log(nav)
         // nav("/project/" + params.projectId)
         nav(-1)
     }
@@ -58,7 +58,13 @@ export default function CardModal({project, ...props}) {
         dispatch(updateTask({
             id: currentCard.id,
             title: e.target.value
-        }))
+        })).then(res => {
+            console.log("Emitting");
+            socket.emit("card update", {
+                id: currentCard.id,
+                room: currentCard.projectId
+            })
+        })
     }
     const onDateChange = (date) => {
         dispatch(updateTask({

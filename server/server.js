@@ -10,7 +10,8 @@ import "./models/Associations.js"
 import authenticateJWT from "./auth/token.js";
 import {accessTokenSecret} from "./controllers/UserController.js";
 import {authorize} from '@thream/socketio-jwt'
-import {addUser, getAllUsers} from "./users.js";
+import {addUser, getAllUsers, deleteUser, getUser} from "./users.js";
+
 export const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, {cors: {origin: "*"}});
@@ -18,22 +19,34 @@ export const io = new Server(server, {cors: {origin: "*"}});
 io.on('connection', function (socket) {
     console.log('Client connected to the WebSocket');
 
-    socket.on('init', (user) => {
-
-        console.log(user.name, user.id)
-        addUser(user.id, user.name)
-
-        console.log(getAllUsers())
+    socket.on('init', ({userId, userName}) => {
+        addUser(socket.id, userName)
     });
 
     socket.on('disconnect', () => {
-        console.log('Client disconnected');
+        const user = deleteUser(socket.id)
     });
 
-    socket.on('update', function (msg) {
-        console.log("Received a chat message");
-        io.emit('update', msg);
-    });
+    socket.on("join", function ({room, name}) {
+        socket.join(room)
+        console.log(name + " joined room", room)
+    })
+
+
+    socket.on("card reorder", function ({board, room}) {
+        const user = getUser(socket.id)
+        socket.broadcast.in(room).emit('card reorder', {
+            board: board,
+        });
+    })
+
+    socket.on("card update", function ({room, id}) {
+        const user = getUser(socket.id)
+        socket.broadcast.in(room).emit('card update', {
+            id: id,
+        });
+    })
+
 })
 
 

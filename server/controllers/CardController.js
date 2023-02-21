@@ -18,7 +18,33 @@ export const getCards = async (req, res) => {
     }
 }
 
+export const getCard = async (req, res) => {
 
+    console.log(req.id);
+    try {
+        const response = await Card.findByPk(req.params.id, {
+            include: [
+                {
+                    model: Label,
+                    attributes: ["title", "id", "color"],
+                    order: [["title", "asc"]],
+                    // separate: true
+                }, {
+                    model: Column,
+                    attributes: ["title"],
+                },
+                {
+                    model: CardField,
+                    order: [["name", "asc"]],
+                    separate: true,
+                }
+            ]
+        });
+        res.status(200).json(response);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 export const getCardsByIds = async (req, res) => {
     const cards = await Card.findAll({
         where: {

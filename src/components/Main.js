@@ -25,7 +25,7 @@ export default function Main() {
     const params = useParams()
 
     const project = useSelector(state => state.data.project)
-
+    const connectionEstablished = useSelector(state => state.data.isConnected)
     useEffect(() => {
         if (!localStorage.getItem("accessToken")) {
             console.error("Missing accessToken", "Redirecting to login");
@@ -35,7 +35,10 @@ export default function Main() {
         } else {
             dispatch(setAccessToken(localStorage.getItem("accessToken")))
             dispatch(setUser(JSON.parse(localStorage.getItem("user"))))
-            dispatch(startConnecting())
+            dispatch(getProjects()).then(r => {
+                dispatch(startConnecting())
+            })
+
         }
     }, [])
 
@@ -48,9 +51,10 @@ export default function Main() {
             : dispatch(setCurrentProject({}))
     }, [params.projectId])
 
-    useEffect(() => {
-        dispatch(getProjects())
-    }, [])
+    // useEffect(() => {
+    //     console.log("connectionEstablished");
+    //     dispatch(getProjects())
+    // }, [connectionEstablished])
 
     useEffect(() => {
         if (params.cardId && project.columns) {

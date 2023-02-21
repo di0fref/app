@@ -2,12 +2,14 @@ import express from "express";
 import {
     createCard,
     getCards, updateCard, reorderCards,
-    addLabel, removeLabel, getCardsByIds, updateField, archiveCards
+    addLabel, removeLabel, getCardsByIds, updateField, archiveCards, getCard
 } from "../controllers/CardController.js";
 
 const router = express.Router();
 
 router.get('/cards', getCards);
+router.get('/cards/:id', getCard);
+
 // router.get('/users/:id', getUserById);
 router.post('/cards', createCard);
 router.put('/cards', updateCard);

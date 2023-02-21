@@ -62,8 +62,6 @@ export const updateColumn = createAsyncThunk(
 export const addColumn = createAsyncThunk(
     'data/addColumn',
     async (column, thunkAPI) => {
-
-        console.log(column)
         try {
             const response = await axios.post("/projects/column/add", column)
             return response.data
@@ -177,6 +175,18 @@ export const archiveCards = createAsyncThunk(
         }
     }
 )
+export const getCard = createAsyncThunk(
+    'data/getCard',
+    async (id, thunkAPI) => {
+        console.log(id);
+        try {
+            const response = await axios.get("/cards/" + id)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
 
 const initialState = {
@@ -222,11 +232,23 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(getCard.fulfilled, (state, action) => {
+                // console.log(action.payload);
+
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
+
+                state.project.columns[columnIndex].cards[cardIndex] = {
+                    ...state.project.columns[columnIndex].cards[cardIndex],
+                    ...action.payload
+                }
+
+            })
             .addCase(archiveCards.fulfilled, (state, action) => {
 
                 action.payload.map(id => {
                     state.project.columns.map((col, colIndex) => col.cards.map((card, cardIndex) => {
-                        if(card.id === id){
+                        if (card.id === id) {
                             state.project.columns[colIndex].cards.splice(cardIndex, 1)
                         }
                     }))

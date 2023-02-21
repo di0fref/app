@@ -4,7 +4,7 @@ import AddTask from "./AddTask";
 import Card from "./Card";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {store} from "../redux/store";
+import {socket, store} from "../redux/store";
 import React from "react";
 import ColumnAdder from "./ColumnAdder";
 import {getProject, reorderTasks, setBoard} from "../redux/dataSlice";
@@ -95,7 +95,7 @@ export default function Board({project}) {
                     ...cols[destColumnIndex], cards: destItems
                 }
 
-                setBoard({columns: cols})
+                setBoard(cols)
 
                 const sourceCards = cols[sourceColumnIndex].cards
                 const destCards = cols[destColumnIndex].cards
@@ -116,6 +116,11 @@ export default function Board({project}) {
                     dispatch(reorderTasks(dCards)).unwrap().then(t => {
                         dispatch(setBoard(cols))
                     })
+                })
+
+                socket.emit("card reorder", {
+                    board: cols,
+                    room: project.id
                 })
 
 
@@ -142,6 +147,11 @@ export default function Board({project}) {
                 })
                 dispatch(reorderTasks(orderedCards)).unwrap()
                 dispatch(setBoard(cols))
+
+                socket.emit("card reorder", {
+                    board: cols,
+                    room: project.id
+                })
             }
         }
     }
@@ -155,7 +165,9 @@ export default function Board({project}) {
                 id: card.id, position: index,
             };
         })
-        dispatch(reorderTasks(orderedCards)).unwrap()
+        dispatch(reorderTasks(orderedCards)).unwrap().then(response => {
+
+        })
     }
 
     if (board?.columns && board?.columns.length) {

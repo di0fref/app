@@ -24,6 +24,8 @@ function classNames(...classes) {
 
 export default function Navbar() {
 
+    const user = useSelector(store => store.data.user)
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const params = useParams()
@@ -49,6 +51,8 @@ export default function Navbar() {
                                         className={'text-white hover:bg-[#537DA4] hover:text-white px-3 py-2 rounded-md text-sm font-medium'}>
                                         {item.name}
                                     </Link>))}
+                                {user.email}
+
 
                                 <div className={'relative'}>
                                     <Menu>
