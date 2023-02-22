@@ -7,10 +7,11 @@ import {Draggable} from 'react-beautiful-dnd';
 import {current} from "@reduxjs/toolkit";
 import {GrTextAlignFull} from "react-icons/gr";
 import {useEffect, useState} from "react";
+import {HiArchive, HiOutlineArchive} from "react-icons/hi";
 
 export default function Card({card, index}) {
 
-        const [fieldHaveValues, setFieldHaveValues] = useState(false)
+    const [fieldHaveValues, setFieldHaveValues] = useState(false)
 
     const fieldsHaveValueCheck = () => {
         if (!card?.card_fields.length) {
@@ -37,6 +38,13 @@ export default function Card({card, index}) {
                     <Link to={"card/" + card.id} className={'group'}>
 
                         <div className={'mx-1_ hover:shadow-md p-2 mt-2 rounded-box bg-white shadow w-64_ _min-h-[6rem] hover:bg-neutral-50 relative'}>
+
+                            {/*{card.status === "archived" ? (*/}
+                            {/*    <div className={'pl-2 flex items-center space-x-2 bg-archive-warning mb-2'}>*/}
+                            {/*        <HiOutlineArchive/>*/}
+                            {/*    <div className={'font-semibold text-sm'}>This card is archived</div>*/}
+                            {/*        </div>*/}
+                            {/*) : ""}*/}
 
                             {card?.labels && card?.labels.length ? (
                                 <div className={'pb-1.5'}>
@@ -71,7 +79,6 @@ export default function Card({card, index}) {
                                     </div>
                                 </div>
                             ) : ""}
-
 
                         </div>
                     </Link>

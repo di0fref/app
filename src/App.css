@@ -48,6 +48,12 @@ body, html {
     @apply text-neutral-500 py-1 px-2 hover:bg-neutral-200 hover:text-neutral-700 text-sm rounded
 }
 
+.bg-archive-warning{
+    background-color: #FDFAE5;
+    background-image: linear-gradient(to bottom right, var(--ds-background-neutral, rgba(0, 0, 0, 0.05)) 25%, transparent 25%, transparent 50%, var(--ds-background-neutral, rgba(0, 0, 0, 0.05)) 50%, var(--ds-background-neutral, rgba(0, 0, 0, 0.05)) 75%, transparent 75%, transparent);
+    background-size: 14px 14px;
+}
+
 input[type=checkbox] {
     @apply shrink-0 mt-0.5
         /*border-neutral-400/90*/

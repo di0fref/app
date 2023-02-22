@@ -25,6 +25,7 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', () => {
         const user = deleteUser(socket.id)
+
     });
 
     socket.on("join", function ({room, name}) {

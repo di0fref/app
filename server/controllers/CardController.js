@@ -8,7 +8,7 @@ import {response} from "express";
 import Field from "../models/Field.js";
 import CardField from "../models/CardField.js";
 import ProjectField from "../models/ProjectField.js";
-
+import _ from "lodash"
 export const getCards = async (req, res) => {
     try {
         const response = await Card.findAll();
@@ -58,11 +58,16 @@ export const reorderCards = async (req, res) => {
     try {
         Promise.all(
             Object.values(req.body).map(card => {
-                Card.update(card, {
-                    where: {
-                        id: card.id
-                    },
-                })
+
+                // Card.update(card, {
+                //     where: {
+                //         id: card.id
+                //     },
+                // })
+
+                updateCard(card, res)
+
+
             })
         ).then(response => {
             res.status(200).json(true);
@@ -100,6 +105,24 @@ export const updateField = async (req, res) => {
 
 export const updateCard = async (req, res) => {
     try {
+
+
+        const originalObj = await Card.findByPk(req.body.id)
+
+        const result = _.pickBy(req.body, (v, k) => !_.isEqual(originalObj[k], v))
+
+        console.log(result);
+        /* Audit on */
+        /*
+            Move
+            Archive
+            Unarchive
+            Due
+            Delete
+            Added user
+            Deleted user
+        */
+
         const response = await Card.update(req.body, {
             where: {
                 id: req.body.id

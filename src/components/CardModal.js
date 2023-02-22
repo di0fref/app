@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {HiOutlineXMark} from "react-icons/hi2";
 import {useNavigate, useParams} from "react-router-dom";
 import {setCurrentCard, updateTask} from "../redux/dataSlice";
-import {BsCalendar, BsCardText, BsTextLeft, BsX, BsCheck} from "react-icons/bs";
+import {BsCalendar, BsCardText, BsTextLeft, BsX, BsCheck, BsArchiveFill, BsArchive} from "react-icons/bs";
 import Description from "./Description";
 import LabelManager from "./LabelManager";
 import DatePicker from "react-datepicker";
@@ -15,6 +15,8 @@ import TextareaAutosize from "react-textarea-autosize"
 import FieldManager from "./FieldManager";
 import CardFields from "./CardFields";
 import {socket} from "../redux/store";
+import {TiArchive} from "react-icons/ti";
+import {HiArrowCircleRight, HiOutlineArchive, HiRefresh} from "react-icons/hi";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -84,10 +86,23 @@ export default function CardModal({project, ...props}) {
 
 
                     <Dialog.Panel className="md:max-w-3xl w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all">
-                        <div className={'min-h-[90vh] pl-12 pr-4 py-8'}>
+
+                        <div className={`${currentCard?.status === "archived" ? "bg-archive-warning" : ""} h-10`}>
+                            {currentCard?.status === "archived"?
+                                <div className={'flex items-center pt-2 pl-6 space-x-2'}>
+                                <HiOutlineArchive/>
+                                <div className={'font-semibold'}>
+                                    This card is archived
+                                </div>
+                            </div>
+                                :""}
                             <button onClick={closeModal} className={'absolute top-2 right-2'}>
                                 <BsX className={'h-6 w-6'}/>
                             </button>
+                        </div>
+                        <div className={'min-h-[90vh] pl-12 pr-4 py-3'}>
+
+
                             <div className={'flex items-center space-x-2 font-semibold text-xl'}>
                                 <div className={'absolute left-6'}><BsCardText className={'h-5 w-5'}/></div>
                                 <div className={'text-neutral-500'}>#{currentCard?.number}</div>
@@ -164,6 +179,15 @@ export default function CardModal({project, ...props}) {
                                         <CustomDatePicker onDateChange={onDateChange} _date={currentCard?.due}/>
                                     </div>
                                     <FieldManager/>
+
+                                    <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Actions</div>
+
+                                    <button className={'mb-4'}><CardModelButton value={"Send to board"} icon={
+                                        <HiRefresh/>}/></button>
+
+                                    <button><CardModelButton value={"Archive"} icon={
+                                        <HiOutlineArchive className={'h-4 w-4'}/>}/></button>
+
                                 </div>
                             </div>
                         </div>

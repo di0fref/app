@@ -1,6 +1,6 @@
 import {Sequelize, DataTypes} from "sequelize";
 import db from "../config/Database.js";
-
+import Temporal from "sequelize-temporal"
 
 const Card = db.define('cards', {
         id: {
@@ -30,6 +30,6 @@ const Card = db.define('cards', {
     },
     {freezeTableName: true},
 )
-
+// Temporal(Card, db, {})
 
 export default Card;

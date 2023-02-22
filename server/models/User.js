@@ -2,6 +2,8 @@ import {Sequelize} from "sequelize";
 import db from "../config/Database.js";
 import Card from "./Card.js";
 
+
+
 const User = db.define('users', {
     id: {
         type: Sequelize.UUID,
@@ -19,8 +21,10 @@ const User = db.define('users', {
     freezeTableName: true
 });
 
+
+
 export default User;
 
-// (async () => {
-//     await db.sync({ alter: true });
-// })();
+(async () => {
+    await db.sync({ alter: true });
+})();

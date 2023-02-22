@@ -5,6 +5,8 @@ import Column from "./Column.js";
 import Label from "./Label.js";
 import ProjectField from "./ProjectField.js";
 import CardField from "./CardField.js";
+import Log from "./Log.js";
+import db from "../config/Database.js";
 
 Card.belongsTo(User);
 Card.belongsTo(Project)
@@ -31,3 +33,7 @@ Project.hasMany(ProjectField)
 CardField.belongsTo(ProjectField)
 CardField.belongsTo(Card)
 Card.hasMany(CardField)
+
+Card.hasMany(Log)
+Log.belongsTo(Card)
+User.hasMany(Log)

@@ -6,6 +6,8 @@ const db = new Sequelize('app','root','root',{
     logging: false
 });
 
+
+
 export default db;
 
 
