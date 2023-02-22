@@ -74,6 +74,13 @@ export default function CardModal({project, ...props}) {
             due: date ? format(date, dbDateFormat) : null,
         }))
     }
+
+    const onArchive = () => {
+      dispatch(updateTask({
+          status: "archived",
+          id: currentCard?.id
+      }))
+    }
     return (
         <Dialog
             open={isOpen}
@@ -88,14 +95,14 @@ export default function CardModal({project, ...props}) {
                     <Dialog.Panel className="md:max-w-3xl w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all">
 
                         <div className={`${currentCard?.status === "archived" ? "bg-archive-warning" : ""} h-10`}>
-                            {currentCard?.status === "archived"?
+                            {currentCard?.status === "archived" ?
                                 <div className={'flex items-center pt-2 pl-6 space-x-2'}>
-                                <HiOutlineArchive/>
-                                <div className={'font-semibold'}>
-                                    This card is archived
+                                    <HiOutlineArchive/>
+                                    <div className={'font-semibold'}>
+                                        This card is archived
+                                    </div>
                                 </div>
-                            </div>
-                                :""}
+                                : ""}
                             <button onClick={closeModal} className={'absolute top-2 right-2'}>
                                 <BsX className={'h-6 w-6'}/>
                             </button>
@@ -185,7 +192,7 @@ export default function CardModal({project, ...props}) {
                                     <button className={'mb-4'}><CardModelButton value={"Send to board"} icon={
                                         <HiRefresh/>}/></button>
 
-                                    <button><CardModelButton value={"Archive"} icon={
+                                    <button onClick={onArchive}><CardModelButton value={"Archive"} icon={
                                         <HiOutlineArchive className={'h-4 w-4'}/>}/></button>
 
                                 </div>

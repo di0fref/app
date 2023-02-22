@@ -5,7 +5,7 @@ import {
     updateProject,
     updateColumn,
     addColumn,
-    addField, getFilteredProjectById, createProject
+    addField, getFilteredProjectById, createProject, getLog
 } from "../controllers/ProjectController.js";
 const router = express.Router();
 
@@ -17,6 +17,8 @@ router.post('/projects/column/add', addColumn);
 router.post('/projects/field/add', addField);
 router.post('/projects/filtered/:id', getFilteredProjectById);
 router.post('/projects/', createProject);
+
+router.get('/projects/log/:id', getLog);
 
 
 

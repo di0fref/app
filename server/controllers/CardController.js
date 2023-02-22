@@ -9,6 +9,8 @@ import Field from "../models/Field.js";
 import CardField from "../models/CardField.js";
 import ProjectField from "../models/ProjectField.js";
 import _ from "lodash"
+import Log from "../models/Log.js"
+
 export const getCards = async (req, res) => {
     try {
         const response = await Card.findAll();
@@ -57,15 +59,24 @@ export const getCardsByIds = async (req, res) => {
 export const reorderCards = async (req, res) => {
     try {
         Promise.all(
-            Object.values(req.body).map(card => {
+            Object.values(req.body).map(async card => {
 
-                // Card.update(card, {
-                //     where: {
-                //         id: card.id
-                //     },
-                // })
-
-                updateCard(card, res)
+                const originalObj = await Card.findByPk(card.id)
+                if (originalObj.columnId !== card.columnId) {
+                    Log.create({
+                        userId: req.user.id,
+                        field: "columnId",
+                        value: card.columnId,
+                        cardId: card.id,
+                        projectId: originalObj.projectId,
+                        columnId: card.columnId
+                    })
+                }
+                Card.update(card, {
+                    where: {
+                        id: card.id
+                    },
+                })
 
 
             })
@@ -106,12 +117,33 @@ export const updateField = async (req, res) => {
 export const updateCard = async (req, res) => {
     try {
 
-
         const originalObj = await Card.findByPk(req.body.id)
+        const changes = _.pickBy(req.body, (v, k) => !_.isEqual(originalObj[k], v))
 
-        const result = _.pickBy(req.body, (v, k) => !_.isEqual(originalObj[k], v))
+        Object.entries(changes).map(([key, val]) => {
 
-        console.log(result);
+            let log = false;
+
+            switch (key) {
+                case "status":
+                    if (val === "archived")
+                        log = true
+                    break;
+                case "due": log = true
+                    break;
+            }
+
+            if(log){
+                Log.create({
+                    userId: req.user.id,
+                    field: key,
+                    value: val,
+                    cardId: originalObj.id,
+                    projectId: originalObj.projectId,
+                })
+            }
+
+        })
         /* Audit on */
         /*
             Move

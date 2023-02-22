@@ -17,6 +17,7 @@ import {dbDateFormat} from "../helper";
 import {useParams} from "react-router-dom";
 import {ArrayParam, useQueryParam, withDefault} from "use-query-params";
 import {myLabelParams, myDueParams} from "./Filters";
+import AuditLog from "./AuditLog"
 
 export default function Board({project}) {
 
@@ -172,10 +173,13 @@ export default function Board({project}) {
 
     if (board?.columns && board?.columns.length) {
 
-        return (<div>
+        return (<div className={'relative'}>
             <div className={'flex items-center space-x-6'}>
                 <div className={'text-white font-bold text-lg mb-2 px-4 pt-2'}>{project.title}</div>
                 <Filters project={project}/>
+                <div className={'flex w-full bg-white_ justify-end '}>
+                    <div className={'w-8 h-8 mr-4'}><AuditLog project={project}/></div>
+                </div>
             </div>
 
             <div className={'overflow-x-auto h-[calc(100vh-6rem)] px-4 '}>

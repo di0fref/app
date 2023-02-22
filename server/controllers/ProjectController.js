@@ -8,6 +8,7 @@ import Label from "../models/Label.js";
 import db from "../config/Database.js"
 import ProjectField from "../models/ProjectField.js";
 import CardField from "../models/CardField.js";
+import Log from "../models/Log.js"
 
 export const getProjects = async (req, res) => {
     try {
@@ -147,11 +148,11 @@ export const getProjectsById = async (req, res) => {
                             order: [["position", "asc"]],
                             separate: true,
                             required: false,
-                            where: {
-                                status: {
-                                    [Op.ne]: "archived",
-                                }
-                            },
+                            // where: {
+                            //     status: {
+                            //         [Op.ne]: "archived",
+                            //     }
+                            // },
                             include: [
                                 {
                                     model: Label,
@@ -215,16 +216,11 @@ export const addColumn = async (req, res) => {
 }
 export const createProject = async (req, res) => {
     try {
-
-        console.log(req.body)
-        console.log(req.user)
-
         const project = await Project.create({
             title: req.body.title,
         })
-        console.log(project.id)
-
         project.addUsers(req.user.id)
+
         /* Create default columns */
         const colBacklog = await Column.create({
             title: "Backlog",
@@ -258,3 +254,20 @@ export const updateProject = async (req, res) => {
     }
 }
 
+
+export const getLog = async (req, res) => {
+    try {
+        const log = await Log.findAll({
+            where: {
+                projectId: req.params.id
+            },
+            limit: 20,
+            include: [User, Column, Card]
+        })
+        res.status(200).json(log);
+
+    } catch
+        (error) {
+        console.log(error.message);
+    }
+}
