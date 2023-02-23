@@ -71,7 +71,7 @@ export default function Main() {
 
         <>
             <Navbar/>
-            <div className={'h-full'}>
+            <div className={'h-full'} >
                 {project?.id ? <Board project={project}/> : <Index/>}
                 {/*<Board project={project}/>*/}
             </div>

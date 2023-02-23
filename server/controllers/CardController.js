@@ -10,6 +10,8 @@ import CardField from "../models/CardField.js";
 import ProjectField from "../models/ProjectField.js";
 import _ from "lodash"
 import Log from "../models/Log.js"
+import Checklist from "../models/Checklist.js";
+import ChecklistItem from "../models/ChecklistItem.js";
 
 export const getCards = async (req, res) => {
     try {
@@ -287,3 +289,27 @@ export const archiveCards = async (req, res) => {
         console.log(error.message);
     }
 }
+
+export const addChecklist = async (req, res) => {
+
+    try {
+        const list = await Checklist.create(req.body)
+        res.status(200).json(list);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export const addCheckItem = async (req, res) => {
+
+    try {
+        const listItem = await ChecklistItem.create(req.body)
+
+        res.status(200).json(listItem);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+

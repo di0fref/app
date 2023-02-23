@@ -9,6 +9,8 @@ import db from "../config/Database.js"
 import ProjectField from "../models/ProjectField.js";
 import CardField from "../models/CardField.js";
 import Log from "../models/Log.js"
+import Checklist from "../models/Checklist.js"
+import ChecklistItem from "../models/ChecklistItem.js";
 
 export const getProjects = async (req, res) => {
     try {
@@ -155,10 +157,13 @@ export const getProjectsById = async (req, res) => {
                             // },
                             include: [
                                 {
+                                    model: Checklist,
+                                    include: [ChecklistItem]
+                                },
+                                {
                                     model: Label,
                                     attributes: ["title", "id", "color"],
                                     order: [["title", "asc"]],
-                                    // separate: true
                                 }, {
                                     model: Column,
                                     attributes: ["title"],

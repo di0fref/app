@@ -3,6 +3,7 @@ import {BsThreeDotsVertical, BsX} from "react-icons/bs";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Activity from "./Activity";
+import {RxActivityLog, RxArchive} from "react-icons/rx";
 
 export default function AuditLog({project}) {
 
@@ -53,11 +54,15 @@ export default function AuditLog({project}) {
                                 </button>
 
                                 <div className={'h-[calc(100vh-6.7rem)] overflow-auto p-6'}>
-                                    <div>Activity</div>
+                                    <div className={'flex items-center space-x-2 mb-4'}>
+                                        <RxActivityLog/>
+                                        <div className={'font-semibold'}>Activity</div>
+                                    </div>
 
                                     {activities?.map(activity => {
                                         return <Activity key={activity.id} activity={activity}/>
                                     })}
+
                                 </div>
                             </div>
 

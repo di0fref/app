@@ -7,6 +7,8 @@ import ProjectField from "./ProjectField.js";
 import CardField from "./CardField.js";
 import Log from "./Log.js";
 import db from "../config/Database.js";
+import Checklist from "./Checklist.js";
+import ChecklistItem from "./ChecklistItem.js";
 
 Card.belongsTo(User);
 Card.belongsTo(Project)
@@ -42,3 +44,10 @@ Log.belongsTo(User)
 User.hasMany(Log)
 Project.hasMany(Log)
 Log.belongsTo(Project)
+
+Checklist.belongsTo(Card)
+Card.hasMany(Checklist)
+
+Checklist.hasMany(ChecklistItem)
+ChecklistItem.belongsTo(Checklist)
+

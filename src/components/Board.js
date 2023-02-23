@@ -178,7 +178,7 @@ export default function Board({project}) {
                 <div className={'text-white font-bold text-lg mb-2 px-4 pt-2'}>{project.title}</div>
                 <Filters project={project}/>
                 <div className={'flex w-full bg-white_ justify-end '}>
-                    <div className={'w-8 h-8 mr-4'}><AuditLog project={project}/></div>
+                    <div className={'w-8 h-8 mr-2'}><AuditLog project={project}/></div>
                 </div>
             </div>
 
@@ -200,7 +200,7 @@ export default function Board({project}) {
                                                                 <div ref={provided.innerRef}{...provided.droppableProps}>
                                                                     <div className={'rounded-box mb-1 px-2.5 pb-2.5 max-h-[calc(100vh-13rem)] overflow-y-auto overflow-x-hidden'}>
                                                                         {column.cards.map((card, index) => {
-                                                                            return <Card key={card.id} card={card} index={index}/>
+                                                                            return (card.status !== "archived")&&<Card key={card.id} card={card} index={index}/>
                                                                         })}
                                                                         {provided.placeholder}
                                                                     </div>

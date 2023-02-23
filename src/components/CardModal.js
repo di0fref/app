@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {HiOutlineXMark} from "react-icons/hi2";
 import {useNavigate, useParams} from "react-router-dom";
 import {setCurrentCard, updateTask} from "../redux/dataSlice";
-import {BsCalendar, BsCardText, BsTextLeft, BsX, BsCheck, BsArchiveFill, BsArchive} from "react-icons/bs";
+import {BsCalendar, BsCardText, BsTextLeft, BsX, BsCheck, BsArchiveFill, BsArchive, BsTag} from "react-icons/bs";
 import Description from "./Description";
 import LabelManager from "./LabelManager";
 import DatePicker from "react-datepicker";
@@ -16,7 +16,9 @@ import FieldManager from "./FieldManager";
 import CardFields from "./CardFields";
 import {socket} from "../redux/store";
 import {TiArchive} from "react-icons/ti";
-import {HiArrowCircleRight, HiOutlineArchive, HiRefresh} from "react-icons/hi";
+import {HiArrowCircleRight, HiCheck, HiOutlineArchive, HiOutlineTag, HiRefresh, HiTag, HiUser} from "react-icons/hi";
+import ChecklistManager from "./ChecklistManager";
+import Checklist from "./Checklist";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -76,10 +78,16 @@ export default function CardModal({project, ...props}) {
     }
 
     const onArchive = () => {
-      dispatch(updateTask({
-          status: "archived",
-          id: currentCard?.id
-      }))
+        dispatch(updateTask({
+            status: "archived",
+            id: currentCard?.id
+        }))
+    }
+    const sendToBoard = () => {
+        dispatch(updateTask({
+            status: "",
+            id: currentCard?.id
+        }))
     }
     return (
         <Dialog
@@ -146,7 +154,11 @@ export default function CardModal({project, ...props}) {
                                     {currentCard?.card_fields.length ?
                                         <>
                                             <div className={'flex items-center pl-1'}>
-                                                <div className={'absolute left-6'}><BsCheck className={'h-5 w-5'}/>
+                                                <div className={'absolute left-6'}>
+                                                    <svg width="22" height="22" role="presentation" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path fillRule="evenodd" clipRule="evenodd" d="M3 6C2.44772 6 2 6.44772 2 7C2 7.55228 2.44772 8 3 8H11C11.5523 8 12 7.55228 12 7C12 6.44772 11.5523 6 11 6H3ZM4 16V12H20V16H4ZM2 12C2 10.8954 2.89543 10 4 10H20C21.1046 10 22 10.8954 22 12V16C22 17.1046 21.1046 18 20 18H4C2.89543 18 2 17.1046 2 16V12Z" fill="currentColor"></path>
+                                                    </svg>
+
                                                 </div>
                                                 <div className={'flex items-center space-x-2'}>
                                                     <div className={'font-semibold text-base'}>Custom fields</div>
@@ -176,7 +188,13 @@ export default function CardModal({project, ...props}) {
                                         <div className={"mt-4 pl-1"}>
                                             <Description card={currentCard} setEdit={setEdit} edit={edit}/>
                                         </div>
+
                                     </div>
+
+                                    {currentCard?.checklists && currentCard.checklists.map(list => (
+                                        <Checklist list={list}/>
+                                    ))}
+
                                 </div>
                                 <div className={'bg-green-600_ w-44'}>
                                     <div className={'mb-4'}>
@@ -185,16 +203,41 @@ export default function CardModal({project, ...props}) {
                                         </div>
                                         <CustomDatePicker onDateChange={onDateChange} _date={currentCard?.due}/>
                                     </div>
+
+                                    <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Add
+                                        to card
+                                    </div>
+
                                     <FieldManager/>
 
-                                    <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Actions</div>
+                                    <button onClick={() => {
+                                    }} className={'mb-2'}>
+                                        <CardModelButton value={"Member"} icon={<HiUser/>}/>
+                                    </button>
 
-                                    <button className={'mb-4'}><CardModelButton value={"Send to board"} icon={
-                                        <HiRefresh/>}/></button>
 
-                                    <button onClick={onArchive}><CardModelButton value={"Archive"} icon={
-                                        <HiOutlineArchive className={'h-4 w-4'}/>}/></button>
+                                    <ChecklistManager/>
 
+                                    <button onClick={() => {
+                                    }} className={'mb-4'}>
+                                        <CardModelButton value={"Label"} icon={<HiOutlineTag/>}/>
+                                    </button>
+
+                                    <div className={'text-xs text-neutral-500 font-semibold  mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Actions</div>
+
+                                    {currentCard?.status === "archived"
+                                        ? (
+                                            <button onClick={sendToBoard} className={'mb-2'}>
+                                                <CardModelButton value={"Send to board"} icon={<HiRefresh/>}/>
+                                            </button>
+                                        )
+                                        : (
+                                            <button onClick={onArchive} className={'mb-2'}>
+                                                <CardModelButton value={"Archive"} icon={
+                                                    <HiOutlineArchive className={'h-4 w-4'}/>}/>
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </div>
