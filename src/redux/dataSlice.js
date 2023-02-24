@@ -9,11 +9,11 @@ export const getProject = createAsyncThunk(
         const {id, filter} = params
         try {
             if (filter?.due.length || filter?.labels.length) {
-                console.log("filtered")
+                // console.log("filtered")
                 const response = await axios.post("/projects/filtered/" + id, filter)
                 return response.data
             } else {
-                console.log("non filtered")
+                // console.log("non filtered")
                 const response = await axios.get("/projects/" + id)
                 return response.data
             }
@@ -211,6 +211,29 @@ export const createProject = createAsyncThunk(
         }
     }
 )
+export const updateChecklistItem = createAsyncThunk(
+    'data/updateChecklistItem',
+    async (item, thunkAPI) => {
+        try {
+            const response = await axios.put("/checkitems/", item)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+export const addChecklistItem = createAsyncThunk(
+    'data/addChecklistItem',
+    async (item, thunkAPI) => {
+        try {
+            const response = await axios.post("/checkitems/", item)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
 
 const initialState = {
     projects: [],
@@ -254,6 +277,26 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(updateChecklistItem.fulfilled, (state, action) => {
+                // console.log(action.payload)
+
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.checklist.card.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.checklist.card.id)
+                const checkListIndex = state.project.columns[columnIndex].cards[cardIndex].checklists.findIndex(list => list.id === action.payload.checklistId)
+                const checkListItemIndex = state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.findIndex(item => item.id === action.payload.id)
+                const item = state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.find(item => item.id === action.payload.id)
+
+                // console.log(columnIndex, cardIndex, checkListIndex, checkListItemIndex)
+                state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items[checkListItemIndex] = {
+                    ...state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items[checkListItemIndex],
+                    ...action.payload
+                }
+
+
+            })
+            .addCase(addChecklistItem.fulfilled, (state, action) => {
+
+            })
             .addCase(createProject.fulfilled, (state, action) => {
                 console.log(action.payload)
                 // return action.payload

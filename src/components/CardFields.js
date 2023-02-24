@@ -21,9 +21,9 @@ const Field = ({field}) => {
     }
 
     return (
-        <div className={'border_'}>
+        <div className={''}>
             <div className={'text-xs text-neutral-500 font-semibold mb-2 '}>{field.name}</div>
-            <input placeholder={`Add ${field.name}...`} value={value} onBlur={saveField} onChange={e => setValue(e.target.value)} className={'placeholder:text-sm w-[150px] text-md bg-modal-dark border-none h-8 focus:bg-white'} type={"text"}/>
+            <input placeholder={`Add ${field.name}...`} value={value} onBlur={saveField} onChange={e => setValue(e.target.value)} className={'placeholder:text-sm w-[150px] text-md bg-modal-dark border-none h-8 focus:bg-white rounded-box'} type={"text"}/>
         </div>
     )
 }

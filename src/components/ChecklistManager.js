@@ -9,7 +9,7 @@ export default function ChecklistManager() {
         <Popover>
             <Popover.Button onClick={() => {
             }} className={'mb-2'}>
-                <CardModelButton value={"Checklist"} icon={<BsCheck2Square/>}/>
+                <CardModelButton className={'w-44'}  value={"Checklist"} icon={<BsCheck2Square/>}/>
             </Popover.Button>
 
             <Popover.Panel>

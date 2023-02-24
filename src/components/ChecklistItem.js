@@ -1,12 +1,26 @@
 import {useEffect, useRef, useState} from "react";
 import MDEditor from "@uiw/react-md-editor";
-import {updateTask} from "../redux/dataSlice";
+import {updateChecklistItem, updateTask} from "../redux/dataSlice";
+import {useDispatch} from "react-redux";
+import {socket} from "../redux/store";
+import {useOnClickOutside} from 'usehooks-ts'
+import {BsThreeDots, BsThreeDotsVertical, BsTrash} from "react-icons/bs";
+import {Menu} from "@headlessui/react";
 
-export default function ChecklistItem({item, edit, setEdit}) {
+export default function ChecklistItem({item, edit, setEdit, card}) {
 
     const [editing, setEditing] = useState(false)
     const inputRef = useRef(null)
     const [value, setValue] = useState(item.name || "");
+    const [done, setDone] = useState(item.done ? true : false);
+    const dispatch = useDispatch()
+
+    const clickRef = useRef();
+
+    const onClickOutside = () => {
+        setEditing(false)
+    }
+    useOnClickOutside(clickRef, onClickOutside);
 
     useEffect(() => {
         if (edit) {
@@ -15,19 +29,37 @@ export default function ChecklistItem({item, edit, setEdit}) {
     }, [edit])
 
     const saveText = () => {
-
         setEditing(false)
-        setEdit(false)
+    }
+
+    const deleteItem = () => {
+      
+    }
+    
+    const updateStatus = (e) => {
+        setDone(e.target.checked)
+        dispatch(updateChecklistItem({
+            id: item.id,
+            done: e.target.checked ? 1 : 0
+        })).then(r => {
+            socket.emit("card update", {
+                id: card.id,
+                room: card.projectId
+            })
+        })
+
     }
 
     return (
-        <div className={'flex items-center space-x-6 space-y-2 relative '}>
 
-            <input type={"checkbox"} className={'absolute -left-2 top-3'}/>
+        <div className={'rounded-box relative hover:bg-modal-dark hover:cursor-pointer group'}>
+            <input onChange={updateStatus} checked={done} type={"checkbox"} className={'absolute -left-6 top-2.5'}/>
 
             {editing ? (
-                    <div className={'w-full'}>
+
+                    <div ref={clickRef} className={'w-full p-2 bg-blue-300_'}>
                         <MDEditor
+
                             height={0}
                             autoFocus={true}
                             enableScroll={false}
@@ -41,53 +73,39 @@ export default function ChecklistItem({item, edit, setEdit}) {
                             <button onClick={saveText} className={'save-btn'}>Save</button>
                             <button onClick={e => {
                                 setEditing(false)
-                                setEdit(false)
                             }} className={'cancel-btn'}>Cancel
                             </button>
                         </div>
                     </div>
+
                 ) :
-                <div onClick={() => setEditing(true)}>
-                    <MDEditor.Markdown placeholder={"Add a detailed description"} className={'!bg-transparent !prose !text-md'} source={value}/>
-                </div>}
+                (
+                    <>
+                        <div className={'p-2 w-full bg-blue-300_'} onClick={() => setEditing(true)}>
+                            <MDEditor.Markdown placeholder={"Add a description"} className={'pr-6 !bg-transparent !prose !text-md'} source={value}/>
+                        </div>
+
+                        <div className={'absolute right-2 z-20_ top-2 '}>
+                            <Menu>
+                                <Menu.Button className={"z-20"}>
+                                    <div className={'z-20 group-hover:visible invisible h-6 w-6 hover:bg-modal-darker flex items-center justify-center rounded-box'}>
+                                        <BsThreeDots/>
+                                    </div>
+                                </Menu.Button>
+                                <Menu.Items as={"div"} static={false}>
+                                    <div className={'absolute bg-white py-1 shadow-lg rounded z-50 w-44'}>
+                                        <Menu.Item onClick={deleteItem} className={'py-1 px-2 hover:bg-modal z-50 text-sm flex items-center space-x-2'} as={"div"}>
+                                            <div><BsTrash className={'text-neutral-500'}/></div>
+                                            <div>Delete</div>
+                                        </Menu.Item>
+                                    </div>
+                                </Menu.Items>
+                            </Menu>
+                        </div>
+                    </>
+                )
+            }
         </div>
+
     )
-
-
-    // if (editing) {
-    //
-    //     return (
-    //         <div>
-    //             <MDEditor
-    //                 height={0}
-    //                 autoFocus={true}
-    //                 enableScroll={false}
-    //                 hideToolbar={true}
-    //                 preview={"edit"}
-    //                 value={value}
-    //                 onChange={setValue}
-    //                 placeholder={"Add a detailed description"}
-    //             />
-    //
-    //             <div className={'flex space-x-2 items-center mt-2'}>
-    //                 <button onClick={saveText} className={'save-btn'}>Save</button>
-    //                 <button onClick={e => {
-    //                     setEditing(false)
-    //                     setEdit(false)
-    //                 }} className={'cancel-btn'}>Cancel
-    //                 </button>
-    //             </div>
-    //         </div>
-    //     )
-    // } else {
-    //     return (
-    //         <div onClick={() => setEditing(true)}>
-    //             <div className={'flex items-center space-x-4 hover:bg-modal-dark px-2 py-1'}>
-    //                 <input type={"checkbox"}/>
-    //                 <MDEditor.Markdown placeholder={"Add a detailed description"} className={'!bg-transparent !prose !text-md'} source={value}/>
-    //             </div>
-    //         </div>
-    //     )
-    // }
-
 }

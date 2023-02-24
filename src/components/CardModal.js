@@ -22,7 +22,7 @@ import Checklist from "./Checklist";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
-        <div onClick={onClick} className={`${props.className} w-44 ml-0.5 md:ml-0 hover:cursor-pointer hover:bg-modal-darker bg-modal-dark w-full h-8 px-2`}>
+        <div onClick={onClick} className={`${props.className} rounded-box  ml-0.5 md:ml-0 hover:cursor-pointer hover:bg-modal-darker bg-modal-dark h-8 px-2`}>
             <div className={'flex items-center space-x-2 h-8'}>
                 {icon}
                 <div className={`text-sm`}>{value}</div>
@@ -63,7 +63,7 @@ export default function CardModal({project, ...props}) {
             id: currentCard.id,
             title: e.target.value
         })).then(res => {
-            console.log("Emitting");
+
             socket.emit("card update", {
                 id: currentCard.id,
                 room: currentCard.projectId
@@ -100,7 +100,7 @@ export default function CardModal({project, ...props}) {
                 <div className="flex min-h-full items-center justify-center p-4">
 
 
-                    <Dialog.Panel className="md:max-w-3xl w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all">
+                    <Dialog.Panel className="md:max-w-4xl w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all">
 
                         <div className={`${currentCard?.status === "archived" ? "bg-archive-warning" : ""} h-10`}>
                             {currentCard?.status === "archived" ?
@@ -192,7 +192,7 @@ export default function CardModal({project, ...props}) {
                                     </div>
 
                                     {currentCard?.checklists && currentCard.checklists.map(list => (
-                                        <Checklist list={list}/>
+                                        <Checklist card={currentCard} key={list.id} list={list}/>
                                     ))}
 
                                 </div>
@@ -212,15 +212,14 @@ export default function CardModal({project, ...props}) {
 
                                     <button onClick={() => {
                                     }} className={'mb-2'}>
-                                        <CardModelButton value={"Member"} icon={<HiUser/>}/>
+                                        <CardModelButton className={'w-44'} value={"Member"} icon={<HiUser/>}/>
                                     </button>
-
 
                                     <ChecklistManager/>
 
                                     <button onClick={() => {
                                     }} className={'mb-4'}>
-                                        <CardModelButton value={"Label"} icon={<HiOutlineTag/>}/>
+                                        <CardModelButton className={'w-44'}  value={"Label"} icon={<HiOutlineTag/>}/>
                                     </button>
 
                                     <div className={'text-xs text-neutral-500 font-semibold  mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Actions</div>
@@ -228,12 +227,12 @@ export default function CardModal({project, ...props}) {
                                     {currentCard?.status === "archived"
                                         ? (
                                             <button onClick={sendToBoard} className={'mb-2'}>
-                                                <CardModelButton value={"Send to board"} icon={<HiRefresh/>}/>
+                                                <CardModelButton className={'w-44'}  value={"Send to board"} icon={<HiRefresh/>}/>
                                             </button>
                                         )
                                         : (
                                             <button onClick={onArchive} className={'mb-2'}>
-                                                <CardModelButton value={"Archive"} icon={
+                                                <CardModelButton className={'w-44'}  value={"Archive"} icon={
                                                     <HiOutlineArchive className={'h-4 w-4'}/>}/>
                                             </button>
                                         )

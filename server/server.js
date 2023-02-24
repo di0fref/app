@@ -11,6 +11,7 @@ import authenticateJWT from "./auth/token.js";
 import {accessTokenSecret} from "./controllers/UserController.js";
 import {authorize} from '@thream/socketio-jwt'
 import {addUser, getAllUsers, deleteUser, getUser} from "./users.js";
+import ChecklistRoute from "./routes/ChecklistRoute.js";
 
 export const app = express();
 const server = http.createServer(app);
@@ -69,7 +70,7 @@ io.use(
 app.use(cors());
 app.use(express.json());
 app.use(authenticateJWT)
-app.use([UserRoute, CardRoute, ProjectRoute, LabelRoute]);
+app.use([UserRoute, CardRoute, ProjectRoute, LabelRoute, ChecklistRoute]);
 
 // app.listen(8000, () => console.log('Server up and running...'));
 app.get('/', (req, res) => {

@@ -41,6 +41,10 @@ export const getCard = async (req, res) => {
                     model: CardField,
                     order: [["name", "asc"]],
                     separate: true,
+                },
+                {
+                    model: Checklist,
+                    include: [ChecklistItem]
                 }
             ]
         });
@@ -284,29 +288,6 @@ export const archiveCards = async (req, res) => {
         )
 
         res.status(201).json(req.body);
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-export const addChecklist = async (req, res) => {
-
-    try {
-        const list = await Checklist.create(req.body)
-        res.status(200).json(list);
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-export const addCheckItem = async (req, res) => {
-
-    try {
-        const listItem = await ChecklistItem.create(req.body)
-
-        res.status(200).json(listItem);
 
     } catch (error) {
         console.log(error.message);
