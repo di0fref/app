@@ -6,10 +6,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {BsArrowLeft, BsChevronDown, BsFillKanbanFill, BsX} from "react-icons/bs";
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
-import {HiChevronRight, HiPlus} from "react-icons/hi";
+import {HiChevronRight, HiOutlineCog, HiOutlineLogout, HiPlus} from "react-icons/hi";
 import AddField from "./AddField";
 import {useRef} from "react";
 import {toast} from "react-toastify";
+import {GoogleHead} from "./GoogleHead";
+import {usePopper} from "react-popper";
+import {signOutFireBase} from "../auth/firebase";
 
 const navigation = [
     {name: 'Dashboard', href: '/', current: true},
@@ -37,6 +40,12 @@ export default function Navbar() {
     const [error, setError] = useState("")
     const [name, setName] = useState("")
 
+    let [referenceElement, setReferenceElement] = useState()
+    let [popperElement, setPopperElement] = useState()
+    let {styles, attributes} = usePopper(referenceElement, popperElement, {
+        placement: "bottom-start",
+        strategy: 'absolute',
+    })
 
     const onClose = () => {
 
@@ -46,7 +55,7 @@ export default function Navbar() {
         dispatch(createProject({
             title: name
         })).unwrap().then(response => {
-            navigate("/project/" + response.id)
+            navigate("/board/" + response.id)
             toast.success('Board "' + response.title + '" created')
         })
     }
@@ -88,7 +97,7 @@ export default function Navbar() {
                                                             <Menu.Item as={"div"} key={project.id}>
                                                                 {({close}) => (
 
-                                                                    <Link to={"/project/" + project.id} onClick={close} className={'flex items-center space-x-2 mb-2 hover:bg-modal-dark  w-full py-1 px-1'}>
+                                                                    <Link to={"/board/" + project.id} onClick={close} className={'flex items-center space-x-2 mb-2 hover:bg-modal-dark  w-full py-1 px-1'}>
                                                                         <div className={'w-10 h-10 font-bold text-lg bg-red-300 rounded-box flex items-center justify-center'}>{project.title.charAt(0)}</div>
                                                                         <div className={'font-bold text-md'}>{project.title}</div>
                                                                     </Link>
@@ -101,8 +110,8 @@ export default function Navbar() {
                                         </Menu>
                                     </div>
                                 </div>
-
                             </div>
+
                             <div className={'relative'}>
                                 <Popover>
                                     <Popover.Button className={'bg-[#537DA4] text-white rounded-box hover:bg-[#5895bb] text-sm px-2 py-1 ml-4'}>
@@ -161,6 +170,36 @@ export default function Navbar() {
                                                 </div>
                                             </div>
                                         )}
+                                    </Popover.Panel>
+                                </Popover>
+                            </div>
+                            <div className={'relative w-full justify-end flex'}>
+                                <Popover
+                                    // ref={setPopperElement}
+                                    // style={{zIndex: 10, ...styles.popper}}
+                                    // {...attributes.popper}
+                                >
+                                    <Popover.Button ref={setReferenceElement}>
+                                        <GoogleHead className={"w-8 h-8 rounded-full"}/>
+                                    </Popover.Button>
+                                    <Popover.Panel as={"div"}>
+                                        <div className={'bg-white shadow-lg absolute w-44 rounded-box right-0'}>
+
+                                            <button onClick={e => {}} className={'my-1 hover:bg-modal-dark w-full'}>
+                                                <div className={'flex items-center space-x-2 px-2 py-1'}>
+                                                    <HiOutlineCog className={'text-neutral-500'}/>
+                                                    <div className={'text-sm'}>Settings</div>
+                                                </div>
+                                            </button>
+
+                                            <button onClick={e => signOutFireBase()} className={'my-1 hover:bg-modal-dark w-full border-t'}>
+                                                <div className={'flex items-center space-x-2 px-2 py-1'}>
+                                                    <HiOutlineLogout  className={'text-neutral-500'}/>
+                                                    <div className={'text-sm'}>Sign out</div>
+                                                </div>
+                                            </button>
+
+                                        </div>
                                     </Popover.Panel>
                                 </Popover>
                             </div>

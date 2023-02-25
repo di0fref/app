@@ -13,6 +13,24 @@ import Log from "../models/Log.js"
 import Checklist from "../models/Checklist.js";
 import ChecklistItem from "../models/ChecklistItem.js";
 
+export const deleteCard = async (req, res) => {
+    try {
+
+        const response = await Card.findByPk(req.params.id)
+
+        await Card.destroy({
+            where: {
+                id: req.params.id
+            }
+        });
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
 export const getCards = async (req, res) => {
     try {
         const response = await Card.findAll();
@@ -24,7 +42,6 @@ export const getCards = async (req, res) => {
 
 export const getCard = async (req, res) => {
 
-    console.log(req.id);
     try {
         const response = await Card.findByPk(req.params.id, {
             include: [
@@ -132,14 +149,15 @@ export const updateCard = async (req, res) => {
 
             switch (key) {
                 case "status":
-                    if (val === "archived")
-                        log = true
+                    // if (val === "archived")
+                    log = true
                     break;
-                case "due": log = true
+                case "due":
+                    log = true
                     break;
             }
 
-            if(log){
+            if (log) {
                 Log.create({
                     userId: req.user.id,
                     field: key,

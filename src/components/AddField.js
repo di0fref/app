@@ -11,7 +11,7 @@ export default function AddField({close}) {
 
     const project = useSelector(state => state.data.project)
 
-    const [error, setError] = useState("")
+    const [error, setError] = useState(false)
     const [name, setName] = useState("")
     const [displayColorPicker, setDisplayColorPicker] = useState(false)
     const [_color_, setColor] = useState("")
@@ -21,6 +21,11 @@ export default function AddField({close}) {
 
     const saveField = () => {
 
+        if(name === ""){
+            setError(true)
+            return
+        }
+
         const data = {
             projectId: project.id,
             title: name,
@@ -28,22 +33,11 @@ export default function AddField({close}) {
         }
 
         dispatch(addField(data)).unwrap().then(r => {
-            dispatch(getProject(project.id))
+            dispatch(getProject({
+                id: project.id,
+                filter: null
+            }))
         })
-        // if (name === "") {
-        //     setError("Please add a title")
-        //     return false
-        // }
-        // if (color === "") {
-        //     setError("Please choose a color")
-        //     return false
-        // }
-        //
-        // dispatch(addLabel({
-        //     title: name,
-        //     color: _color_,
-        //     projectId: project.id
-        // })).unwrap()
         close()
     }
 
@@ -56,9 +50,13 @@ export default function AddField({close}) {
                 </div>
 
                 <label htmlFor={"name"} className={'text-xs text-neutral-500 font-semibold mb-4'}>Title</label>
-                <input autoFocus={true} ref={ref} className={'mt-1 border-1 border-neutral-300 text-md px-2 py-1.5 w-full  rounded-box '} type={"text"} onChange={(e) => setName(e.target.value)}/>
+                <input autoFocus={true} ref={ref} className={'mt-1 border-1 border-neutral-300 text-md px-2 py-1.5 w-full  rounded-box '} type={"text"} onChange={(e) => {
+                    setName(e.target.value)
+                    setError(false)
+                }}/>
+                {/*<div className={'error'}></div>*/}
 
-                <div className={'text-red-600 text-sm'}>{error}</div>
+                {error && <div className={'text-red-600 text-sm text-sm'}>Please give your field a title</div> }
 
             </div>
             <div>

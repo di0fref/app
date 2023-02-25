@@ -85,7 +85,7 @@ export default function Filters({project}) {
                                 )
                                 : ""}
                         </div>
-                        <Popover.Panel static={false} className="absolute left-0 z-10 mt-3 w-80 _px-4 sm:px-0 lg:max-w-3xl">
+                        <Popover.Panel static={false} className="absolute left-0 z-10 mt-2 w-80 _px-4 sm:px-0 lg:max-w-3xl">
                             <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white">
                                 <div className="relative bg-white p-4 ">
                                     <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>

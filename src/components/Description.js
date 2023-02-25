@@ -30,12 +30,13 @@ export default function Description({card, edit, setEdit}) {
         return (
             <>
                 <MDEditor
-                    className={"bg-red-300"}
                     hideToolbar={true}
                     preview={"edit"}
                     value={value}
                     onChange={setValue}
-                    placeholder={"Add a detailed description"}
+                    textareaProps={{
+                        placeholder: "Add a detailed description"
+                    }}
                 />
 
                 <div className={'flex space-x-2 items-center mt-2'}>

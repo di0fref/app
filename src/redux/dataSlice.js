@@ -233,7 +233,52 @@ export const addChecklistItem = createAsyncThunk(
         }
     }
 )
+export const addCheckList = createAsyncThunk(
+    'data/addCheckList',
+    async (list, thunkAPI) => {
+        try {
+            const response = await axios.post("/checklist/", list)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
+export const deleteCheckList = createAsyncThunk(
+    'data/deleteCheckList',
+    async (id, thunkAPI) => {
+        try {
+            const response = await axios.delete("/checklist/" + id)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
+export const deleteCheckListItem = createAsyncThunk(
+    'data/deleteCheckListItem',
+    async (id, thunkAPI) => {
+        try {
+            const response = await axios.delete("/checkitems/" + id)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+export const deleteCard = createAsyncThunk(
+    'data/deleteCard',
+    async (id, thunkAPI) => {
+        try {
+            const response = await axios.delete("/cards/" + id)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
 const initialState = {
     projects: [],
@@ -277,6 +322,40 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(deleteCard.fulfilled, (state, action) => {
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
+
+                state.project.columns[columnIndex].cards.splice(cardIndex,1)
+
+                console.log(action.payload)
+            })
+            .addCase(deleteCheckListItem.fulfilled, (state, action) => {
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.checklist.card.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.checklist.card.id)
+                const checkListIndex = state.project.columns[columnIndex].cards[cardIndex].checklists.findIndex(list => list.id === action.payload.checklistId)
+                const checkListItemIndex = state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.findIndex(item => item.id === action.payload.id)
+
+                console.log( columnIndex, cardIndex, checkListIndex, checkListItemIndex)
+                state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.splice(checkListItemIndex, 1)
+
+            })
+
+            .addCase(deleteCheckList.fulfilled, (state, action) => {
+
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.card.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.card.id)
+                const checkListIndex = state.project.columns[columnIndex].cards[cardIndex].checklists.findIndex(list => list.id === action.payload.id)
+                state.project.columns[columnIndex].cards[cardIndex].checklists.splice(checkListIndex, 1)
+            })
+            .addCase(addCheckList.fulfilled, (state, action) => {
+
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.card.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.card.id)
+
+                state.project.columns[columnIndex].cards[cardIndex].checklists.unshift(action.payload)
+
+            })
             .addCase(updateChecklistItem.fulfilled, (state, action) => {
                 // console.log(action.payload)
 
@@ -284,9 +363,7 @@ export const dataSlice = createSlice({
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.checklist.card.id)
                 const checkListIndex = state.project.columns[columnIndex].cards[cardIndex].checklists.findIndex(list => list.id === action.payload.checklistId)
                 const checkListItemIndex = state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.findIndex(item => item.id === action.payload.id)
-                const item = state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.find(item => item.id === action.payload.id)
 
-                // console.log(columnIndex, cardIndex, checkListIndex, checkListItemIndex)
                 state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items[checkListItemIndex] = {
                     ...state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items[checkListItemIndex],
                     ...action.payload
@@ -295,6 +372,14 @@ export const dataSlice = createSlice({
 
             })
             .addCase(addChecklistItem.fulfilled, (state, action) => {
+                console.log(action.payload)
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.checklist.card.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.checklist.card.id)
+                const checkListIndex = state.project.columns[columnIndex].cards[cardIndex].checklists.findIndex(list => list.id === action.payload.checklistId)
+
+                console.log(columnIndex, cardIndex, checkListIndex)
+
+                state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.push(action.payload)
 
             })
             .addCase(createProject.fulfilled, (state, action) => {

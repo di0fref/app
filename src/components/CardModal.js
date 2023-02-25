@@ -2,9 +2,9 @@ import {Dialog, Transition} from '@headlessui/react'
 import {Fragment, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {HiOutlineXMark} from "react-icons/hi2";
-import {useNavigate, useParams} from "react-router-dom";
-import {setCurrentCard, updateTask} from "../redux/dataSlice";
-import {BsCalendar, BsCardText, BsTextLeft, BsX, BsCheck, BsArchiveFill, BsArchive, BsTag} from "react-icons/bs";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import {setCurrentCard, updateTask, deleteCard} from "../redux/dataSlice";
+import {BsCalendar, BsCardText, BsTextLeft, BsX, BsCheck, BsArchiveFill, BsArchive, BsTag, BsTrash, BsDash} from "react-icons/bs";
 import Description from "./Description";
 import LabelManager from "./LabelManager";
 import DatePicker from "react-datepicker";
@@ -16,13 +16,14 @@ import FieldManager from "./FieldManager";
 import CardFields from "./CardFields";
 import {socket} from "../redux/store";
 import {TiArchive} from "react-icons/ti";
-import {HiArrowCircleRight, HiCheck, HiOutlineArchive, HiOutlineTag, HiRefresh, HiTag, HiUser} from "react-icons/hi";
+import {HiArrowCircleRight, HiCheck, HiOutlineArchive, HiOutlineTag, HiRefresh, HiTag, HiTrash, HiUser} from "react-icons/hi";
 import ChecklistManager from "./ChecklistManager";
 import Checklist from "./Checklist";
+import {toast} from "react-toastify";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
-        <div onClick={onClick} className={`${props.className} rounded-box  ml-0.5 md:ml-0 hover:cursor-pointer hover:bg-modal-darker bg-modal-dark h-8 px-2`}>
+        <div onClick={onClick} className={`rounded-box ml-0.5 md:ml-0 hover:cursor-pointer hover:bg-modal-darker bg-modal-dark h-8 px-2 ${props.className}`}>
             <div className={'flex items-center space-x-2 h-8'}>
                 {icon}
                 <div className={`text-sm`}>{value}</div>
@@ -31,27 +32,53 @@ export function CardModelButton({icon, value, onClick, ...props}) {
     )
 }
 
+export function CardModelButtonRed({icon, value, onClick, ...props}) {
+    return (
+        <div onClick={onClick} className={`rounded-box ml-0.5 md:ml-0 hover:cursor-pointer bg-orange-700 hover:bg-orange-800 text-white bg-modal-dark h-8 px-2 ${props.className}`}>
+            <div className={'flex items-center space-x-2 h-8'}>
+                {icon}
+                <div className={`text-sm`}>{value}</div>
+            </div>
+        </div>
+    )
+}
+
+
 export default function CardModal({project, ...props}) {
     let [isOpen, setIsOpen] = useState(false)
     const currentCard = useSelector(state => state.data.currentCard)
     const nav = useNavigate()
     const dispatch = useDispatch();
     const params = useParams()
+    const loc = useLocation()
+
     const [tags, setTags] = useState([])
 
     const [title, setTitle] = useState(currentCard?.title)
     const [edit, setEdit] = useState(null)
 
     useEffect(() => {
-        currentCard && setIsOpen(true)
-        setTitle(currentCard?.title)
+        if (currentCard === undefined && params.cardId) {
+            nav("/board/" + params.projectId + loc.search)
+            toast.error("We could not find the card. It is probably deleted.")
+        } else {
+            currentCard && setIsOpen(true)
+            setTitle(currentCard?.title)
+        }
+
     }, [currentCard])
+
+    const onDeleteCard = () => {
+        setIsOpen(false)
+        dispatch(setCurrentCard(null))
+        nav("/board/" + params.projectId + loc.search)
+        dispatch(deleteCard(currentCard.id))
+    }
 
     function closeModal() {
         setIsOpen(false)
         dispatch(setCurrentCard(null))
-        // nav("/project/" + params.projectId)
-        nav(-1)
+        nav("/board/" + params.projectId + loc.search)
     }
 
     function openModal() {
@@ -124,7 +151,7 @@ export default function CardModal({project, ...props}) {
                             </div>
 
                             <div className={'flex md:flex-row flex-col md:space-x-4 space-x-0'}>
-                                <div className={'_bg-amber-400 flex-grow '}>
+                                <div className={'bg-amber-400_ flex-grow pr-4 '}>
                                     <div className={'mt-1'}>
                                         <TextareaAutosize
                                             onBlur={onTitleBlur}
@@ -147,8 +174,27 @@ export default function CardModal({project, ...props}) {
                                         list {currentCard?.column.title}
                                     </div>
 
-                                    <div className={'pl-1'}>
-                                        <LabelManager card={currentCard} project={project}/>
+                                    {currentCard?.labels.length ?
+                                        <div className={'pl-1'}>
+                                            <LabelManager showLabels={true} button={"plus"} card={currentCard} project={project}/>
+                                        </div> : ""}
+
+                                    <div>
+                                        <div className={'flex items-center pl-1'}>
+                                            <div className={'absolute left-6'}><BsTextLeft className={'h-5 w-5'}/></div>
+                                            <div className={'flex items-center space-x-2'}>
+                                                <div className={'font-semibold text-base'}>Description</div>
+                                                <div>
+                                                    <button onClick={() => {
+                                                        setEdit(true)
+                                                    }} className={'py-1 px-2 bg-neutral-200 text-sm rounded hover:bg-neutral-300'}>Edit
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className={"mb-4 mt-3 pl-1"}>
+                                            <Description card={currentCard} setEdit={setEdit} edit={edit}/>
+                                        </div>
                                     </div>
 
                                     {currentCard?.card_fields.length ?
@@ -170,27 +216,6 @@ export default function CardModal({project, ...props}) {
                                         </>
                                         : ""}
 
-                                    <div>
-
-                                        <div className={'flex items-center pl-1'}>
-                                            <div className={'absolute left-6'}><BsTextLeft className={'h-5 w-5'}/></div>
-                                            <div className={'flex items-center space-x-2'}>
-                                                <div className={'font-semibold text-base'}>Description</div>
-                                                <div>
-                                                    <button onClick={() => {
-                                                        setEdit(true)
-                                                    }} className={'py-1 px-2 bg-neutral-200 text-sm rounded hover:bg-neutral-300'}>Edit
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className={"mt-4 pl-1"}>
-                                            <Description card={currentCard} setEdit={setEdit} edit={edit}/>
-                                        </div>
-
-                                    </div>
-
                                     {currentCard?.checklists && currentCard.checklists.map(list => (
                                         <Checklist card={currentCard} key={list.id} list={list}/>
                                     ))}
@@ -208,31 +233,36 @@ export default function CardModal({project, ...props}) {
                                         to card
                                     </div>
 
-                                    <FieldManager/>
+                                    <FieldManager showLabels={true}/>
 
                                     <button onClick={() => {
                                     }} className={'mb-2'}>
                                         <CardModelButton className={'w-44'} value={"Member"} icon={<HiUser/>}/>
                                     </button>
 
-                                    <ChecklistManager/>
+                                    <ChecklistManager card={currentCard}/>
 
-                                    <button onClick={() => {
+                                    <div onClick={() => {
                                     }} className={'mb-4'}>
-                                        <CardModelButton className={'w-44'}  value={"Label"} icon={<HiOutlineTag/>}/>
-                                    </button>
+                                        <LabelManager showLabels={false}/>
+                                    </div>
 
                                     <div className={'text-xs text-neutral-500 font-semibold  mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Actions</div>
 
                                     {currentCard?.status === "archived"
                                         ? (
-                                            <button onClick={sendToBoard} className={'mb-2'}>
-                                                <CardModelButton className={'w-44'}  value={"Send to board"} icon={<HiRefresh/>}/>
-                                            </button>
+                                            <>
+                                                <button onClick={sendToBoard} className={'mb-2'}>
+                                                    <CardModelButton className={'w-44'} value={"Send to board"} icon={<HiRefresh/>}/>
+                                                </button>
+                                                <button onClick={onDeleteCard} className={'mb-2'}>
+                                                    <CardModelButtonRed className={'w-44'} value={"Delete"} icon={<BsDash/>}/>
+                                                </button>
+                                            </>
                                         )
                                         : (
                                             <button onClick={onArchive} className={'mb-2'}>
-                                                <CardModelButton className={'w-44'}  value={"Archive"} icon={
+                                                <CardModelButton className={'w-44'} value={"Archive"} icon={
                                                     <HiOutlineArchive className={'h-4 w-4'}/>}/>
                                             </button>
                                         )

@@ -1,6 +1,6 @@
 import {formatDate} from "../helper"
-import {Link} from "react-router-dom";
-import {BsPencil, BsTextLeft} from "react-icons/bs";
+import {Link, useLocation, useSearchParams} from "react-router-dom";
+import {BsCheck2Square, BsPencil, BsTextLeft} from "react-icons/bs";
 import SmallLabel from "./SmallLabel";
 import DateBadge from "./DateBadge";
 import {Draggable} from 'react-beautiful-dnd';
@@ -12,7 +12,7 @@ import {HiArchive, HiOutlineArchive} from "react-icons/hi";
 export default function Card({card, index}) {
 
     const [fieldHaveValues, setFieldHaveValues] = useState(false)
-
+    const loc = useLocation()
     const fieldsHaveValueCheck = () => {
         if (!card?.card_fields.length) {
             setFieldHaveValues(false)
@@ -21,7 +21,6 @@ export default function Card({card, index}) {
 
         setFieldHaveValues((have === -1) ? false : true)
     }
-
 
     useEffect(() => {
         fieldsHaveValueCheck()
@@ -35,16 +34,9 @@ export default function Card({card, index}) {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}>
-                    <Link to={"card/" + card.id} className={'group'}>
+                    <Link to={"card/" + card.id + loc.search} className={'group'}>
 
                         <div className={'mx-1_ hover:shadow-md p-2 mt-2 rounded-box bg-white shadow w-64_ _min-h-[6rem] hover:bg-neutral-50 relative'}>
-
-                            {/*{card.status === "archived" ? (*/}
-                            {/*    <div className={'pl-2 flex items-center space-x-2 bg-archive-warning mb-2'}>*/}
-                            {/*        <HiOutlineArchive/>*/}
-                            {/*    <div className={'font-semibold text-sm'}>This card is archived</div>*/}
-                            {/*        </div>*/}
-                            {/*) : ""}*/}
 
                             {card?.labels && card?.labels.length ? (
                                 <div className={'pb-1.5'}>
@@ -64,8 +56,10 @@ export default function Card({card, index}) {
 
                             <div className={'flex items-center justify-between space-x-2 _bg-red-300'}>
                                 <div className={'text-sm'}><DateBadge date={card.due}/></div>
-                                {card?.text ?
-                                    <div className={''}><BsTextLeft className={'h-4 w-4 text-neutral-500'}/></div> : ""}
+                                <div className={'flex items-center space-x-2'}>
+                                    {card?.text ? <BsTextLeft className={'h-4 w-4 text-neutral-500'}/> : ""}
+                                    {card?.checklists.length ? <BsCheck2Square className={'h-4 w-4 text-neutral-500'}/> : ""}
+                                </div>
                             </div>
 
 

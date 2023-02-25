@@ -69,18 +69,9 @@ export const getFilteredProjectById = async (req, res) => {
 
     const dueWhere = req.body.due.length ?
         {
-            [Op.and]: {
-                due: req.body.due.map(due => due),
-                status: {
-                    [Op.ne]: "archived"
-                },
-            }
+                due: req.body.due.map(due => due)
         }
-        : {
-            status: {
-                [Op.ne]: "archived"
-            },
-        }
+        : null
 
     try {
         const project = await Project.findByPk(req.params.id, {
@@ -103,6 +94,14 @@ export const getFilteredProjectById = async (req, res) => {
                             required: false,
                             where: dueWhere,
                             include: [
+                                {
+                                    model: Checklist,
+                                    include: [{
+                                        model: ChecklistItem,
+                                        order: [["createdAt", "asc"]],
+                                        separate: true
+                                    }]
+                                },
                                 {
                                     model: Label,
                                     attributes: ["title", "id", "color"],
@@ -158,7 +157,11 @@ export const getProjectsById = async (req, res) => {
                             include: [
                                 {
                                     model: Checklist,
-                                    include: [ChecklistItem]
+                                    include: [{
+                                        model: ChecklistItem,
+                                        order: [["createdAt", "asc"]],
+                                        separate: true
+                                    }]
                                 },
                                 {
                                     model: Label,

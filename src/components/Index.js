@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 
 const ProjectBox = ({project}) => {
     return (
-        <Link to={"/project/" + project.id}>
+        <Link to={"/board/" + project.id}>
             <div className={'bg-[#127bbd] text-white bg-modal w-[177px] h-[80px] p-2 font-semibold rounded-box'}>{project.title}</div>
         </Link>
     )

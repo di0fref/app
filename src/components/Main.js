@@ -17,12 +17,15 @@ import Index from "./Index";
 import {store} from "../redux/store";
 import Navbar from "./Navbar";
 import Board from "./Board";
+import {onAuthStateChanged} from "firebase/auth"
+import {getAuth} from "firebase/auth";
 
 export default function Main() {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const params = useParams()
+    const auth = getAuth();
 
     const project = useSelector(state => state.data.project)
     const connectionEstablished = useSelector(state => state.data.isConnected)
@@ -42,6 +45,15 @@ export default function Main() {
         }
     }, [])
 
+    onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                localStorage.removeItem("accessToken")
+                localStorage.removeItem("user")
+                navigate("/login")
+            }
+        }
+    )
+
     useEffect(() => {
         params.projectId
             ? dispatch(getProject({
@@ -57,7 +69,7 @@ export default function Main() {
     // }, [connectionEstablished])
 
     useEffect(() => {
-        if (params.cardId && project.columns) {
+        if (params.cardId && project?.columns) {
             dispatch(setCurrentCard(
                 project.columns
                     .map((col) => col.cards)

@@ -25,8 +25,8 @@ function App() {
 
                 <Routes>
                     <Route path={"/"} element={<Main/>}/>
-                    <Route path={"/project/:projectId"} element={<Main/>}/>
-                    <Route path={"/project/:projectId/card/:cardId"} element={<Main/>}/>
+                    <Route path={"/board/:projectId"} element={<Main/>}/>
+                    <Route path={"/board/:projectId/card/:cardId"} element={<Main/>}/>
                     <Route path={"/login"} element={<Login/>}/>
                 </Routes>
             </QueryParamProvider>

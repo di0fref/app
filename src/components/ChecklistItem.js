@@ -1,13 +1,13 @@
 import {useEffect, useRef, useState} from "react";
 import MDEditor from "@uiw/react-md-editor";
-import {updateChecklistItem, updateTask} from "../redux/dataSlice";
+import {addChecklistItem, deleteCheckListItem, updateChecklistItem, updateTask} from "../redux/dataSlice";
 import {useDispatch} from "react-redux";
 import {socket} from "../redux/store";
 import {useOnClickOutside} from 'usehooks-ts'
 import {BsThreeDots, BsThreeDotsVertical, BsTrash} from "react-icons/bs";
 import {Menu} from "@headlessui/react";
 
-export default function ChecklistItem({item, edit, setEdit, card}) {
+export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) {
 
     const [editing, setEditing] = useState(false)
     const inputRef = useRef(null)
@@ -19,6 +19,7 @@ export default function ChecklistItem({item, edit, setEdit, card}) {
 
     const onClickOutside = () => {
         setEditing(false)
+        setEdit(false)
     }
     useOnClickOutside(clickRef, onClickOutside);
 
@@ -29,11 +30,21 @@ export default function ChecklistItem({item, edit, setEdit, card}) {
     }, [edit])
 
     const saveText = () => {
+        if(isNew){
+            dispatch(addChecklistItem({
+                checklistId: list.id,
+                name: value
+            }))
+        }
+        else{
+
+        }
+        setEdit(false)
         setEditing(false)
     }
 
     const deleteItem = () => {
-      
+        dispatch(deleteCheckListItem(item.id))
     }
     
     const updateStatus = (e) => {
@@ -47,7 +58,6 @@ export default function ChecklistItem({item, edit, setEdit, card}) {
                 room: card.projectId
             })
         })
-
     }
 
     return (
@@ -59,7 +69,9 @@ export default function ChecklistItem({item, edit, setEdit, card}) {
 
                     <div ref={clickRef} className={'w-full p-2 bg-blue-300_'}>
                         <MDEditor
-
+                            style={{
+                                minHeight: "50px"
+                            }}
                             height={0}
                             autoFocus={true}
                             enableScroll={false}
@@ -67,12 +79,17 @@ export default function ChecklistItem({item, edit, setEdit, card}) {
                             preview={"edit"}
                             value={value}
                             onChange={setValue}
-                            placeholder={""}
+                            placeholder={"Add text"}
+                            visibleDragbar={false}
+                            textareaProps={{
+                                placeholder: "Add an item",
+                            }}
                         />
                         <div className={'flex space-x-2 items-center mt-2'}>
                             <button onClick={saveText} className={'save-btn'}>Save</button>
                             <button onClick={e => {
                                 setEditing(false)
+                                setEdit(false)
                             }} className={'cancel-btn'}>Cancel
                             </button>
                         </div>
@@ -96,7 +113,7 @@ export default function ChecklistItem({item, edit, setEdit, card}) {
                                     <div className={'absolute bg-white py-1 shadow-lg rounded z-50 w-44'}>
                                         <Menu.Item onClick={deleteItem} className={'py-1 px-2 hover:bg-modal z-50 text-sm flex items-center space-x-2'} as={"div"}>
                                             <div><BsTrash className={'text-neutral-500'}/></div>
-                                            <div>Delete</div>
+                                            <div>Delete item</div>
                                         </Menu.Item>
                                     </div>
                                 </Menu.Items>
