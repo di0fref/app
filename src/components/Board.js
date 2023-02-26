@@ -18,6 +18,7 @@ import {useParams} from "react-router-dom";
 import {ArrayParam, useQueryParam, withDefault} from "use-query-params";
 import {myLabelParams, myDueParams} from "./Filters";
 import AuditLog from "./AuditLog"
+import Members from "./Members";
 
 export default function Board({project}) {
 
@@ -177,6 +178,7 @@ export default function Board({project}) {
             <div className={'flex items-center space-x-6'}>
                 <div className={'text-white font-bold text-lg mb-2 px-4 pt-2'}>{project.title}</div>
                 <Filters project={project}/>
+                <Members project={project}/>
                 <div className={'flex w-full bg-white_ justify-end '}>
                     <div className={'w-8 h-8 mr-2'}><AuditLog project={project}/></div>
                 </div>

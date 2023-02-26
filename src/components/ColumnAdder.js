@@ -35,7 +35,7 @@ export default function ColumnAdder({project}) {
             {!editing
                 ? (
 
-                    <div onClick={e => setEditing(true)} className={'hover:cursor-pointer text-white shadow-2xl flex items-center justify-center rounded-box  bg-[#5e89b1] h-11 w-64'}>
+                    <div onClick={e => setEditing(true)} className={'mr-2 hover:cursor-pointer text-white shadow-2xl flex items-center justify-center rounded-box  bg-[#5e89b1] h-11 w-64'}>
                         <div className={'text-sm'}>+ Add another list</div>
                     </div>
                 )

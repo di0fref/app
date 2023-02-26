@@ -174,16 +174,12 @@ export default function Navbar() {
                                 </Popover>
                             </div>
                             <div className={'relative w-full justify-end flex'}>
-                                <Popover
-                                    // ref={setPopperElement}
-                                    // style={{zIndex: 10, ...styles.popper}}
-                                    // {...attributes.popper}
-                                >
+                                <Popover>
                                     <Popover.Button ref={setReferenceElement}>
                                         <GoogleHead className={"w-8 h-8 rounded-full"}/>
                                     </Popover.Button>
                                     <Popover.Panel as={"div"}>
-                                        <div className={'bg-white shadow-lg absolute w-44 rounded-box right-0'}>
+                                        <div className={'z-20 bg-white shadow-lg absolute w-44 rounded-box right-0'}>
 
                                             <button onClick={e => {}} className={'my-1 hover:bg-modal-dark w-full'}>
                                                 <div className={'flex items-center space-x-2 px-2 py-1'}>
@@ -198,7 +194,6 @@ export default function Navbar() {
                                                     <div className={'text-sm'}>Sign out</div>
                                                 </div>
                                             </button>
-
                                         </div>
                                     </Popover.Panel>
                                 </Popover>

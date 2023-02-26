@@ -6,19 +6,23 @@ import DateBadge from "./DateBadge";
 import {Draggable} from 'react-beautiful-dnd';
 import {current} from "@reduxjs/toolkit";
 import {GrTextAlignFull} from "react-icons/gr";
-import {useEffect, useState} from "react";
+import {memo, useEffect, useState} from "react";
 import {HiArchive, HiOutlineArchive} from "react-icons/hi";
+import useDebugPropChanges from "../hooks/useDebugPropChanges";
+
 
 export default function Card({card, index}) {
 
     const [fieldHaveValues, setFieldHaveValues] = useState(false)
     const loc = useLocation()
+
+// useDebugPropChanges({card, index})
+
     const fieldsHaveValueCheck = () => {
         if (!card?.card_fields.length) {
             setFieldHaveValues(false)
         }
         const have = card?.card_fields.findIndex(field => field.value)
-
         setFieldHaveValues((have === -1) ? false : true)
     }
 
@@ -58,7 +62,7 @@ export default function Card({card, index}) {
                                 <div className={'text-sm'}><DateBadge date={card.due}/></div>
                                 <div className={'flex items-center space-x-2'}>
                                     {card?.text ? <BsTextLeft className={'h-4 w-4 text-neutral-500'}/> : ""}
-                                    {card?.checklists.length ? <BsCheck2Square className={'h-4 w-4 text-neutral-500'}/> : ""}
+                                    {card?.checklists && card.checklists.length ? <BsCheck2Square className={'h-4 w-4 text-neutral-500'}/> : ""}
                                 </div>
                             </div>
 

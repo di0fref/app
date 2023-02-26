@@ -73,6 +73,10 @@ export default function CardModal({project, ...props}) {
         dispatch(setCurrentCard(null))
         nav("/board/" + params.projectId + loc.search)
         dispatch(deleteCard(currentCard.id))
+        socket.emit("card delete", {
+            id: currentCard.id,
+            room: currentCard.projectId
+        })
     }
 
     function closeModal() {
@@ -102,6 +106,10 @@ export default function CardModal({project, ...props}) {
             id: currentCard.id,
             due: date ? format(date, dbDateFormat) : null,
         }))
+        socket.emit("card update", {
+            id: currentCard.id,
+            room: currentCard.projectId
+        })
     }
 
     const onArchive = () => {
@@ -109,12 +117,20 @@ export default function CardModal({project, ...props}) {
             status: "archived",
             id: currentCard?.id
         }))
+        socket.emit("card update", {
+            id: currentCard.id,
+            room: currentCard.projectId
+        })
     }
     const sendToBoard = () => {
         dispatch(updateTask({
             status: "",
             id: currentCard?.id
         }))
+        socket.emit("card update", {
+            id: currentCard.id,
+            room: currentCard.projectId
+        })
     }
     return (
         <Dialog

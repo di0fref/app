@@ -30,23 +30,31 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
     }, [edit])
 
     const saveText = () => {
-        if(isNew){
-            dispatch(addChecklistItem({
-                checklistId: list.id,
-                name: value
-            }))
+        if(value !== "") {
+            if (isNew) {
+                dispatch(addChecklistItem({
+                    checklistId: list.id,
+                    name: value
+                }))
+            } else {
+                dispatch(updateChecklistItem({
+                    id: item.id,
+                    name: value
+                }))
+            }
+            setEdit(false)
+            setEditing(false)
+            socket.emit("card update", {
+                id: card.id,
+                room: card.projectId
+            })
         }
-        else{
-
-        }
-        setEdit(false)
-        setEditing(false)
     }
 
     const deleteItem = () => {
         dispatch(deleteCheckListItem(item.id))
     }
-    
+
     const updateStatus = (e) => {
         setDone(e.target.checked)
         dispatch(updateChecklistItem({

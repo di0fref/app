@@ -12,7 +12,7 @@ export default function AddTask({column, project, addCard}) {
     const [editing, setEditing] = useState(false)
     const inputReference = useRef()
 
-    const submit = async () => {
+    const submit = () => {
 
         const card = dispatch(addTask({
             projectId: project.id,
@@ -26,6 +26,8 @@ export default function AddTask({column, project, addCard}) {
             })
 
             addCard(response)
+            setValue("")
+            setEditing(false)
         })
     }
     useEffect(() => {
@@ -41,8 +43,6 @@ export default function AddTask({column, project, addCard}) {
         if (e.key === 'Enter') {
             e.preventDefault()
             submit()
-            setValue("")
-            setEditing(false)
         }
     }
     return (
@@ -71,6 +71,9 @@ export default function AddTask({column, project, addCard}) {
                             value={value}
                             className={'mt-1 border-0 text-md px-2 py-1.5 shadow  w-full resize-none rounded-box focus:ring-0 focus:border-0 '}
                             placeholder={"Enter a title for this card..."}/>
+
+                        <button onClick={e => submit()} className={'save-btn'}>Add card</button>
+
                     </div>
                 )}
         </div>

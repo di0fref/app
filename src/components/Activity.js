@@ -29,17 +29,26 @@ export default function Activity({activity}) {
             case "columnId":
                 return {
                     user: activity.user,
-                    action: <span>Moved <Link className={"underline"} to={"/project/" + activity.card.projectId + "/card/" + activity.card.id}>{activity.card.title}</Link> to</span>,
+                    action: <span>Moved <Link className={"underline"} to={"/board/" + activity.card.projectId + "/card/" + activity.card.id}>{activity.card.title}</Link> to</span>,
                     to: activity.column.title,
-                    link: "/project/" + activity.card.projectId + "/card" + activity.card.id
+                    link: "/board/" + activity.card.projectId + "/card" + activity.card.id
                 }
                 break;
             case "status":
                 return {
                     user: activity.user,
-                    action: <span>{activity.value==="archived"?"archived":"sent to board"} <Link className={"underline"} to={"/project/" + activity.card.projectId + "/card/" + activity.card.id}>{activity.card.title}</Link></span>,
+                    action: <span>{activity.value==="archived"?"archived":"sent to board"} <Link className={"underline"} to={"/board/" + activity.card.projectId + "/card/" + activity.card.id}>{activity.card.title}</Link></span>,
                     to: "",
-                    link: "/project/" + activity.card.projectId + "/card" + activity.card.id
+                    link: "/board/" + activity.card.projectId + "/card" + activity.card.id
+                }
+                break;
+
+            case "due":
+                return {
+                    user: activity.user,
+                    action: <span>Updated due date on <Link className={"underline"} to={"/board/" + activity.card.projectId + "/card/" + activity.card.id}>{activity.card.title}</Link></span>,
+                    to: "",
+                    link: "/board/" + activity.card.projectId + "/card" + activity.card.id
                 }
                 break;
         }
@@ -48,5 +57,6 @@ export default function Activity({activity}) {
 
     return (
         <ActivityText arr={getText()}/>
+        // <></>
     )
 }
