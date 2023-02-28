@@ -5,16 +5,18 @@ import {
     createUser,
     updateUser,
     deleteUser,
-    login
+    login,
+    getProjects, removeUserFromProject
 } from "../controllers/UserController.js";
 
 const router = express.Router();
 
 router.post('/login', login);
-router.get('/users', getUsers);
+router.get('/users/:projectId', getUsers);
 router.get('/users/:id', getUserById);
 router.post('/users', createUser);
 router.patch('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
-
+router.get('/users/projects/:userId', getProjects);
+router.post("/users/removeUserFromProject", removeUserFromProject)
 export default router;

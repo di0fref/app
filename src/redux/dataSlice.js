@@ -131,9 +131,9 @@ export const addLabel = createAsyncThunk(
 
 export const getProjects = createAsyncThunk(
     'data/getProjects',
-    async (label, thunkAPI) => {
+    async (userId, thunkAPI) => {
         try {
-            const response = await axios.get("/projects")
+            const response = await axios.get("/users/projects/" + userId)
             return response.data
         } catch (error) {
             throw thunkAPI.rejectWithValue(error.message)

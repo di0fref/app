@@ -9,6 +9,8 @@ import Log from "./Log.js";
 import db from "../config/Database.js";
 import Checklist from "./Checklist.js";
 import ChecklistItem from "./ChecklistItem.js";
+import ProjectUsers from "../models/ProjectUsers.js";
+import ProjectUser from "../models/ProjectUsers.js";
 
 Card.belongsTo(User);
 Card.belongsTo(Project)
@@ -17,8 +19,11 @@ Card.belongsTo(Column)
 User.hasMany(Card)
 Project.hasMany(Card)
 
-Project.belongsToMany(User, {through: 'ProjectUsers', timestamps: false})
-User.belongsToMany(Project, {through: 'ProjectUsers', timestamps: false})
+Project.belongsToMany(User, {through: ProjectUsers, timestamps: false})
+User.belongsToMany(Project, {through: ProjectUsers, timestamps: false})
+
+ProjectUser.belongsTo(User)
+User.hasMany(ProjectUser)
 
 Project.hasMany(Column)
 Column.belongsTo(Project)

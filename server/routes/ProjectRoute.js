@@ -1,6 +1,5 @@
 import express from "express";
 import {
-    getProjects,
     getProjectsById,
     updateProject,
     updateColumn,
@@ -9,7 +8,6 @@ import {
 } from "../controllers/ProjectController.js";
 const router = express.Router();
 
-router.get('/projects', getProjects);
 router.get('/projects/:id', getProjectsById);
 router.put('/projects/:id', updateProject);
 router.put('/projects/column/:id', updateColumn);

@@ -38,10 +38,11 @@ export default function Main() {
         } else {
             dispatch(setAccessToken(localStorage.getItem("accessToken")))
             dispatch(setUser(JSON.parse(localStorage.getItem("user"))))
-            dispatch(getProjects()).then(r => {
+            dispatch(getProjects(
+                JSON.parse(localStorage.getItem("user")).id
+            )).then(r => {
                 dispatch(startConnecting())
             })
-
         }
     }, [])
 
@@ -83,9 +84,8 @@ export default function Main() {
 
         <>
             <Navbar/>
-            <div className={'h-full'} >
+            <div className={'h-full'}>
                 {project?.id ? <Board project={project}/> : <Index/>}
-                {/*<Board project={project}/>*/}
             </div>
         </>
 

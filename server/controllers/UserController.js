@@ -1,8 +1,43 @@
 import User from "../models/User.js";
 
 import jwt from "jsonwebtoken"
+import Project from "../models/Project.js";
+import ProjectUser from "../models/ProjectUsers.js";
 
 export const accessTokenSecret = "kalle"
+
+
+export const removeUserFromProject = async (req, res) => {
+    try {
+
+        const response = await ProjectUser.destroy({
+            where: {
+                userId: req.body.userId,
+                projectId: req.body.projectId
+            }
+        })
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export const getProjects = async (req, res) => {
+    try {
+        const response = await Project.findAll({
+            include: {
+                model: User,
+                where: {
+                    id: req.params.userId
+                }
+            },
+        });
+        res.status(200).json(response);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 export const login = async (req, res) => {
     try {
@@ -30,7 +65,16 @@ export const login = async (req, res) => {
 
 export const getUsers = async (req, res) => {
     try {
-        const response = await User.findAll();
+        const response = await User.findAll({
+            include: {
+                model: ProjectUser,
+                attributes: ["role"],
+                where: {
+                    // userId: req.user.id,
+                    projectId: req.params.projectId
+                },
+            },
+        });
         res.status(200).json(response);
     } catch (error) {
         console.log(error.message);

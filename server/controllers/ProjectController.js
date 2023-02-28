@@ -17,11 +17,12 @@ export const getProjects = async (req, res) => {
         const response = await Project.findAll({
             include: {
                 model: User,
-                where: {
-                    id: req.user.id
+                through: {
+                    where: {
+                        userId: req.params.userId
+                    }
                 }
-            },
-            where: {}
+            }
         })
 
         res.status(200).json(response);
@@ -69,7 +70,7 @@ export const getFilteredProjectById = async (req, res) => {
 
     const dueWhere = req.body.due.length ?
         {
-                due: req.body.due.map(due => due)
+            due: req.body.due.map(due => due)
         }
         : null
 
@@ -131,8 +132,18 @@ export const getFilteredProjectById = async (req, res) => {
 
 export const getProjectsById = async (req, res) => {
     try {
+        console.log(req.user)
         const project = await Project.findByPk(req.params.id, {
             include: [
+                {
+                    model: User,
+                    required: true,
+                    through:{
+                        where: {
+                            userId: req.user.id,
+                        },
+                    }
+                },
                 {
                     model: Label
                 },
@@ -149,11 +160,6 @@ export const getProjectsById = async (req, res) => {
                             order: [["position", "asc"]],
                             separate: true,
                             required: false,
-                            // where: {
-                            //     status: {
-                            //         [Op.ne]: "archived",
-                            //     }
-                            // },
                             include: [
                                 {
                                     model: Checklist,
@@ -227,7 +233,7 @@ export const createProject = async (req, res) => {
         const project = await Project.create({
             title: req.body.title,
         })
-        project.addUsers(req.user.id)
+        project.addUsers(req.user.id, { through: { role: 'admin' }})
 
         /* Create default columns */
         const colBacklog = await Column.create({

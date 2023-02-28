@@ -16,10 +16,14 @@ module.exports = {
             // sans :"-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif"
         },
         extend: {
+            boxShadow:{
+                all: " 0 4px 8px -2px rgba(9, 30, 66, 0.25), 0 0 1px rgba(9, 30, 66, 0.31)"
+            },
             borderRadius:{
                 box: "3px"
             },
             colors: {
+                subtle: "#5e6c84",
                 "modal-darker": "#e2e4e9",
                 "modal-dark": "#ebecef",
                 modal: "#F4F5F7",
