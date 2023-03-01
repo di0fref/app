@@ -85,7 +85,8 @@ export const reorderCards = async (req, res) => {
             Object.values(req.body).map(async card => {
 
                 const originalObj = await Card.findByPk(card.id)
-                if (originalObj.columnId !== card.columnId) {
+
+                if (originalObj.columnId != card.columnId) {
                     Log.create({
                         userId: req.user.id,
                         field: "columnId",
@@ -241,6 +242,9 @@ export const createCard = async (req, res) => {
                     },
                     {
                         model: CardField
+                    },
+                    {
+                        model: Checklist
                     }
                 ],
             }).then(card => {

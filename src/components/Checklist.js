@@ -77,7 +77,7 @@ export default function Checklist({list, card}) {
             return <ChecklistItem card={card} key={item.id} item={item}/>
         })}
 
-        {newItem && <ChecklistItem setEdit={setNewItem} list={list} item={{name: ""}} isNew={true} edit={true}/>}
+        {newItem && <ChecklistItem card={card} setEdit={setNewItem} list={list} item={{name: ""}} isNew={true} edit={true}/>}
 
         {!newItem && <button onClick={addItem} className={'bg-modal-darker py-1 px-2 rounded-box ml-2 my-2 text-sm'}>Add
             item</button>}

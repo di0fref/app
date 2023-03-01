@@ -104,13 +104,15 @@ export default function Board({project}) {
 
                 const sCards = sourceCards.map((card, index) => {
                     return {
-                        id: card.id, columnId: source.droppableId, position: index
+                        id: card.id, columnId: source.droppableId, position: index, columnId: card.columnId
                     }
                 })
 
                 const dCards = destCards.map((card, index) => {
                     return {
-                        id: card.id, columnId: destination.droppableId, position: index
+                        id: card.id,
+                        columnId: destination.droppableId,
+                        position: index,
 
                     }
                 })
@@ -144,7 +146,9 @@ export default function Board({project}) {
                 const cards = cols[columnIndex].cards
                 const orderedCards = cards.map((card, index) => {
                     return {
-                        id: card.id, position: index,
+                        id: card.id,
+                        position: index,
+                        columnId: card.columnId
                     };
                 })
                 dispatch(reorderTasks(orderedCards)).unwrap()
@@ -164,7 +168,9 @@ export default function Board({project}) {
         const cards = column.cards
         const orderedCards = cards.map((card, index) => {
             return {
-                id: card.id, position: index,
+                id: card.id,
+                position: index,
+                columnId: card.columnId
             };
         })
         dispatch(reorderTasks(orderedCards)).unwrap().then(response => {

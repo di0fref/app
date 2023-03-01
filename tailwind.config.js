@@ -33,7 +33,7 @@ module.exports = {
                 warning: "#e95b4c"
             },
             fontSize: {
-                base: "16px",
+                base: "15px",
                 md: "0.95em",
             },
             // fontFamily: {

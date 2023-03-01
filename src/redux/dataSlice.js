@@ -350,8 +350,12 @@ export const dataSlice = createSlice({
             })
             .addCase(addCheckList.fulfilled, (state, action) => {
 
+                console.log(action.payload)
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.card.columnId)
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.card.id)
+
+                console.log(columnIndex, cardIndex)
+
 
                 state.project.columns[columnIndex].cards[cardIndex].checklists.unshift(action.payload)
 
@@ -372,12 +376,10 @@ export const dataSlice = createSlice({
 
             })
             .addCase(addChecklistItem.fulfilled, (state, action) => {
-                console.log(action.payload)
+
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.checklist.card.columnId)
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.checklist.card.id)
                 const checkListIndex = state.project.columns[columnIndex].cards[cardIndex].checklists.findIndex(list => list.id === action.payload.checklistId)
-
-                console.log(columnIndex, cardIndex, checkListIndex)
 
                 state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.push(action.payload)
 
@@ -436,7 +438,7 @@ export const dataSlice = createSlice({
                 state.projects = action.payload
             })
             .addCase(addTask.fulfilled, (state, action) => {
-
+                console.log(action.payload)
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
 
