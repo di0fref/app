@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {socket, store} from "../redux/store";
 import React from "react";
 import ColumnAdder from "./ColumnAdder";
-import {getProject, reorderTasks, setBoard} from "../redux/dataSlice";
+import {getProject, reorderTasks, setBoard, updateColumn} from "../redux/dataSlice";
 import CardModal from "./CardModal";
 import Filters from "./Filters";
 import {useReadLocalStorage} from "usehooks-ts";
@@ -19,6 +19,7 @@ import {ArrayParam, useQueryParam, withDefault} from "use-query-params";
 import {myLabelParams, myDueParams} from "./Filters";
 import AuditLog from "./AuditLog"
 import Members from "./Members";
+import {arrayMoveImmutable} from 'array-move';
 
 export default function Board({project}) {
 
@@ -62,11 +63,32 @@ export default function Board({project}) {
     const onDragEnd = (result, columns) => {
 
         const {type} = result;
+        const {source, destination} = result;
+
+        if (type === "col"){
+
+            if(source.index === destination.index){
+                /* Bail early */
+                return
+            }
+            const sourceColumn = columns[source.index]
+            const destColumn = columns[destination.index]
+
+            const newColumns = arrayMoveImmutable(columns, source.index, destination.index)
+            newColumns.map((column, index) => {
+                dispatch(updateColumn({
+                    id: column.id,
+                    order: index
+                }))
+            })
+            setBoard(newColumns)
+            dispatch(setBoard(newColumns))
+
+        }
 
         if (type === "card") {
             let cols = []
             if (!result.destination) return;
-            const {source, destination} = result;
 
             if (source.droppableId === destination.droppableId && source.index === destination.index) {
                 /* Bail early */
@@ -173,16 +195,14 @@ export default function Board({project}) {
                 columnId: card.columnId
             };
         })
-        dispatch(reorderTasks(orderedCards)).unwrap().then(response => {
-
-        })
+        dispatch(reorderTasks(orderedCards))
     }
 
     if (board?.columns && board?.columns.length) {
 
         return (<div className={'relative'}>
             <div className={'flex items-center space-x-6'}>
-                <div className={'text-white font-bold text-lg mb-2 px-4 pt-2'}>{project.title}</div>
+                <div className={'text-white font-bold text-lg mb-2 px-4 pt-2 whitespace-nowrap'}>{project.title}</div>
                 <Filters project={project}/>
                 <Members project={project}/>
                 <div className={'flex w-full bg-white_ justify-end '}>

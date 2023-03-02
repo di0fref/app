@@ -2,6 +2,7 @@ import {Popover} from "@headlessui/react";
 import {BsThreeDotsVertical, BsX} from "react-icons/bs";
 import {useDispatch} from "react-redux";
 import {archiveCards} from "../redux/dataSlice"
+import Pop from "./Pop";
 
 export default function ColumnMenu({column}) {
 

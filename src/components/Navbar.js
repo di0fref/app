@@ -1,7 +1,7 @@
 import {Fragment, useEffect, useState} from 'react'
 import {Disclosure, Menu, Popover, Transition} from '@headlessui/react'
 import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
-import {getProject, createProject} from "../redux/dataSlice";
+import {getProject, createProject, getProjects} from "../redux/dataSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {BsArrowLeft, BsChevronDown, BsFillKanbanFill, BsX} from "react-icons/bs";
@@ -57,6 +57,7 @@ export default function Navbar() {
         })).unwrap().then(response => {
             navigate("/board/" + response.id)
             toast.success('Board "' + response.title + '" created')
+            dispatch(getProjects(user.id))
         })
     }
 
@@ -98,8 +99,8 @@ export default function Navbar() {
                                                                 {({close}) => (
 
                                                                     <Link to={"/board/" + project.id} onClick={close} className={'flex items-center space-x-2 mb-2 hover:bg-modal-dark  w-full py-1 px-1'}>
-                                                                        <div className={'w-10 h-10 font-bold text-lg bg-red-300 rounded-box flex items-center justify-center'}>{project.title.charAt(0)}</div>
-                                                                        <div className={'font-bold text-md'}>{project.title}</div>
+                                                                        <div className={'w-6 h-6 font-bold_ text-md bg-gray-300 rounded-box flex items-center justify-center'}>{project.title.charAt(0)}</div>
+                                                                        <div className={'font-bold_ text-md'}>{project.title}</div>
                                                                     </Link>
                                                                 )}
                                                             </Menu.Item>

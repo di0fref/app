@@ -52,12 +52,12 @@ export default function Description({card, edit, setEdit}) {
         if (card.text) {
             return (
                 <div>
-                    <MDEditor.Markdown placeholder={"Add a detailed description"} className={'_min-h-[6rem] !bg-transparent !prose !text-md'} source={value}/>
+                    <MDEditor.Markdown placeholder={"Add a detailed description"} className={' !bg-transparent !prose !text-md '} source={value}/>
                 </div>
             )
         } else {
             return (
-                <div className={'hover:cursor-pointer bg-modal-dark w-full h-12 py-1 px-2 rounded-sm text-sm text-neutral-500'}>Add a detailed description</div>
+                <div onClick={e => setEdit(true)} className={'hover:cursor-pointer bg-modal-dark w-full h-16 py-1 px-2 rounded-sm text-sm text-neutral-500 hover:bg-modal-darker'}>Add a detailed description</div>
             )
         }
     }

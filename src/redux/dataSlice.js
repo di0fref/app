@@ -327,8 +327,6 @@ export const dataSlice = createSlice({
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
 
                 state.project.columns[columnIndex].cards.splice(cardIndex,1)
-
-                console.log(action.payload)
             })
             .addCase(deleteCheckListItem.fulfilled, (state, action) => {
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.checklist.card.columnId)
@@ -353,9 +351,6 @@ export const dataSlice = createSlice({
                 console.log(action.payload)
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.card.columnId)
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.card.id)
-
-                console.log(columnIndex, cardIndex)
-
 
                 state.project.columns[columnIndex].cards[cardIndex].checklists.unshift(action.payload)
 
@@ -463,7 +458,7 @@ export const dataSlice = createSlice({
                 state.columns = action.payload
             })
             .addCase(updateColumn.fulfilled, (state, action) => {
-                console.log(action);
+                // console.log(action);
             })
             .addCase(addColumn.fulfilled, (state, action) => {
                 state.project.columns.push(action.payload)

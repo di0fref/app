@@ -1,4 +1,4 @@
-import {Dialog, Transition} from '@headlessui/react'
+import {Dialog, Transition, Popover} from '@headlessui/react'
 import {Fragment, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {HiOutlineXMark} from "react-icons/hi2";
@@ -20,10 +20,11 @@ import {HiArrowCircleRight, HiCheck, HiOutlineArchive, HiOutlineTag, HiRefresh, 
 import ChecklistManager from "./ChecklistManager";
 import Checklist from "./Checklist";
 import {toast} from "react-toastify";
+import {usePopper} from "react-popper";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
-        <div onClick={onClick} className={`rounded-box ml-0.5 md:ml-0 hover:cursor-pointer hover:bg-modal-darker bg-modal-dark h-8 px-2 ${props.className}`}>
+        <div onClick={onClick} className={`rounded-box ml-0.5 md:ml-0 hover:cursor-pointer hover:bg-modal-darker bg-modal-dark h-8 px-2 text-left ${props.className}`}>
             <div className={'flex items-center space-x-2 h-8'}>
                 {icon}
                 <div className={`text-sm`}>{value}</div>
@@ -34,10 +35,10 @@ export function CardModelButton({icon, value, onClick, ...props}) {
 
 export function CardModelButtonRed({icon, value, onClick, ...props}) {
     return (
-        <div onClick={onClick} className={`rounded-box ml-0.5 md:ml-0 hover:cursor-pointer bg-orange-700 hover:bg-orange-800 text-white bg-modal-dark h-8 px-2 ${props.className}`}>
+        <div onClick={onClick} className={`rounded-box ml-0.5 md:ml-0 hover:cursor-pointer bg-orange-700 hover:bg-orange-800 text-white bg-modal-dark h-8 px-2 text-left ${props.className}`}>
             <div className={'flex items-center space-x-2 h-8'}>
                 {icon}
-                <div className={`text-sm`}>{value}</div>
+                <div className={`text-sm flex-grow`}>{value}</div>
             </div>
         </div>
     )
@@ -45,6 +46,15 @@ export function CardModelButtonRed({icon, value, onClick, ...props}) {
 
 
 export default function CardModal({project, ...props}) {
+
+
+    let [referenceElement, setReferenceElement] = useState()
+    let [popperElement, setPopperElement] = useState()
+    let {styles, attributes} = usePopper(referenceElement, popperElement, {
+        placement: "bottom-end",
+        strategy: 'absolute',
+    })
+
     let [isOpen, setIsOpen] = useState(false)
     const currentCard = useSelector(state => state.data.currentCard)
     const nav = useNavigate()
@@ -200,12 +210,12 @@ export default function CardModal({project, ...props}) {
                                             <div className={'absolute left-6'}><BsTextLeft className={'h-5 w-5'}/></div>
                                             <div className={'flex items-center space-x-2'}>
                                                 <div className={'font-semibold text-base'}>Description</div>
-                                                <div>
-                                                    <button onClick={() => {
-                                                        setEdit(true)
-                                                    }} className={'py-1 px-2 bg-neutral-200 text-sm rounded hover:bg-neutral-300'}>Edit
-                                                    </button>
-                                                </div>
+                                                {/*<div>*/}
+                                                {/*    <button onClick={() => {*/}
+                                                {/*        setEdit(true)*/}
+                                                {/*    }} className={'py-1 px-2 bg-neutral-200 text-sm rounded hover:bg-neutral-300'}>Edit*/}
+                                                {/*    </button>*/}
+                                                {/*</div>*/}
                                             </div>
                                         </div>
                                         <div className={"mb-4 mt-3 pl-1"}>
@@ -237,7 +247,7 @@ export default function CardModal({project, ...props}) {
                                     ))}
 
                                 </div>
-                                <div className={'bg-green-600_ w-44'}>
+                                <div className={'bg-green-600_ w-44 '}>
                                     <div className={'mb-4'}>
                                         <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Due
                                             date
@@ -271,9 +281,37 @@ export default function CardModal({project, ...props}) {
                                                 <button onClick={sendToBoard} className={'mb-2'}>
                                                     <CardModelButton className={'w-44'} value={"Send to board"} icon={<HiRefresh/>}/>
                                                 </button>
-                                                <button onClick={onDeleteCard} className={'mb-2'}>
-                                                    <CardModelButtonRed className={'w-44'} value={"Delete"} icon={<BsDash/>}/>
-                                                </button>
+                                                {/*<button onClick={onDeleteCard} className={'mb-2'}>*/}
+                                                {/*    <CardModelButtonRed className={'w-44'} value={"Delete"} icon={<BsDash/>}/>*/}
+
+                                                <Popover className={"relative"}>
+                                                    <Popover.Button ref={setReferenceElement}>
+                                                        <CardModelButtonRed className={'w-44'} value={"Delete"} icon={<BsDash/>}/>
+                                                    </Popover.Button>
+                                                    <Popover.Panel className={'absolute top-8 right-0 z-10 mt-1 w-80'}
+                                                                   ref={setPopperElement}
+                                                                   style={{zIndex: 10, ...styles.popper}}
+                                                                   {...attributes.popper}
+                                                    >
+                                                        {({close}) => (
+
+                                                            <div className="overflow-hidden rounded shadow-all ring-1 ring-black ring-opacity-5 bg-white">
+                                                                <div className="relative bg-white p-4 ">
+                                                                    <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Delete card?</div>
+
+                                                                    <button onClick={close} className={'absolute top-3 right-2'}>
+                                                                        <BsX className={'h-6 w-6'}/>
+                                                                    </button>
+
+                                                                    <div className={'text-sm'}>All actions will be removed from the activity feed and you won’t be able to re-open the card. There is no undo.</div>
+                                                                    <CardModelButtonRed onClick={onDeleteCard} className={'w-full text-center mt-3'} value={"Delete"}/>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </Popover.Panel>
+                                                </Popover>
+
+                                                {/*</button>*/}
                                             </>
                                         )
                                         : (

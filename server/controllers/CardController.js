@@ -18,11 +18,19 @@ export const deleteCard = async (req, res) => {
 
         const response = await Card.findByPk(req.params.id)
 
+        await Log.destroy({
+            where:{
+                cardId: req.params.id
+            }
+        })
+
         await Card.destroy({
             where: {
                 id: req.params.id
             }
         });
+
+
 
         res.status(200).json(response);
     } catch (error) {

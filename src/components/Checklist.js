@@ -1,11 +1,12 @@
 import ChecklistItem from "./ChecklistItem";
-import {BsCheck2Square, BsTextLeft, BsTrash} from "react-icons/bs";
+import {BsCheck2Square, BsTextLeft, BsTrash, BsX} from "react-icons/bs";
 import {useState, useEffect} from "react";
-import {CardModelButton} from "./CardModal";
+import {CardModelButton, CardModelButtonRed} from "./CardModal";
 import {useDispatch} from "react-redux";
 import {addChecklistItem, deleteCheckList} from "../redux/dataSlice";
 import {Popover} from "@headlessui/react";
 import {usePopper} from 'react-popper'
+import Pop from "./Pop";
 
 export default function Checklist({list, card}) {
 
@@ -13,7 +14,7 @@ export default function Checklist({list, card}) {
     let [referenceElement, setReferenceElement] = useState()
     let [popperElement, setPopperElement] = useState()
     let {styles, attributes} = usePopper(referenceElement, popperElement, {
-        placement: "bottom-start",
+        placement: "bottom-end",
         strategy: 'absolute',
     })
 
@@ -40,28 +41,40 @@ export default function Checklist({list, card}) {
         <div className={'flex items-center justify-between '}>
             <div className={'font-semibold text-base my-2'}>{list?.name}</div>
 
+
             <Popover as={"div"}>
                 <Popover.Button ref={setReferenceElement}>
                     <CardModelButton value={"Delete"}/>
                 </Popover.Button>
 
-                <Popover.Panel as={"div"}
-                               ref={setPopperElement}
-                               style={{zIndex: 10, ...styles.popper}}
-                               {...attributes.popper}
-                >
-                    <div className={'bg-white py-1 shadow-lg rounded w-72 mt-2'}>
-                        <div className={'border-b text-center text-sm text-neutral-500 py-1'}>Delete
-                            checklist?
-                        </div>
-                        <div className={'p-1'}>
-                            <div className={'text-sm p-1'}>Deleting a checklist is permanent and there is no way to get it back.
+                <Popover.Panel as={"div"} className={"w-80"} ref={setPopperElement} style={{zIndex: 10, ...styles.popper}}{...attributes.popper}>
+                    {({close}) => (
+
+                        <div className="overflow-hidden rounded shadow-all ring-1 ring-black ring-opacity-5 bg-white">
+                            <div className="relative bg-white p-4 ">
+                                <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Delete checklist?</div>
+
+
+
+                                <button onClick={close} className={'absolute top-3 right-2'}>
+                                    <BsX className={'h-6 w-6'}/>
+                                </button>
+
+
+
+                                <div>
+                                    <div className={'text-sm p-1'}>Deleting a checklist is permanent and there is no way to get it back.
+                                    </div>
+                                    <div className={'mt-2 text-center'}>
+                                        <CardModelButtonRed onClick={deleteList} className={'text-center'} value={"Delete"}/>
+                                    </div>
+                                </div>
+
+
+
                             </div>
-                            <div className={'mt-2 text-center'}>
-                                <button onClick={deleteList} className={'rounded-box w-full ml-0.5 bg-orange-700 hover:bg-orange-800 text-sm text-center text-white h-7'}>Delete</button>
-                            </div>
                         </div>
-                    </div>
+                    )}
                 </Popover.Panel>
             </Popover>
         </div>
