@@ -23,6 +23,30 @@ export const removeUserFromProject = async (req, res) => {
     }
 }
 
+export const addUserToProject = async (req, res) => {
+
+
+    const user = await User.findOne({
+        where: {
+            email: req.body.email
+        }
+    })
+
+    try {
+        const response = await ProjectUser.create({
+            email: req.body.email,
+            status: "pending",
+            userId: user?user.id:null,
+            projectId: req.body.projectId,
+            role: req.body.role
+        })
+
+        res.status(200).json(response);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 export const getProjects = async (req, res) => {
     try {
         const response = await Project.findAll({

@@ -7,6 +7,7 @@ import {Avatar} from "./GoogleHead";
 import {Menu, Listbox} from "@headlessui/react";
 import ShareSelect from "./ShareSelect";
 import {useSelector} from "react-redux";
+import validator from "validator";
 
 
 export default function Members({project}) {
@@ -14,7 +15,9 @@ export default function Members({project}) {
     const [open, setOpen] = useState(true)
     const [users, setUsers] = useState([])
     const currentUser = useSelector(state => state.data.user)
-
+    const [newUserEmail, setNewUserEmail] = useState("")
+    const [emailError, setEmailError] = useState("")
+    const [selected, setSelected] = useState("")
 
     const fetchData = async () => {
         const response = await axios.get("/users/" + project.id)
@@ -25,8 +28,30 @@ export default function Members({project}) {
         open && fetchData().catch(console.error)
     }, [open])
 
-    const addUser = (user) => {
+    const validateEmail = (email) => {
+        if (!validator.isEmail(email)) {
+            setEmailError("Please enter valid Email.")
+            return false
+        } else {
+            setEmailError('')
+            return true
+        }
+    }
 
+    const addUser = () => {
+        if (!validateEmail(newUserEmail)) {
+            return
+        }
+
+        const data = {
+            email: newUserEmail,
+            role: selected,
+            projectId: project.id
+        }
+        console.log(data);
+        axios.post("/users/addUserToProject", data).then(res => {
+            fetchData().catch(console.error)
+        })
     }
 
     const removeUser = (user) => {
@@ -57,15 +82,23 @@ export default function Members({project}) {
                     <Dialog.Panel className="max-w-lg w-11/12 transform rounded-sm bg-white text-left align-middle shadow-xl transition-all">
 
                         <Dialog.Title className={"pt-4 px-6 fo nt-semibold text-xl"}>Share board</Dialog.Title>
-                        <button onClick={() => setOpen(false)} className={'absolute top-4 right-4'}><BsX className={'w-7 h-7'}/></button>
+                        <button onClick={() => setOpen(false)} className={'absolute top-4 right-4'}>
+                            <BsX className={'w-7 h-7'}/></button>
 
                         <div className={'min-h-[300px] max-h-[600px] px-6 py-4'}>
 
                             <div className={'h-full bg-red-300_'}>
-                                <div className={'flex items-center justify-between space-x-4'}>
-                                    <input type={"text"} className={'mt-1_ border-1 border-neutral-300 text-md h-9 py-1 px-2 w-full rounded-box'}/>
-                                    <button className={'save-btn h-8'}>Share</button>
+                                <div className={'flex items-center justify-between space-x-2'}>
+                                    <input onChange={e => {
+                                        setNewUserEmail(e.target.value)
+                                        setEmailError("")
+                                    }} type={"text"} className={'mt-1_ border-1 border-neutral-300 text-md h-9 py-1 px-2 w-full rounded-box'}/>
+
+                                    <ShareSelect returnSelected={setSelected} initialSelected={"Member"} locked={false}/>
+
+                                    <button onClick={addUser} className={'save-btn h-8'}>Share</button>
                                 </div>
+                                {emailError && <div className={'text-red-600 text-sm'}>{emailError}</div>}
                             </div>
 
                             <div>
@@ -73,11 +106,12 @@ export default function Members({project}) {
                                     <div key={user.id} className={'flex items-center space-x-4 mt-4 '}>
                                         <Avatar className={"bg-neutral-200 rounded-full w-8 h-8"} key={user.id} user={user}/>
                                         <div className={'flex flex-col flex-grow'}>
-                                            <div className={'text-md _font-semibold'}>{user.name} {user.id === currentUser.id ? <span className={'text-sm'}>(you)</span> : ""} </div>
+                                            <div className={'text-md _font-semibold'}>{user.name} {user.id === currentUser.id ?
+                                                <span className={'text-sm'}>(you)</span> : ""} </div>
                                             <div className={'text-subtle text-xs'}>{user.email}</div>
                                         </div>
                                         <div>
-                                            <ShareSelect removeUser={removeUser} user={user} locked={user.id === currentUser.id}/>
+                                            <ShareSelect removeUser={removeUser} user={user} initialSelected={user.ProjectUsers[0].role} locked={user.id === currentUser.id}/>
                                         </div>
                                     </div>
                                 ))}
