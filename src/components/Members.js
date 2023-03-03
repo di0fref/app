@@ -12,13 +12,14 @@ import validator from "validator";
 
 export default function Members({project}) {
 
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const [users, setUsers] = useState([])
     const currentUser = useSelector(state => state.data.user)
     const [newUserEmail, setNewUserEmail] = useState("")
     const [emailError, setEmailError] = useState("")
     const [selected, setSelected] = useState("")
 
+    console.log(users.pending);
     const fetchData = async () => {
         const response = await axios.get("/users/" + project.id)
         setUsers(response.data)
@@ -46,10 +47,10 @@ export default function Members({project}) {
         const data = {
             email: newUserEmail,
             role: selected,
-            projectId: project.id
+            projectId: project.id,
+            role: "Member"
         }
-        console.log(data);
-        axios.post("/users/addUserToProject", data).then(res => {
+        axios.post("/users/addPendingUser", data).then(res => {
             fetchData().catch(console.error)
         })
     }
@@ -85,7 +86,7 @@ export default function Members({project}) {
                         <button onClick={() => setOpen(false)} className={'absolute top-4 right-4'}>
                             <BsX className={'w-7 h-7'}/></button>
 
-                        <div className={'min-h-[300px] max-h-[600px] px-6 py-4'}>
+                        <div className={'min-h-[300px] max-h-[600px] overflow-auto px-6 py-4'}>
 
                             <div className={'h-full bg-red-300_'}>
                                 <div className={'flex items-center justify-between space-x-2'}>
@@ -100,10 +101,10 @@ export default function Members({project}) {
                                 </div>
                                 {emailError && <div className={'text-red-600 text-sm'}>{emailError}</div>}
                             </div>
-
+                            <div className={'font-semibold text-sm mt-4 mb-2'}>Members</div>
                             <div>
-                                {users && users?.map(user => (
-                                    <div key={user.id} className={'flex items-center space-x-4 mt-4 '}>
+                                {users.users && users?.users.map(user => (
+                                    <div key={user.id} className={'flex items-center space-x-4 mb-4 '}>
                                         <Avatar className={"bg-neutral-200 rounded-full w-8 h-8"} key={user.id} user={user}/>
                                         <div className={'flex flex-col flex-grow'}>
                                             <div className={'text-md _font-semibold'}>{user.name} {user.id === currentUser.id ?
@@ -116,7 +117,22 @@ export default function Members({project}) {
                                     </div>
                                 ))}
                             </div>
+                            <div className={'font-semibold text-sm mt-4 mb-2'}>Pending</div>
+                            <div>
+                                {users.pending && users?.pending.map(user => (
+                                    <div key={user.id} className={'flex items-center space-x-4 mb-4 '}>
+                                        <Avatar className={"bg-neutral-200 rounded-full w-8 h-8"} key={user.id}/>
+                                        <div className={'flex flex-col flex-grow'}>
+                                            <div className={'text-md _font-semibold'}>{user.email}</div>
+                                            {/*<div className={'text-subtle text-xs'}>{user.email}</div>*/}
+                                        </div>
+                                        <div>
+                                            <ShareSelect removeUser={removeUser} user={user} initialSelected={user.role} locked={false}/>
+                                        </div>
+                                    </div>
 
+                                ))}
+                            </div>
                         </div>
 
                     </Dialog.Panel>

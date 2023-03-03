@@ -11,6 +11,7 @@ import Checklist from "./Checklist.js";
 import ChecklistItem from "./ChecklistItem.js";
 import ProjectUsers from "../models/ProjectUsers.js";
 import ProjectUser from "../models/ProjectUsers.js";
+import PendingUser from "./PendingUser.js";
 
 Card.belongsTo(User);
 Card.belongsTo(Project)
@@ -56,3 +57,7 @@ Card.hasMany(Checklist)
 Checklist.hasMany(ChecklistItem)
 ChecklistItem.belongsTo(Checklist)
 
+PendingUser.belongsTo(Project)
+Project.hasMany(PendingUser)
+PendingUser.belongsTo(User)
+User.hasMany(PendingUser)

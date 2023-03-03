@@ -6,7 +6,7 @@ import {
     updateUser,
     deleteUser,
     login,
-    getProjects, removeUserFromProject, addUserToProject
+    getProjects, removeUserFromProject, addPendingUser
 } from "../controllers/UserController.js";
 
 const router = express.Router();
@@ -19,6 +19,6 @@ router.patch('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
 router.get('/users/projects/:userId', getProjects);
 router.post("/users/removeUserFromProject", removeUserFromProject)
-router.post("/users/addUserToProject", addUserToProject)
+router.post("/users/addPendingUser", addPendingUser)
 
 export default router;

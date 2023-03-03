@@ -7,6 +7,7 @@ import {addChecklistItem, deleteCheckList} from "../redux/dataSlice";
 import {Popover} from "@headlessui/react";
 import {usePopper} from 'react-popper'
 import Pop from "./Pop";
+import {toast} from "react-toastify";
 
 export default function Checklist({list, card}) {
 
@@ -25,7 +26,9 @@ export default function Checklist({list, card}) {
     const dispatch = useDispatch()
 
     const deleteList = () => {
-        dispatch(deleteCheckList(list.id))
+        dispatch(deleteCheckList(list.id)).unwrap().then(r => {
+            toast.success(`Checklist "${list.name}" removed`)
+        })
     }
 
     const addItem = () => {

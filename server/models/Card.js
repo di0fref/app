@@ -25,10 +25,13 @@ const Card = db.define('cards', {
         position: {
             type: Sequelize.INTEGER,
             defaultValue: 0
-        }
+        },
 
     },
-    {freezeTableName: true},
+    {
+        freezeTableName: true,
+        paranoid: true
+    },
 )
 // Temporal(Card, db, {})
 

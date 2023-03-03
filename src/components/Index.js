@@ -2,6 +2,11 @@ import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getProjects} from "../redux/dataSlice"
 import {Link} from "react-router-dom";
+import {Popover} from "@headlessui/react";
+import {CardModelButton, CardModelButtonRed} from "./CardModal";
+import {BsX} from "react-icons/bs";
+import {useState, forwardRef, useImperativeHandle} from "react";
+import {usePopper} from "react-popper";
 
 
 const ProjectBox = ({project}) => {
@@ -17,10 +22,6 @@ export default function Index() {
 
     const projects = useSelector(state => state.data.projects)
     const dispatch = useDispatch();
-
-    // useEffect(() => {
-    //     dispatch(getProjects())
-    // }, [])
 
     return (
         <div className={'flex h-screen bg-modal justify-center'}>

@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken"
 import Project from "../models/Project.js";
 import ProjectUser from "../models/ProjectUsers.js";
+import PendingUser from "../models/PendingUser.js";
 
 export const accessTokenSecret = "kalle"
 
@@ -23,22 +24,21 @@ export const removeUserFromProject = async (req, res) => {
     }
 }
 
-export const addUserToProject = async (req, res) => {
-
-
-    const user = await User.findOne({
-        where: {
-            email: req.body.email
-        }
-    })
+export const addPendingUser = async (req, res) => {
 
     try {
-        const response = await ProjectUser.create({
+        const user = await User.findOne({
+            where: {
+                email: req.body.email
+            }
+        })
+        const response = await PendingUser.create({
             email: req.body.email,
             status: "pending",
-            userId: user?user.id:null,
+            role: "Member",
+            // userId: user ? user.id : null,
             projectId: req.body.projectId,
-            role: req.body.role
+            // role: req.body.role
         })
 
         res.status(200).json(response);
@@ -99,7 +99,20 @@ export const getUsers = async (req, res) => {
                 },
             },
         });
-        res.status(200).json(response);
+
+        const pending = await PendingUser.findAll({
+            where: {
+                projectId: req.params.projectId
+            }
+        })
+
+
+        res.status(200).json(
+            {
+                users: response,
+                pending: pending
+            }
+        );
     } catch (error) {
         console.log(error.message);
     }
