@@ -6,7 +6,7 @@ import {useDispatch} from "react-redux";
 import {addChecklistItem, deleteCheckList} from "../redux/dataSlice";
 import {Popover} from "@headlessui/react";
 import {usePopper} from 'react-popper'
-import Pop from "./Pop";
+// import Pop from "./Pop";
 import {toast} from "react-toastify";
 
 export default function Checklist({list, card}) {
