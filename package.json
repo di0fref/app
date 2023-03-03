@@ -46,7 +46,9 @@
   },
   "scripts": {
     "start": "react-scripts start ",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon ./server/server.js",
+    "client": "BROWSER=none react-scripts start "
   },
   "eslintConfig": {
     "extends": [
