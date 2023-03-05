@@ -279,11 +279,24 @@ export const deleteCard = createAsyncThunk(
         }
     }
 )
+export const getNotifications = createAsyncThunk(
+    'data/getNotifications',
+    async (thunkAPI) => {
+        try {
+            const response = await axios.get("/users/notifications/get")
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
+
 
 const initialState = {
     projects: [],
     project: [],
     user: [],
+    notifications: [],
     accessToken: null,
     currentCard: null,
     currentProject: [],
@@ -322,11 +335,15 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(getNotifications.fulfilled, (state, action) => {
+                console.log(action.payload)
+                state.notifications = action.payload;
+            })
             .addCase(deleteCard.fulfilled, (state, action) => {
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
 
-                state.project.columns[columnIndex].cards.splice(cardIndex,1)
+                state.project.columns[columnIndex].cards.splice(cardIndex, 1)
             })
             .addCase(deleteCheckListItem.fulfilled, (state, action) => {
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.checklist.card.columnId)
@@ -334,7 +351,7 @@ export const dataSlice = createSlice({
                 const checkListIndex = state.project.columns[columnIndex].cards[cardIndex].checklists.findIndex(list => list.id === action.payload.checklistId)
                 const checkListItemIndex = state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.findIndex(item => item.id === action.payload.id)
 
-                console.log( columnIndex, cardIndex, checkListIndex, checkListItemIndex)
+                console.log(columnIndex, cardIndex, checkListIndex, checkListItemIndex)
                 state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items.splice(checkListItemIndex, 1)
 
             })
@@ -433,7 +450,6 @@ export const dataSlice = createSlice({
                 state.projects = action.payload
             })
             .addCase(addTask.fulfilled, (state, action) => {
-                console.log(action.payload)
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
 

@@ -1,7 +1,7 @@
 import {formatDate} from "../helper"
 import {Link, useLocation, useSearchParams} from "react-router-dom";
 import {BsCheck2Square, BsPencil, BsTextLeft} from "react-icons/bs";
-import SmallLabel from "./SmallLabel";
+import {SmallLabel} from "./SmallLabel";
 import DateBadge from "./DateBadge";
 import {Draggable} from 'react-beautiful-dnd';
 import {current} from "@reduxjs/toolkit";

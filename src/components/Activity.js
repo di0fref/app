@@ -2,9 +2,11 @@ import {BsPersonFill} from "react-icons/bs";
 import {Link} from "react-router-dom";
 import {format} from "date-fns";
 import {Avatar, GoogleHead} from "./GoogleHead";
+import {useSelector} from "react-redux";
 
 export default function Activity({activity}) {
 
+    const user = useSelector(state => state.data.user)
 
     const ActivityText = ({arr}) => {
         if(arr)
@@ -13,10 +15,10 @@ export default function Activity({activity}) {
                 <div className={'flex space-x-4 _bg-red-300 mb-4'}>
                     <Avatar user={arr.user} className={"rounded-full h-10 w-10"}/>
                     <div className={'text-sm'}>
-                        <span className={'font-semibold text-black'}>{arr.user.name} </span>
+                        <span className={'font-semibold text-black'}>{arr.user.id === user.id?"You":arr.user.name} </span>
                         <span>{arr.action} </span>
                         <span>{arr.to}</span>
-                        <p className={'text-xs mt-1'}>at {format(new Date(activity.createdAt), "Y-MM-d H:ii")}</p>
+                        <p className={'text-xs mt-1'}>at {format(new Date(activity.createdAt), "Y-MM-dd H:ii")}</p>
                     </div>
                 </div>
             </div>

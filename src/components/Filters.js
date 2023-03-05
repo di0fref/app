@@ -1,10 +1,11 @@
 import {Popover} from "@headlessui/react";
-import {BsClock, BsFilter, BsX} from "react-icons/bs";
-import {FiClock} from "react-icons/fi";
+import {BsCalendar, BsClock, BsFilter, BsX} from "react-icons/bs";
+import {FiCalendar, FiClock} from "react-icons/fi";
 import {useLocalStorage} from "usehooks-ts"
 import {useState, useEffect} from "react";
 import Label from "./Label";
 import {ArrayParam, useQueryParam, withDefault} from "use-query-params";
+import CustomDatePicker from "./CustomDatePicker";
 
 export const myDueParams = withDefault(ArrayParam, [])
 export const myLabelParams = withDefault(ArrayParam, [])
@@ -86,7 +87,7 @@ export default function Filters({project}) {
                                 : ""}
                         </div>
                         <Popover.Panel static={false} className="absolute left-0 z-10 mt-2 w-80 _px-4 sm:px-0 lg:max-w-3xl">
-                            <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white">
+                            <div className="overflow-visible rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white">
                                 <div className="relative bg-white p-4 ">
                                     <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>
                                         Filters
@@ -115,6 +116,7 @@ export default function Filters({project}) {
                                                        onChange={(e) => {
                                                            setDueFilter(e, "today")
                                                        }}/>
+                                                <FiClock className={'rounded-full text-neutral-500 h-4 w-4'}/>
                                                 <div>Today</div>
                                             </div>
 
@@ -124,21 +126,22 @@ export default function Filters({project}) {
                                                        checked={dueParams && dueParams.includes("tomorrow")}
                                                        onChange={(e) => setDueFilter(e, "tomorrow")}/>
                                                 <div className={'flex items-center justify-start space-x-2'}>
-                                                    <FiClock className={'bg-[#EDD747] rounded-full text-white h-5 w-5'}/>
+                                                    <FiClock className={'bg-[#EDD747] rounded-full text-white h-4 w-4'}/>
                                                     <div>Tomorrow</div>
                                                 </div>
                                             </div>
 
-
                                             {/*<div className={'flex items-center space-x-2 mb-2'}>*/}
-                                            {/*    <input name={"overdue"} type={"checkbox"}*/}
-                                            {/*           checked={filterParams && filterParams?.due && filterParams.due.includes("overdue")}*/}
-                                            {/*           onChange={(e) => setDueFilter(e, "overdue")}/>*/}
+                                            {/*    <input name={"tomorrow"} type={"checkbox"}*/}
+                                            {/*           checked={dueParams && dueParams.includes("tomorrow")}*/}
+                                            {/*           onChange={(e) => setDueFilter(e, "tomorrow")}/>*/}
                                             {/*    <div className={'flex items-center justify-start space-x-2'}>*/}
-                                            {/*        <FiClock className={'bg-red-600 rounded-full text-white  h-5 w-5'}/>*/}
-                                            {/*        <div>Overdue</div>*/}
+                                            {/*        <BsCalendar className={'bg-[#EDD747]_ _rounded-full _text-white h-4 w-4 text-neutral-500'}/>*/}
+                                            {/*        /!*<div>Tomorrow</div>*!/*/}
+                                            {/*        <CustomDatePicker/>*/}
                                             {/*    </div>*/}
                                             {/*</div>*/}
+
 
 
                                             <div className={'text-sm text-neutral-500 font-semibold mt-3 mb-2 '}>Labels</div>

@@ -11,7 +11,8 @@ import Checklist from "./Checklist.js";
 import ChecklistItem from "./ChecklistItem.js";
 import ProjectUsers from "../models/ProjectUsers.js";
 import ProjectUser from "../models/ProjectUsers.js";
-import PendingUser from "./PendingUser.js";
+import Notification from "../models//Notification.js";
+import CardMember from "./CardMember.js";
 
 Card.belongsTo(User);
 Card.belongsTo(Project)
@@ -23,8 +24,8 @@ Project.hasMany(Card)
 Project.belongsToMany(User, {through: ProjectUsers, timestamps: false})
 User.belongsToMany(Project, {through: ProjectUsers, timestamps: false})
 
-ProjectUser.belongsTo(User)
-User.hasMany(ProjectUser)
+ProjectUser.belongsTo(User, {as: "user", constraints: false})
+User.hasMany(ProjectUser, {as: "user", constraints: false})
 
 Project.hasMany(Column)
 Column.belongsTo(Project)
@@ -57,7 +58,19 @@ Card.hasMany(Checklist)
 Checklist.hasMany(ChecklistItem)
 ChecklistItem.belongsTo(Checklist)
 
-PendingUser.belongsTo(Project)
-Project.hasMany(PendingUser)
-PendingUser.belongsTo(User)
-User.hasMany(PendingUser)
+ProjectUsers.belongsTo(User, {as: "sharedBy"})
+
+Notification.belongsTo(User, {as: "user"})
+Notification.belongsTo(User, {as: "userBy"})
+Notification.belongsTo(Project)
+Notification.belongsTo(Card)
+Card.hasMany(Notification)
+
+Project.hasMany(Notification)
+
+User.hasMany(Notification)
+
+Card.hasMany(CardMember)
+CardMember.belongsTo(Card)
+CardMember.belongsTo(User)
+User.hasMany(CardMember)

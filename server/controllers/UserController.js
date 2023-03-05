@@ -3,9 +3,57 @@ import User from "../models/User.js";
 import jwt from "jsonwebtoken"
 import Project from "../models/Project.js";
 import ProjectUser from "../models/ProjectUsers.js";
-import PendingUser from "../models/PendingUser.js";
+import Notification from "../models/Notification.js";
+import Card from "../models/Card.js";
 
 export const accessTokenSecret = "kalle"
+
+export const resetNotifications = async (req, res) => {
+    try {
+
+      await Notification.update({
+           status: "Seen"
+       },{
+           where: {
+               userId: req.user.id
+           }
+       })
+
+        res.status(200).json(true);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+export const getNotifications = async (req, res) => {
+    try {
+
+        const response = await Notification.findAll({
+            where: {
+                userId: req.user.id
+            },
+            order: [["createdAt", "asc"]],
+            include: [
+                {
+                    model: User,
+                    as: "userBy"
+                },
+                {
+                    model: Project
+                },
+                {
+                    model: Card
+                }
+            ]
+        })
+
+        res.status(200).json(response);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 export const removeUserFromProject = async (req, res) => {
@@ -13,10 +61,16 @@ export const removeUserFromProject = async (req, res) => {
 
         const response = await ProjectUser.destroy({
             where: {
-                userId: req.body.userId,
-                projectId: req.body.projectId
+                id: req.body.id,
             }
         })
+
+        // await Notification.create({
+        //     userById: req.body.sharedById,
+        //     status: "New",
+        //     action: "RemovedFromProject",
+        //     userId: user ? user.id : null,
+        // })
 
         res.status(200).json(response);
     } catch (error) {
@@ -25,21 +79,30 @@ export const removeUserFromProject = async (req, res) => {
 }
 
 export const addPendingUser = async (req, res) => {
-
+    console.log(req.body)
     try {
         const user = await User.findOne({
             where: {
                 email: req.body.email
             }
         })
-        const response = await PendingUser.create({
+        const response = await ProjectUser.create({
             email: req.body.email,
-            status: "pending",
-            role: "Member",
-            // userId: user ? user.id : null,
+            status: "Pending",
+            userId: user ? user.id : null,
             projectId: req.body.projectId,
-            // role: req.body.role
+            sharedById: req.body.sharedById,
+            role: req.body.role
         })
+
+        await Notification.create({
+            userById: req.body.sharedById,
+            status: "New",
+            action: "AddedToProject",
+            userId: user ? user.id : null,
+            projectId: req.body.projectId
+        })
+
 
         res.status(200).json(response);
     } catch (error) {
@@ -69,11 +132,16 @@ export const login = async (req, res) => {
         const user = await User.findOne({
             where: {
                 email: username
-            }
+            },
+            include: [
+                {
+                    model: Notification,
+                    as: "notificationUser"
+                }
+            ]
         })
 
         if (user) {
-            // Generate an access token
             const accessToken = jwt.sign({username: user.name, id: user.id}, accessTokenSecret);
             res.json({
                 accessToken,
@@ -89,30 +157,30 @@ export const login = async (req, res) => {
 
 export const getUsers = async (req, res) => {
     try {
-        const response = await User.findAll({
-            include: {
-                model: ProjectUser,
-                attributes: ["role"],
-                where: {
-                    // userId: req.user.id,
-                    projectId: req.params.projectId
-                },
-            },
-        });
+        // const response = await User.findAll({
+        //     include: {
+        //         model: ProjectUser,
+        //         as: "user",
+        //         attributes: ["role"],
+        //         where: {
+        //             projectId: req.params.projectId
+        //         },
+        //     },
+        // });
 
-        const pending = await PendingUser.findAll({
+        const response = await ProjectUser.findAll({
             where: {
-                projectId: req.params.projectId
-            }
+                projectId: req.params.projectId,
+            },
+            include: [
+                {
+                    model: User,
+                    as: "user"
+                }
+            ]
         })
 
-
-        res.status(200).json(
-            {
-                users: response,
-                pending: pending
-            }
-        );
+        res.status(200).json(response);
     } catch (error) {
         console.log(error.message);
     }

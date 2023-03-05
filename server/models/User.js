@@ -28,4 +28,5 @@ export default User;
 
 // (async () => {
 //     await db.sync({ alter: true });
+//     console.log("Done syncing database")
 // })();

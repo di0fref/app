@@ -1,8 +1,7 @@
-import {applyMiddleware, combineReducers, configureStore} from '@reduxjs/toolkit'
-import dataReducer, {getUpdatedCard, getProject, setBoard, getNewCard} from "./dataSlice"
+import {configureStore} from '@reduxjs/toolkit'
+import dataReducer, {getUpdatedCard, setBoard, getNewCard, getNotifications} from "./dataSlice"
 import {startConnecting, connectionEstablished} from "./dataSlice";
 import io from "socket.io-client"
-import {matchPath} from "react-router-dom";
 
 const logger = store => next => action => {
     // console.group(action.type)
@@ -14,11 +13,11 @@ const logger = store => next => action => {
 }
 export let socket;
 
-const jwt = localStorage.getItem("accessToken")
+// const jwt = localStorage.getItem("accessToken")
 const socketMiddleware = store => {
 
     return next => action => {
-        const isConnectionEstablished = socket && store.getState().data.isConnected;
+        // const isConnectionEstablished = socket && store.getState().data.isConnected;
 
         if (startConnecting.match(action)) {
             socket = io.connect("ws://localhost:8000", {
@@ -33,7 +32,7 @@ const socketMiddleware = store => {
                     userName: store.getState().data.user.name,
                 })
 
-                store.getState().data.projects.map(project => {
+                store.getState().data.projects.forEach(project => {
                     socket.emit("join", {
                         room: project.id,
                         name: store.getState().data.user.name
@@ -49,6 +48,11 @@ const socketMiddleware = store => {
             })
             socket.on("card update", (data) => {
                 store.dispatch(getUpdatedCard(data.id))
+            })
+            socket.on("project shared", (data) => {
+                if(data.email === store.getState().data.user.email){
+                    store.dispatch(getNotifications())
+                }
             })
         }
         next(action);

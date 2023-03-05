@@ -25,13 +25,26 @@ export default function AddTask({column, project, addCard}) {
         setLineCount(lines.length)
         if (lines.length > 1) {
             setMultiple(true)
-        }else {
+
+        } else {
             submit()
         }
     }
-    
-    const createMultiple = () => {
 
+    const createMultiple = () => {
+        const lines = splitLines(value)
+
+        lines.map(line => {
+            dispatch(addTask({
+                projectId: project.id,
+                columnId: column.id,
+                title: line
+            })).unwrap().then(res => {
+                addCard(res)
+            })
+        })
+        setValue("")
+        setEditing(false)
     }
 
     const submit = (button) => {
@@ -39,7 +52,7 @@ export default function AddTask({column, project, addCard}) {
         const card = dispatch(addTask({
             projectId: project.id,
             columnId: column.id,
-            title: value
+            title: value.replaceAll('\n', ' ')
         })).unwrap().then(response => {
 
             socket.emit("card new", {
@@ -68,7 +81,7 @@ export default function AddTask({column, project, addCard}) {
         }
     }
     return (
-        <div className={'w-full px-2 pt-2'} >
+        <div className={'w-full px-2 pt-2'}>
 
             <div className={'flex items-center justify-between'}>
                 <div className={'font-semibold text-md'}>{column?.title}</div>

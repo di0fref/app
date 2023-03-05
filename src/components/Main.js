@@ -7,7 +7,8 @@ import {
     setCurrentCard,
     setCurrentProject,
     setUser,
-    startConnecting
+    startConnecting,
+    getNotifications
 } from "../redux/dataSlice";
 import {useDispatch, useSelector} from "react-redux";
 import Sidebar from "./Sidebar";
@@ -42,6 +43,7 @@ export default function Main() {
                 JSON.parse(localStorage.getItem("user")).id
             )).then(r => {
                 dispatch(startConnecting())
+                dispatch(getNotifications())
             })
         }
     }, [])

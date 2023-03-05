@@ -11,6 +11,7 @@ import CardField from "../models/CardField.js";
 import Log from "../models/Log.js"
 import Checklist from "../models/Checklist.js"
 import ChecklistItem from "../models/ChecklistItem.js";
+import Notification from "../models//Notification.js";
 
 export const getProjects = async (req, res) => {
     try {
@@ -132,17 +133,17 @@ export const getFilteredProjectById = async (req, res) => {
 
 export const getProjectsById = async (req, res) => {
     try {
-        console.log(req.user)
+
         const project = await Project.findByPk(req.params.id, {
             include: [
                 {
                     model: User,
                     required: true,
-                    through:{
+                    through: {
                         where: {
                             userId: req.user.id,
                         },
-                    }
+                    },
                 },
                 {
                     model: Label
@@ -181,7 +182,7 @@ export const getProjectsById = async (req, res) => {
                                     model: CardField,
                                     order: [["name", "asc"]],
                                     separate: true,
-                                }
+                                },
                             ]
                         }
                     ]
@@ -233,7 +234,7 @@ export const createProject = async (req, res) => {
         const project = await Project.create({
             title: req.body.title,
         })
-        project.addUsers(req.user.id, { through: { role: 'admin' }})
+        project.addUsers(req.user.id, {through: {role: 'admin'}})
 
         /* Create default columns */
         const colBacklog = await Column.create({

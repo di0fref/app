@@ -6,7 +6,8 @@ import {
     updateUser,
     deleteUser,
     login,
-    getProjects, removeUserFromProject, addPendingUser
+    getProjects, removeUserFromProject, addPendingUser,
+    getNotifications, resetNotifications
 } from "../controllers/UserController.js";
 
 const router = express.Router();
@@ -14,11 +15,14 @@ const router = express.Router();
 router.post('/login', login);
 router.get('/users/:projectId', getUsers);
 router.get('/users/:id', getUserById);
+
 router.post('/users', createUser);
 router.patch('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
 router.get('/users/projects/:userId', getProjects);
 router.post("/users/removeUserFromProject", removeUserFromProject)
 router.post("/users/addPendingUser", addPendingUser)
+router.get('/users/notifications/get', getNotifications);
+router.put("/users/notifications/reset", resetNotifications)
 
 export default router;

@@ -19,7 +19,7 @@ const server = http.createServer(app);
 export const io = new Server(server, {cors: {origin: "*"}});
 
 io.on('connection', function (socket) {
-    console.log('Client connected to the WebSocket');
+    // console.log('Client connected to the WebSocket');
 
     socket.on('init', ({userId, userName}) => {
         addUser(socket.id, userName)
@@ -27,12 +27,11 @@ io.on('connection', function (socket) {
 
     socket.on('disconnect', () => {
         const user = deleteUser(socket.id)
-
     });
 
     socket.on("join", function ({room, name}) {
         socket.join(room)
-        console.log(name + " joined room", room)
+        // console.log(name + " joined room", room)
     })
 
 
@@ -51,11 +50,18 @@ io.on('connection', function (socket) {
     })
 
     socket.on("card new", function ({room, id}) {
-        console.log(room, id);
         const user = getUser(socket.id)
         socket.broadcast.in(room).emit('card new', {
             id: id,
         });
+    })
+
+    socket.on("project shared", function ({email, projectId}) {
+        console.log("shared")
+        socket.broadcast.emit("project shared", {
+            projectId: projectId,
+            email: email
+        })
     })
 
 })

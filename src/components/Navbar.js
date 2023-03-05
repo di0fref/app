@@ -4,15 +4,16 @@ import {Bars3Icon, BellIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import {getProject, createProject, getProjects} from "../redux/dataSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {BsArrowLeft, BsChevronDown, BsFillKanbanFill, BsX} from "react-icons/bs";
+import {BsArrowLeft, BsBell, BsChevronDown, BsFillKanbanFill, BsX} from "react-icons/bs";
 import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import {HiChevronRight, HiOutlineCog, HiOutlineLogout, HiPlus} from "react-icons/hi";
 import AddField from "./AddField";
 import {useRef} from "react";
 import {toast} from "react-toastify";
-import {GoogleHead} from "./GoogleHead";
+import {Avatar, GoogleHead} from "./GoogleHead";
 import {usePopper} from "react-popper";
 import {signOutFireBase} from "../auth/firebase";
+import Notifications from "./Notifications";
 
 const navigation = [
     {name: 'Dashboard', href: '/', current: true},
@@ -175,29 +176,36 @@ export default function Navbar() {
                                 </Popover>
                             </div>
                             <div className={'relative w-full justify-end flex'}>
-                                <Popover>
-                                    <Popover.Button ref={setReferenceElement}>
-                                        <GoogleHead className={"w-8 h-8 rounded-full"}/>
-                                    </Popover.Button>
-                                    <Popover.Panel as={"div"}>
-                                        <div className={'z-20 bg-white shadow-lg absolute w-44 rounded-box right-0'}>
 
-                                            <button onClick={e => {}} className={'my-1 hover:bg-modal-dark w-full'}>
-                                                <div className={'flex items-center space-x-2 px-2 py-1'}>
-                                                    <HiOutlineCog className={'text-neutral-500'}/>
-                                                    <div className={'text-sm'}>Settings</div>
-                                                </div>
-                                            </button>
+                                <>
+                                    {/*<div className={'mr-3 mt-1'}>*/}
+                                        <Notifications/>
+                                    {/*</div>*/}
+                                    <Popover>
+                                        <Popover.Button ref={setReferenceElement}>
+                                            <Avatar user={user} className={"w-8 h-8 rounded-full"}/>
+                                        </Popover.Button>
+                                        <Popover.Panel as={"div"}>
+                                            <div className={'z-20 bg-white shadow-lg absolute w-44 rounded-box right-0'}>
 
-                                            <button onClick={e => signOutFireBase()} className={'my-1 hover:bg-modal-dark w-full border-t'}>
-                                                <div className={'flex items-center space-x-2 px-2 py-1'}>
-                                                    <HiOutlineLogout  className={'text-neutral-500'}/>
-                                                    <div className={'text-sm'}>Sign out</div>
-                                                </div>
-                                            </button>
-                                        </div>
-                                    </Popover.Panel>
-                                </Popover>
+                                                <button onClick={e => {
+                                                }} className={'my-1 hover:bg-modal-dark w-full'}>
+                                                    <div className={'flex items-center space-x-2 px-2 py-1'}>
+                                                        <HiOutlineCog className={'text-neutral-500'}/>
+                                                        <div className={'text-sm'}>Settings</div>
+                                                    </div>
+                                                </button>
+
+                                                <button onClick={e => signOutFireBase()} className={'my-1 hover:bg-modal-dark w-full border-t'}>
+                                                    <div className={'flex items-center space-x-2 px-2 py-1'}>
+                                                        <HiOutlineLogout className={'text-neutral-500'}/>
+                                                        <div className={'text-sm'}>Sign out</div>
+                                                    </div>
+                                                </button>
+                                            </div>
+                                        </Popover.Panel>
+                                    </Popover>
+                                </>
                             </div>
                         </div>
                     </div>

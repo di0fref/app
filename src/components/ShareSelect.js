@@ -28,7 +28,7 @@ export default function ShareSelect({user, locked, removeUser, initialSelected, 
             </Listbox.Button>
 
             <Listbox.Options ref={setPopperElement} style={{zIndex: 10, ...styles.popper}}{...attributes.popper}>
-                <div className={"text-md z-20 bg-white  shadow-all mt-2 w-52"}>
+                <div className={"text-sm z-20 bg-white  py-2 shadow-all mt-2 w-52"}>
                     <Listbox.Option as={"div"} value={"Member"}>
                         <button className={'hover:bg-modal w-full py-1 px-4 text-left'}>
                             <div>Member</div>

@@ -1,13 +1,13 @@
 import {Dialog} from "@headlessui/react";
-import {BsFilter, BsX} from "react-icons/bs";
-import {HiChevronDown, HiUser} from "react-icons/hi";
-import {useState, useEffect} from "react";
+import {BsX} from "react-icons/bs";
+import {HiUser} from "react-icons/hi";
+import {useState, useEffect, useCallback} from "react";
 import axios from "axios";
 import {Avatar} from "./GoogleHead";
-import {Menu, Listbox} from "@headlessui/react";
 import ShareSelect from "./ShareSelect";
 import {useSelector} from "react-redux";
 import validator from "validator";
+import {socket} from "../redux/store";
 
 
 export default function Members({project}) {
@@ -19,19 +19,18 @@ export default function Members({project}) {
     const [emailError, setEmailError] = useState("")
     const [selected, setSelected] = useState("")
 
-    console.log(users.pending);
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         const response = await axios.get("/users/" + project.id)
         setUsers(response.data)
-    }
+    }, [project.id])
 
     useEffect(() => {
         open && fetchData().catch(console.error)
-    }, [open])
+    }, [open, fetchData, project.id])
 
     const validateEmail = (email) => {
         if (!validator.isEmail(email)) {
-            setEmailError("Please enter valid Email.")
+            setEmailError("Please enter a valid email address.")
             return false
         } else {
             setEmailError('')
@@ -48,16 +47,23 @@ export default function Members({project}) {
             email: newUserEmail,
             role: selected,
             projectId: project.id,
-            role: "Member"
+            sharedById: currentUser.id
         }
         axios.post("/users/addPendingUser", data).then(res => {
             fetchData().catch(console.error)
+
+            socket.emit("project shared", {
+                projectId: project.id,
+                email: newUserEmail
+            })
+
         })
     }
 
     const removeUser = (user) => {
+        console.log(user)
         axios.post("/users/removeUserFromProject", {
-            userId: user.id,
+            id: user.id,
             projectId: project.id
         }).then(res => {
             fetchData().catch(console.error)
@@ -90,7 +96,7 @@ export default function Members({project}) {
 
                             <div className={'h-full bg-red-300_'}>
                                 <div className={'flex items-center justify-between space-x-2'}>
-                                    <input onChange={e => {
+                                    <input autoFocus={true} onChange={e => {
                                         setNewUserEmail(e.target.value)
                                         setEmailError("")
                                     }} type={"text"} className={'mt-1_ border-1 border-neutral-300 text-md h-9 py-1 px-2 w-full rounded-box'}/>
@@ -101,40 +107,25 @@ export default function Members({project}) {
                                 </div>
                                 {emailError && <div className={'text-red-600 text-sm'}>{emailError}</div>}
                             </div>
-                            <div className={'font-semibold text-sm mt-4 mb-2'}>Members</div>
-                            <div>
-                                {users.users && users?.users.map(user => (
+                            {/*<div className={'font-semibold text-sm mt-4 mb-2'}>Members</div>*/}
+
+                            <div className={'mt-4'}>
+                                {users && users.map(user => (
                                     <div key={user.id} className={'flex items-center space-x-4 mb-4 '}>
-                                        <Avatar className={"bg-neutral-200 rounded-full w-8 h-8"} key={user.id} user={user}/>
+                                        <Avatar className={"bg-neutral-200 rounded-full w-8 h-8"} key={user.id} user={user.user ? user.user : null}/>
                                         <div className={'flex flex-col flex-grow'}>
-                                            <div className={'text-md _font-semibold'}>{user.name} {user.id === currentUser.id ?
+                                            <div className={'text-md _font-semibold'}>{user.user ? user.user.name : ""} {user.user?.id === currentUser.id ?
                                                 <span className={'text-sm'}>(you)</span> : ""} </div>
                                             <div className={'text-subtle text-xs'}>{user.email}</div>
                                         </div>
                                         <div>
-                                            <ShareSelect removeUser={removeUser} user={user} initialSelected={user.ProjectUsers[0].role} locked={user.id === currentUser.id}/>
+                                            <ShareSelect removeUser={removeUser} user={user} initialSelected={user.role} locked={user?.user?.id === currentUser.id}/>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                            <div className={'font-semibold text-sm mt-4 mb-2'}>Pending</div>
-                            <div>
-                                {users.pending && users?.pending.map(user => (
-                                    <div key={user.id} className={'flex items-center space-x-4 mb-4 '}>
-                                        <Avatar className={"bg-neutral-200 rounded-full w-8 h-8"} key={user.id}/>
-                                        <div className={'flex flex-col flex-grow'}>
-                                            <div className={'text-md _font-semibold'}>{user.email}</div>
-                                            {/*<div className={'text-subtle text-xs'}>{user.email}</div>*/}
-                                        </div>
-                                        <div>
-                                            <ShareSelect removeUser={removeUser} user={user} initialSelected={user.role} locked={false}/>
-                                        </div>
-                                    </div>
 
-                                ))}
-                            </div>
                         </div>
-
                     </Dialog.Panel>
                 </div>
             </Dialog>
