@@ -7,7 +7,7 @@ import {
     deleteUser,
     login,
     getProjects, removeUserFromProject, addPendingUser,
-    getNotifications, resetNotifications
+    getNotifications, resetNotifications, addUserToCard
 } from "../controllers/UserController.js";
 
 const router = express.Router();
@@ -24,5 +24,7 @@ router.post("/users/removeUserFromProject", removeUserFromProject)
 router.post("/users/addPendingUser", addPendingUser)
 router.get('/users/notifications/get', getNotifications);
 router.put("/users/notifications/reset", resetNotifications)
+router.post("/users/toCard/add", addUserToCard)
+// router.delete("/users/toCard/delete", deleteUserFromCard)
 
 export default router;

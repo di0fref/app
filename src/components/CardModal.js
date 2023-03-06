@@ -21,6 +21,7 @@ import ChecklistManager from "./ChecklistManager";
 import Checklist from "./Checklist";
 import {toast} from "react-toastify";
 import {usePopper} from "react-popper";
+import CardUser from "./CardUser";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -261,10 +262,11 @@ export default function CardModal({project, ...props}) {
 
                                     <FieldManager showLabels={true}/>
 
-                                    <button onClick={() => {
-                                    }} className={'mb-2'}>
-                                        <CardModelButton className={'w-44'} value={"Member"} icon={<HiUser/>}/>
-                                    </button>
+                                    {/*<button onClick={() => {*/}
+                                    {/*}} className={'mb-2'}>*/}
+                                    {/*    <CardModelButton className={'w-44'} value={"Member"} icon={<HiUser/>}/>*/}
+                                    {/*</button>*/}
+                                    <div className={'mb-2'}><CardUser project={project}/></div>
 
                                     <ChecklistManager card={currentCard}/>
 

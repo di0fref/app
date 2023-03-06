@@ -12,6 +12,7 @@ import Log from "../models/Log.js"
 import Checklist from "../models/Checklist.js"
 import ChecklistItem from "../models/ChecklistItem.js";
 import Notification from "../models//Notification.js";
+import ProjectUser from "../models/ProjectUser.js";
 
 export const getProjects = async (req, res) => {
     try {
@@ -79,6 +80,10 @@ export const getFilteredProjectById = async (req, res) => {
         const project = await Project.findByPk(req.params.id, {
             include: [
                 {
+                    model: User,
+                    required: true,
+                },
+                {
                     model: Label
                 },
                 {
@@ -139,11 +144,6 @@ export const getProjectsById = async (req, res) => {
                 {
                     model: User,
                     required: true,
-                    through: {
-                        where: {
-                            userId: req.user.id,
-                        },
-                    },
                 },
                 {
                     model: Label
@@ -234,7 +234,7 @@ export const createProject = async (req, res) => {
         const project = await Project.create({
             title: req.body.title,
         })
-        project.addUsers(req.user.id, {through: {role: 'admin'}})
+        project.addUsers(req.user.id, {through: {role: 'admin', status: "Accepted"}})
 
         /* Create default columns */
         const colBacklog = await Column.create({

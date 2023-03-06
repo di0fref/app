@@ -9,8 +9,7 @@ import Log from "./Log.js";
 import db from "../config/Database.js";
 import Checklist from "./Checklist.js";
 import ChecklistItem from "./ChecklistItem.js";
-import ProjectUsers from "../models/ProjectUsers.js";
-import ProjectUser from "../models/ProjectUsers.js";
+import ProjectUser from "../models/ProjectUser.js";
 import Notification from "../models//Notification.js";
 import CardMember from "./CardMember.js";
 
@@ -21,8 +20,8 @@ Card.belongsTo(Column)
 User.hasMany(Card)
 Project.hasMany(Card)
 
-Project.belongsToMany(User, {through: ProjectUsers, timestamps: false})
-User.belongsToMany(Project, {through: ProjectUsers, timestamps: false})
+Project.belongsToMany(User, {through: ProjectUser, timestamps: false})
+User.belongsToMany(Project, {through: ProjectUser, timestamps: false})
 
 ProjectUser.belongsTo(User, {as: "user", constraints: false})
 User.hasMany(ProjectUser, {as: "user", constraints: false})
@@ -58,7 +57,7 @@ Card.hasMany(Checklist)
 Checklist.hasMany(ChecklistItem)
 ChecklistItem.belongsTo(Checklist)
 
-ProjectUsers.belongsTo(User, {as: "sharedBy"})
+ProjectUser.belongsTo(User, {as: "sharedBy"})
 
 Notification.belongsTo(User, {as: "user"})
 Notification.belongsTo(User, {as: "userBy"})

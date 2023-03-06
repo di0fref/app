@@ -2,12 +2,27 @@ import User from "../models/User.js";
 
 import jwt from "jsonwebtoken"
 import Project from "../models/Project.js";
-import ProjectUser from "../models/ProjectUsers.js";
+import ProjectUser from "../models/ProjectUser.js";
 import Notification from "../models/Notification.js";
 import Card from "../models/Card.js";
+import CardMember from "../models/CardMember.js";
 
 export const accessTokenSecret = "kalle"
 
+
+export const addUserToCard = async (req, res) => {
+    try {
+        const member = await CardMember.create({
+            userId: req.body.userId,
+            cardId: req.body.cardId
+        })
+
+        res.status(200).json(member);
+
+    } catch (error) {
+        res.status(201).send({error: error.name})
+    }
+}
 export const resetNotifications = async (req, res) => {
     try {
 
@@ -157,16 +172,6 @@ export const login = async (req, res) => {
 
 export const getUsers = async (req, res) => {
     try {
-        // const response = await User.findAll({
-        //     include: {
-        //         model: ProjectUser,
-        //         as: "user",
-        //         attributes: ["role"],
-        //         where: {
-        //             projectId: req.params.projectId
-        //         },
-        //     },
-        // });
 
         const response = await ProjectUser.findAll({
             where: {

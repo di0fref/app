@@ -12,7 +12,7 @@ import {accessTokenSecret} from "./controllers/UserController.js";
 import {authorize} from '@thream/socketio-jwt'
 import {addUser, getAllUsers, deleteUser, getUser} from "./users.js";
 import ChecklistRoute from "./routes/ChecklistRoute.js";
-import ProjectUsers from "./models/ProjectUsers.js";
+import ProjectUsers from "./models/ProjectUser.js";
 
 export const app = express();
 const server = http.createServer(app);
