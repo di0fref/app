@@ -14,7 +14,6 @@ export const GoogleHead = (props) => {
 export const Avatar = ({user, ...props}) => {
 
     const [isUndefined, updateIsUndefined] = useState(false);
-
     const onError = () => {
         updateIsUndefined(true);
     };

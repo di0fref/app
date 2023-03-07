@@ -5,14 +5,17 @@ import Project from "../models/Project.js";
 import ProjectUser from "../models/ProjectUser.js";
 import Notification from "../models/Notification.js";
 import Card from "../models/Card.js";
-import CardMember from "../models/CardMember.js";
+import CardUser from "../models/CardUser.js";
+// import CardMember from "../models/CardMember.js";
 
 export const accessTokenSecret = "kalle"
 
 
 export const addUserToCard = async (req, res) => {
+
+    console.log(req.body);
     try {
-        const member = await CardMember.create({
+        const member = await CardUser.create({
             userId: req.body.userId,
             cardId: req.body.cardId
         })
@@ -20,6 +23,7 @@ export const addUserToCard = async (req, res) => {
         res.status(200).json(member);
 
     } catch (error) {
+        console.log(error.message);
         res.status(201).send({error: error.name})
     }
 }

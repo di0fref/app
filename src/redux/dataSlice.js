@@ -298,7 +298,6 @@ export const addUserToCard = createAsyncThunk(
     async (user, thunkAPI) => {
         try {
             const response = await axios.post("/users/toCard/add", user)
-            console.log(response)
             return response.data
         } catch (error) {
             throw thunkAPI.rejectWithValue(error.message)
@@ -353,7 +352,7 @@ export const dataSlice = createSlice({
         builder
             .addCase(addUserToCard.fulfilled, (state, action) => {
 
-                console.log(action.payload)
+                // console.log(action.payload)
             })
             .addCase(addUserToCard.rejected, (state, action) => {
                 console.log(action.payload)

@@ -13,6 +13,7 @@ import Checklist from "../models/Checklist.js"
 import ChecklistItem from "../models/ChecklistItem.js";
 import Notification from "../models//Notification.js";
 import ProjectUser from "../models/ProjectUser.js";
+// import CardMember from "../models/CardMember.js";
 
 export const getProjects = async (req, res) => {
     try {
@@ -81,7 +82,6 @@ export const getFilteredProjectById = async (req, res) => {
             include: [
                 {
                     model: User,
-                    required: true,
                 },
                 {
                     model: Label
@@ -107,8 +107,12 @@ export const getFilteredProjectById = async (req, res) => {
                                         model: ChecklistItem,
                                         order: [["createdAt", "asc"]],
                                         separate: true
-                                    }]
+                                    },]
                                 },
+                                // {
+                                //     model: CardMember,
+                                //     as: "members"
+                                // },
                                 {
                                     model: Label,
                                     attributes: ["title", "id", "color"],
@@ -143,7 +147,7 @@ export const getProjectsById = async (req, res) => {
             include: [
                 {
                     model: User,
-                    required: true,
+                    // as: "users"
                 },
                 {
                     model: Label
@@ -164,11 +168,17 @@ export const getProjectsById = async (req, res) => {
                             include: [
                                 {
                                     model: Checklist,
-                                    include: [{
-                                        model: ChecklistItem,
-                                        order: [["createdAt", "asc"]],
-                                        separate: true
-                                    }]
+                                    include: [
+                                        {
+                                            model: ChecklistItem,
+                                            order: [["createdAt", "asc"]],
+                                            separate: true
+                                        },
+                                    ]
+                                },
+                                {
+                                    model: User,
+                                    // as: "members"
                                 },
                                 {
                                     model: Label,

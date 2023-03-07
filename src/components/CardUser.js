@@ -1,5 +1,5 @@
 import {Popover} from "@headlessui/react";
-import {BsX} from "react-icons/bs";
+import {BsCheck, BsX} from "react-icons/bs";
 import {CardModelButton} from "./CardModal";
 import {HiUser} from "react-icons/hi";
 import {useState} from "react";
@@ -8,15 +8,17 @@ import {useCallback, useEffect} from "react";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
 import {Avatar} from "./GoogleHead";
-import { Tooltip } from 'react-tooltip'
+import {Tooltip} from 'react-tooltip'
 import {addUserToCard} from "../redux/dataSlice";
 
 export default function CardUser({project}) {
 
     const [users, setUsers] = useState([])
-    const members = useSelector(state => state.data.project.users)
+    const projectUsers = useSelector(state => state.data.project.users)
     const dispatch = useDispatch()
     const currentCard = useSelector(state => state.data.currentCard)
+
+    console.log(projectUsers);
 
     let [referenceElement, setReferenceElement] = useState()
     let [popperElement, setPopperElement] = useState()
@@ -30,7 +32,7 @@ export default function CardUser({project}) {
             userId: user.id,
             cardId: currentCard.id
         })).unwrap().then(res => {
-            console.log(res)
+            // console.log(res)
         })
     }
 
@@ -50,11 +52,19 @@ export default function CardUser({project}) {
                                 <BsX className={'h-6 w-6'}/>
                             </button>
 
-                            <div className={'flex items-center space-x-2'}>
-                                {members.map(user => (
-                                    <button onClick={e => onAddUser(user)} key={user.id} data-tooltip-id={user.name} data-tooltip-content={user.name}>
-                                        <Avatar user={user} className={"rounded-full w-8 w-8"}/>
-                                        <Tooltip id={user.name}/>
+                            <div className={''}>
+                                {projectUsers.map(user => (
+                                    <button className={'flex items-center space-x-2 mb-3'} onClick={e => onAddUser(user)} key={user.id} data-tooltip-id={user.name} data-tooltip-content={user.name}>
+                                        <div className={'flex items-center space-x-2 flex-grow'}>
+                                            <Avatar user={user} className={"rounded-full w-8 w-8"}/>
+                                            <div className={'text-md flex-grow'}>{user.name}</div>
+                                            <Tooltip id={user.name}/>
+                                        </div>
+                                        <div className={'flex justify-between'}>
+                                            {(currentCard.users.findIndex(member => member.id === user.id) !== -1)
+                                                ? <BsCheck/>
+                                                : ""}
+                                        </div>
                                     </button>
                                 ))}
                             </div>

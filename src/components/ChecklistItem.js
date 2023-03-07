@@ -19,7 +19,9 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
 
     const onClickOutside = () => {
         setEditing(false)
-        setEdit(false)
+        if (setEdit) {
+            setEdit(false)
+        }
     }
     useOnClickOutside(clickRef, onClickOutside);
 
@@ -30,7 +32,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
     }, [edit])
 
     const saveText = () => {
-        if(value !== "") {
+        if (value !== "") {
             if (isNew) {
                 dispatch(addChecklistItem({
                     checklistId: list.id,
@@ -42,7 +44,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
                     name: value
                 }))
             }
-            setEdit(false)
+            // setEdit(false)
             setEditing(false)
             socket.emit("card update", {
                 id: card.id,
@@ -96,8 +98,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
                         <div className={'flex space-x-2 items-center mt-2'}>
                             <button onClick={saveText} className={'save-btn'}>Save</button>
                             <button onClick={e => {
-                                setEditing(false)
-                                setEdit(false)
+                                saveText()
                             }} className={'cancel-btn'}>Cancel
                             </button>
                         </div>

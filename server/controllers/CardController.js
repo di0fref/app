@@ -12,6 +12,7 @@ import _ from "lodash"
 import Log from "../models/Log.js"
 import Checklist from "../models/Checklist.js";
 import ChecklistItem from "../models/ChecklistItem.js";
+// import CardMember from "../models/CardMember.js";
 
 export const deleteCard = async (req, res) => {
     try {
@@ -19,7 +20,7 @@ export const deleteCard = async (req, res) => {
         const response = await Card.findByPk(req.params.id)
 
         await Log.destroy({
-            where:{
+            where: {
                 cardId: req.params.id
             }
         })
@@ -29,7 +30,6 @@ export const deleteCard = async (req, res) => {
                 id: req.params.id
             }
         });
-
 
 
         res.status(200).json(response);
@@ -70,7 +70,11 @@ export const getCard = async (req, res) => {
                 {
                     model: Checklist,
                     include: [ChecklistItem]
-                }
+                },
+                {
+                    model: CardMember,
+                    as: "members"
+                },
             ]
         });
         res.status(200).json(response);
@@ -253,6 +257,10 @@ export const createCard = async (req, res) => {
                     },
                     {
                         model: Checklist
+                    },
+                    {
+                        model: CardMember,
+                        as: "members"
                     }
                 ],
             }).then(card => {

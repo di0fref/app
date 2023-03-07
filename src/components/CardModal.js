@@ -4,7 +4,18 @@ import {useDispatch, useSelector} from "react-redux";
 import {HiOutlineXMark} from "react-icons/hi2";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {setCurrentCard, updateTask, deleteCard} from "../redux/dataSlice";
-import {BsCalendar, BsCardText, BsTextLeft, BsX, BsCheck, BsArchiveFill, BsArchive, BsTag, BsTrash, BsDash} from "react-icons/bs";
+import {
+    BsCalendar,
+    BsCardText,
+    BsTextLeft,
+    BsX,
+    BsCheck,
+    BsArchiveFill,
+    BsArchive,
+    BsTag,
+    BsTrash,
+    BsDash
+} from "react-icons/bs";
 import Description from "./Description";
 import LabelManager from "./LabelManager";
 import DatePicker from "react-datepicker";
@@ -16,12 +27,22 @@ import FieldManager from "./FieldManager";
 import CardFields from "./CardFields";
 import {socket} from "../redux/store";
 import {TiArchive} from "react-icons/ti";
-import {HiArrowCircleRight, HiCheck, HiOutlineArchive, HiOutlineTag, HiRefresh, HiTag, HiTrash, HiUser} from "react-icons/hi";
+import {
+    HiArrowCircleRight,
+    HiCheck,
+    HiOutlineArchive,
+    HiOutlineTag,
+    HiRefresh,
+    HiTag,
+    HiTrash,
+    HiUser
+} from "react-icons/hi";
 import ChecklistManager from "./ChecklistManager";
 import Checklist from "./Checklist";
 import {toast} from "react-toastify";
 import {usePopper} from "react-popper";
 import CardUser from "./CardUser";
+import {Avatar} from "./GoogleHead";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -201,10 +222,16 @@ export default function CardModal({project, ...props}) {
                                         list {currentCard?.column.title}
                                     </div>
 
-                                    {currentCard?.labels.length ?
-                                        <div className={'pl-1'}>
-                                            <LabelManager showLabels={true} button={"plus"} card={currentCard} project={project}/>
-                                        </div> : ""}
+                                    <div className={'flex items-center space-x-2'}>
+                                        {currentCard?.labels.length ?
+                                            currentCard?.users.map(user => {
+                                                return <Avatar className={'rounded-full h-8 w-8'} key={user.id} user={user}/>
+                                            }) : ""}
+                                        {currentCard?.labels.length ?
+                                            <div className={'pl-1'}>
+                                                <LabelManager showLabels={true} button={"plus"} card={currentCard} project={project}/>
+                                            </div> : ""}
+                                    </div>
 
                                     <div>
                                         <div className={'flex items-center pl-1'}>
@@ -281,14 +308,16 @@ export default function CardModal({project, ...props}) {
                                         ? (
                                             <>
                                                 <button onClick={sendToBoard} className={'mb-2'}>
-                                                    <CardModelButton className={'w-44'} value={"Send to board"} icon={<HiRefresh/>}/>
+                                                    <CardModelButton className={'w-44'} value={"Send to board"} icon={
+                                                        <HiRefresh/>}/>
                                                 </button>
                                                 {/*<button onClick={onDeleteCard} className={'mb-2'}>*/}
                                                 {/*    <CardModelButtonRed className={'w-44'} value={"Delete"} icon={<BsDash/>}/>*/}
 
                                                 <Popover className={"relative"}>
                                                     <Popover.Button ref={setReferenceElement}>
-                                                        <CardModelButtonRed className={'w-44'} value={"Delete"} icon={<BsDash/>}/>
+                                                        <CardModelButtonRed className={'w-44'} value={"Delete"} icon={
+                                                            <BsDash/>}/>
                                                     </Popover.Button>
                                                     <Popover.Panel className={'absolute top-8 right-0 z-10 mt-1 w-80'}
                                                                    ref={setPopperElement}

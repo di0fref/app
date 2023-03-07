@@ -11,20 +11,21 @@ import Checklist from "./Checklist.js";
 import ChecklistItem from "./ChecklistItem.js";
 import ProjectUser from "../models/ProjectUser.js";
 import Notification from "../models//Notification.js";
-import CardMember from "./CardMember.js";
+import CardUser from "./CardUser.js";
+// import CardMember from "./CardMember.js";
 
-Card.belongsTo(User);
+// Card.belongsTo(User);
 Card.belongsTo(Project)
 Card.belongsTo(Column)
 
-User.hasMany(Card)
+// User.hasMany(Card)
 Project.hasMany(Card)
 
 Project.belongsToMany(User, {through: ProjectUser, timestamps: false})
 User.belongsToMany(Project, {through: ProjectUser, timestamps: false})
 
-ProjectUser.belongsTo(User, {as: "user", constraints: false})
-User.hasMany(ProjectUser, {as: "user", constraints: false})
+// ProjectUser.belongsTo(User, {as: "user", constraints: false})
+// User.hasMany(ProjectUser, {as: "user", constraints: false})
 
 Project.hasMany(Column)
 Column.belongsTo(Project)
@@ -69,7 +70,12 @@ Project.hasMany(Notification)
 
 User.hasMany(Notification)
 
-Card.hasMany(CardMember)
-CardMember.belongsTo(Card)
-CardMember.belongsTo(User)
-User.hasMany(CardMember)
+Card.belongsToMany(User, {through: CardUser, timestamps: false})
+User.belongsToMany(Card, {through: CardUser, timestamps: false})
+
+// Card.hasMany(CardMember, {as: "members"})
+// CardMember.belongsTo(Card, {as: "members"})
+//
+//
+// CardMember.belongsTo(User)
+// User.hasMany(CardMember)
