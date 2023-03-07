@@ -28,7 +28,7 @@ export default function Card({card, index}) {
 
     useEffect(() => {
         fieldsHaveValueCheck()
-    }, [])
+    }, [card])
 
     return (
         <Draggable key={card.id} draggableId={card.id} index={index}>
