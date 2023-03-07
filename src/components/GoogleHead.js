@@ -20,9 +20,10 @@ export const Avatar = ({user, ...props}) => {
 
     if (isUndefined || !user?.image) {
         return (
-            // <HiUser {...props} style={{backgroundColor: "#dddddd", color: "#aaa", padding: "3px" }}/>
-
-            <div className={'flex items-center justify-center rounded-full h-8 w-8'} style={{backgroundColor: "#eee", color: "#444", padding: "3px" }}>
+            <div className={'bg-modal-darker flex items-center justify-center rounded-full h-8 w-8'} style={
+                {
+                    color: "#444", padding: "3px"
+                }}>
                 {
                     user?.name
                         ? user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()

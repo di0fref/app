@@ -13,7 +13,6 @@ export const accessTokenSecret = "kalle"
 
 export const addUserToCard = async (req, res) => {
 
-    console.log(req.body);
     try {
         const member = await CardUser.create({
             userId: req.body.userId,
@@ -27,16 +26,33 @@ export const addUserToCard = async (req, res) => {
         res.status(201).send({error: error.name})
     }
 }
+export const removeUserFromCard = async (req, res) => {
+    console.log(req.body)
+    try {
+        const member = await CardUser.destroy({
+            where: {
+                userId: req.body.userId,
+                cardId: req.body.cardId
+            }
+        })
+
+        res.status(200).json(member);
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(201).send({error: error.name})
+    }
+}
 export const resetNotifications = async (req, res) => {
     try {
 
-      await Notification.update({
-           status: "Seen"
-       },{
-           where: {
-               userId: req.user.id
-           }
-       })
+        await Notification.update({
+            status: "Seen"
+        }, {
+            where: {
+                userId: req.user.id
+            }
+        })
 
         res.status(200).json(true);
 

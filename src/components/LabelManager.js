@@ -48,7 +48,7 @@ export default function LabelManager({project__, button, showLabels}) {
         <div>
             {showLabels&&<div className={'text-xs text-neutral-500 font-semibold mb-2 '}>Labels</div>}
 
-            <div className={"mb-6"}>
+            {/*<div className={"mb-6"}>*/}
                 <Popover className="relative_">
 
                     <div className={'flex flex-wrap gap-1'}>
@@ -58,7 +58,7 @@ export default function LabelManager({project__, button, showLabels}) {
 
                         <Popover.Button>
                             {button === "plus"
-                                ? <div className={'w-8 h-8 bg-modal-dark font-bold py-1'}>+</div>
+                                ? <div className={'w-8 h-8 bg-modal-dark font-bold py-1 hover:bg-modal-dar'}>+</div>
                                 : <CardModelButton className={'w-44'} icon={<HiOutlineTag/>} value={"Label"}/>}
                         </Popover.Button>
 
@@ -111,7 +111,7 @@ export default function LabelManager({project__, button, showLabels}) {
                     </Popover.Panel>
                 </Popover>
             </div>
-        </div>
+        // </div>
     )
 }
 

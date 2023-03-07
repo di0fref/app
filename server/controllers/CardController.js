@@ -12,7 +12,7 @@ import _ from "lodash"
 import Log from "../models/Log.js"
 import Checklist from "../models/Checklist.js";
 import ChecklistItem from "../models/ChecklistItem.js";
-// import CardMember from "../models/CardMember.js";
+import User from "../models/User.js";
 
 export const deleteCard = async (req, res) => {
     try {
@@ -72,8 +72,8 @@ export const getCard = async (req, res) => {
                     include: [ChecklistItem]
                 },
                 {
-                    model: CardMember,
-                    as: "members"
+                    model: User,
+                    // as: "members"
                 },
             ]
         });

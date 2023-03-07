@@ -273,7 +273,7 @@ export const deleteCard = createAsyncThunk(
     async (id, thunkAPI) => {
         try {
             const response = await axios.delete("/cards/" + id)
-            if (response.error){
+            if (response.error) {
                 throw thunkAPI.rejectWithValue(response.message)
             }
             return response.data
@@ -305,7 +305,17 @@ export const addUserToCard = createAsyncThunk(
     }
 )
 
-
+export const removeUserFromCard = createAsyncThunk(
+    'data/removeUserFromCard',
+    async (user, thunkAPI) => {
+        try {
+            const response = await axios.post("/users/toCard/delete", user)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 
 const initialState = {
     projects: [],
@@ -350,9 +360,11 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(removeUserFromCard.fulfilled, (state, action) => {
+                console.log(action.payload)
+            })
             .addCase(addUserToCard.fulfilled, (state, action) => {
-
-                // console.log(action.payload)
+                console.log(action.payload)
             })
             .addCase(addUserToCard.rejected, (state, action) => {
                 console.log(action.payload)

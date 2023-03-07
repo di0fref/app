@@ -41,7 +41,7 @@ import ChecklistManager from "./ChecklistManager";
 import Checklist from "./Checklist";
 import {toast} from "react-toastify";
 import {usePopper} from "react-popper";
-import CardUser from "./CardUser";
+import CardUserManager from "./CardUserManager";
 import {Avatar} from "./GoogleHead";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
@@ -222,11 +222,12 @@ export default function CardModal({project, ...props}) {
                                         list {currentCard?.column.title}
                                     </div>
 
-                                    <div className={'flex items-center space-x-2'}>
-                                        {currentCard?.labels.length ?
-                                            currentCard?.users.map(user => {
-                                                return <Avatar className={'rounded-full h-8 w-8'} key={user.id} user={user}/>
-                                            }) : ""}
+                                    <div className={'flex items-center space-x-4 mb-4'}>
+                                        {currentCard?.users.length ?
+                                            <div className={'pl-1'}>
+                                                <CardUserManager showTitle={true} button={"plus"}/>
+                                            </div>
+                                            : ""}
                                         {currentCard?.labels.length ?
                                             <div className={'pl-1'}>
                                                 <LabelManager showLabels={true} button={"plus"} card={currentCard} project={project}/>
@@ -288,21 +289,11 @@ export default function CardModal({project, ...props}) {
                                     </div>
 
                                     <FieldManager showLabels={true}/>
-
-                                    {/*<button onClick={() => {*/}
-                                    {/*}} className={'mb-2'}>*/}
-                                    {/*    <CardModelButton className={'w-44'} value={"Member"} icon={<HiUser/>}/>*/}
-                                    {/*</button>*/}
-                                    <div className={'mb-2'}><CardUser project={project}/></div>
-
+                                    <CardUserManager project={project} showTitle={false}/>
                                     <ChecklistManager card={currentCard}/>
+                                    <LabelManager showLabels={false}/>
 
-                                    <div onClick={() => {
-                                    }} className={'mb-4'}>
-                                        <LabelManager showLabels={false}/>
-                                    </div>
-
-                                    <div className={'text-xs text-neutral-500 font-semibold  mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Actions</div>
+                                    <div className={'text-xs text-neutral-500 font-semibold  mb-2 md:mt-0 pt-4 md:pl-0 pl-1'}>Actions</div>
 
                                     {currentCard?.status === "archived"
                                         ? (
