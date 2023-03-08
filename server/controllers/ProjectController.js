@@ -193,6 +193,9 @@ export const getProjectsById = async (req, res) => {
                                     order: [["name", "asc"]],
                                     separate: true,
                                 },
+                                {
+                                    model: Log
+                                }
                             ]
                         }
                     ]

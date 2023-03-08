@@ -44,7 +44,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
                     name: value
                 }))
             }
-            // setEdit(false)
+            setEdit && setEdit(false)
             setEditing(false)
             socket.emit("card update", {
                 id: card.id,
@@ -68,6 +68,11 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
                 room: card.projectId
             })
         })
+    }
+
+    const cancelItem = () => {
+        setEdit && setEdit(false)
+        setEditing(false)
     }
 
     return (
@@ -97,9 +102,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
                         />
                         <div className={'flex space-x-2 items-center mt-2'}>
                             <button onClick={saveText} className={'save-btn'}>Save</button>
-                            <button onClick={e => {
-                                saveText()
-                            }} className={'cancel-btn'}>Cancel
+                            <button onClick={cancelItem} className={'cancel-btn'}>Cancel
                             </button>
                         </div>
                     </div>

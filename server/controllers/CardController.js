@@ -259,8 +259,7 @@ export const createCard = async (req, res) => {
                         model: Checklist
                     },
                     {
-                        model: CardMember,
-                        as: "members"
+                        model: User,
                     }
                 ],
             }).then(card => {

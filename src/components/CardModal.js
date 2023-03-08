@@ -43,6 +43,7 @@ import {toast} from "react-toastify";
 import {usePopper} from "react-popper";
 import CardUserManager from "./CardUserManager";
 import {Avatar} from "./GoogleHead";
+import CardActivity from "./CardActivity";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -172,24 +173,24 @@ export default function CardModal({project, ...props}) {
             {/* The backdrop, rendered as a fixed sibling to the panel container */}
             <div className="fixed inset-0 overflow-auto bg-black/50" aria-hidden="true"/>
             <div className="fixed inset-0 overflow-y-auto">
-                <div className="flex min-h-full items-center justify-center p-4">
+                <div className="flex min-h-[600px] items-center justify-center p-4">
 
 
-                    <Dialog.Panel className="md:max-w-4xl w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all">
+                    <Dialog.Panel className="md:max-w-[768px] w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all">
 
-                        <div className={`${currentCard?.status === "archived" ? "bg-archive-warning" : ""} h-10`}>
-                            {currentCard?.status === "archived" ?
-                                <div className={'flex items-center pt-2 pl-6 space-x-2'}>
+                        {currentCard?.status === "archived" ?
+                            (
+                                <div className={'flex items-center py-2 pl-6 space-x-2 bg-archive-warning'}>
                                     <HiOutlineArchive/>
                                     <div className={'font-semibold'}>
                                         This card is archived
                                     </div>
                                 </div>
-                                : ""}
-                            <button onClick={closeModal} className={'absolute top-2 right-2'}>
-                                <BsX className={'h-6 w-6'}/>
-                            </button>
-                        </div>
+                            ) : ""}
+
+                        <button onClick={closeModal} className={'absolute top-2 right-2'}>
+                            <BsX className={'h-6 w-6'}/>
+                        </button>
                         <div className={'min-h-[90vh] pl-12 pr-4 py-3'}>
 
 
@@ -239,12 +240,6 @@ export default function CardModal({project, ...props}) {
                                             <div className={'absolute left-6'}><BsTextLeft className={'h-5 w-5'}/></div>
                                             <div className={'flex items-center space-x-2'}>
                                                 <div className={'font-semibold text-base'}>Description</div>
-                                                {/*<div>*/}
-                                                {/*    <button onClick={() => {*/}
-                                                {/*        setEdit(true)*/}
-                                                {/*    }} className={'py-1 px-2 bg-neutral-200 text-sm rounded hover:bg-neutral-300'}>Edit*/}
-                                                {/*    </button>*/}
-                                                {/*</div>*/}
                                             </div>
                                         </div>
                                         <div className={"mb-4 mt-3 pl-1"}>
@@ -275,7 +270,12 @@ export default function CardModal({project, ...props}) {
                                         <Checklist card={currentCard} key={list.id} list={list}/>
                                     ))}
 
+                                    <div>
+                                        <CardActivity card={currentCard}/>
+                                    </div>
                                 </div>
+
+
                                 <div className={'bg-green-600_ w-44 '}>
                                     <div className={'mb-4'}>
                                         <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Due

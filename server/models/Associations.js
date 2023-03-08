@@ -46,6 +46,12 @@ Card.hasMany(CardField)
 Card.hasMany(Log)
 Log.belongsTo(Card)
 Log.belongsTo(Column)
+
+Log.belongsTo(Checklist)
+Log.belongsTo(ChecklistItem)
+Checklist.hasMany(Log)
+ChecklistItem.hasMany(Log)
+
 Column.hasMany(Log)
 Log.belongsTo(User)
 User.hasMany(Log)
@@ -58,7 +64,9 @@ Card.hasMany(Checklist)
 Checklist.hasMany(ChecklistItem)
 ChecklistItem.belongsTo(Checklist)
 
+
 ProjectUser.belongsTo(User, {as: "sharedBy"})
+ProjectUser.belongsTo(User, {as: "user"})
 
 Notification.belongsTo(User, {as: "user"})
 Notification.belongsTo(User, {as: "userBy"})

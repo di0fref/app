@@ -1,6 +1,7 @@
 import Checklist from "../models/Checklist.js";
 import ChecklistItem from "../models/ChecklistItem.js";
 import Card from "../models/Card.js"
+import Log from "../models/Log.js";
 
 
 export const deleteChecklistItem = async (req, res) => {
@@ -78,6 +79,14 @@ export const addChecklist = async (req, res) => {
             ],
         })
 
+        await Log.create({
+            field: "Checklist",
+            action: "Added",
+            module: "Checklist",
+            cardId: newList.cardId,
+            checklistId: newList.id
+        })
+
         res.status(200).json(newList);
 
     } catch (error) {
@@ -117,6 +126,18 @@ export const updateCheckItem = async (req, res) => {
             }
         })
 
+        // if (req.body.done) {
+        //     Log.create({
+        //         field: "Checklist",
+        //         action: "Added",
+        //         module: "ChecklistItem",
+        //         cardId: req.body.cardId,
+        //         checklistId: req.body.id,
+        //         checklistItemId: listItem.id
+        //     })
+        // }
+
+
         res.status(200).json(
             await ChecklistItem.findByPk(req.body.id, {
                 include: [{
@@ -131,6 +152,7 @@ export const updateCheckItem = async (req, res) => {
                 }]
             })
         );
+
 
     } catch (error) {
         console.log(error.message);

@@ -9,7 +9,9 @@ const Log = db.define('logs', {
         primaryKey: true
     },
     field: Sequelize.STRING,
-    value: Sequelize.STRING
+    value: Sequelize.STRING,
+    module: Sequelize.STRING,
+    action: Sequelize.STRING
 }, {
     freezeTableName: true
 });

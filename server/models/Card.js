@@ -12,7 +12,7 @@ const Card = db.define('cards', {
         number: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
-            unique: true
+            // unique: true
         },
         title: Sequelize.TEXT,
         text: Sequelize.TEXT,
@@ -30,9 +30,16 @@ const Card = db.define('cards', {
     },
     {
         freezeTableName: true,
-        paranoid: true
+        paranoid: true,
+        indexes:[
+            {
+                unique: true,
+                fields: ["number"]
+            }
+        ]
     },
 )
 // Temporal(Card, db, {})
 
 export default Card;
+
