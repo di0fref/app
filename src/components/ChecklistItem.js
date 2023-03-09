@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from "react";
 import MDEditor from "@uiw/react-md-editor";
-import {addChecklistItem, deleteCheckListItem, updateChecklistItem, updateTask} from "../redux/dataSlice";
+import {addChecklistItem, deleteCheckListItem, getUpdatedCard, updateChecklistItem, updateTask} from "../redux/dataSlice";
 import {useDispatch} from "react-redux";
 import {socket} from "../redux/store";
 import {useOnClickOutside} from 'usehooks-ts'
@@ -63,6 +63,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
             id: item.id,
             done: e.target.checked ? 1 : 0
         })).then(r => {
+            dispatch(getUpdatedCard(card.id))
             socket.emit("card update", {
                 id: card.id,
                 room: card.projectId
@@ -78,7 +79,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
     return (
 
         <div className={'rounded-box relative hover:bg-modal-dark hover:cursor-pointer group'}>
-            <input onChange={updateStatus} checked={done} type={"checkbox"} className={'absolute -left-6 top-2.5'}/>
+            <input onChange={updateStatus} checked={done} type={"checkbox"} className={'absolute left-2 top-2.5'}/>
 
             {editing ? (
 
@@ -111,7 +112,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
                 (
                     <>
                         <div className={'p-2 w-full bg-blue-300_'} onClick={() => setEditing(true)}>
-                            <MDEditor.Markdown placeholder={"Add a description"} className={'pr-6 !bg-transparent !prose !text-md'} source={value}/>
+                            <MDEditor.Markdown placeholder={"Add a description"} className={'ml-6 pr-6 !bg-transparent !prose !text-md'} source={value}/>
                         </div>
 
                         <div className={'absolute right-2 z-20_ top-2 '}>

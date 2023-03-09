@@ -80,11 +80,14 @@ export const addChecklist = async (req, res) => {
         })
 
         await Log.create({
+            userId: req.user.id,
             field: "Checklist",
             action: "Added",
             module: "Checklist",
             cardId: newList.cardId,
-            checklistId: newList.id
+            checklistId: newList.id,
+            name: newList.name
+
         })
 
         res.status(200).json(newList);
@@ -118,39 +121,55 @@ export const addCheckItem = async (req, res) => {
 }
 
 export const updateCheckItem = async (req, res) => {
-    console.log(req.body)
     try {
+        const oldItem = await ChecklistItem.findByPk(req.body.id)
         const listItem = await ChecklistItem.update(req.body, {
             where: {
                 id: req.body.id
             }
         })
+        const item = await ChecklistItem.findByPk(req.body.id, {
+            include: [{
+                model: Checklist,
+                attributes: ["id"],
+                include: [
+                    {
+                        model: Card,
+                        attributes: ["id", "columnId"]
+                    }
+                ]
+            }]
+        })
 
-        // if (req.body.done) {
-        //     Log.create({
-        //         field: "Checklist",
-        //         action: "Added",
-        //         module: "ChecklistItem",
-        //         cardId: req.body.cardId,
-        //         checklistId: req.body.id,
-        //         checklistItemId: listItem.id
-        //     })
-        // }
+        if(oldItem.done && !item.done){
+            console.log("Log: Remove completed item")
+            await Log.destroy({
+                where:{
+                    checklistItemId: item.id,
+                    action: "Completed"
+                }
+            })
+        }
+
+        if (!oldItem.done && item.done) {
+
+            console.log("Log: Add completed item")
+
+            await Log.create({
+                userId: req.user.id,
+                field: "ChecklistItem",
+                action: "Completed",
+                module: "ChecklistItem",
+                cardId: item.checklist.card.id,
+                checklistId: item.checklistId,
+                checklistItemId: item.id,
+                name: item.name
+            })
+        }
 
 
         res.status(200).json(
-            await ChecklistItem.findByPk(req.body.id, {
-                include: [{
-                    model: Checklist,
-                    attributes: ["id"],
-                    include: [
-                        {
-                            model: Card,
-                            attributes: ["id", "columnId"]
-                        }
-                    ]
-                }]
-            })
+            item
         );
 
 

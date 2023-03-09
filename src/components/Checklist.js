@@ -58,11 +58,9 @@ export default function Checklist({list, card}) {
                                 <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Delete checklist?</div>
 
 
-
                                 <button onClick={close} className={'absolute top-3 right-2'}>
                                     <BsX className={'h-6 w-6'}/>
                                 </button>
-
 
 
                                 <div>
@@ -74,7 +72,6 @@ export default function Checklist({list, card}) {
                                 </div>
 
 
-
                             </div>
                         </div>
                     )}
@@ -84,7 +81,7 @@ export default function Checklist({list, card}) {
 
         <div className={'pl-2 mt-3'}>
             <div className="my-3 h-2 w-full bg-neutral-200 relative rounded">
-                <div className={'absolute -left-9 -top-1.5 text-xs'}>{percentage}%</div>
+                <div className={'absolute -left-0 -top-4 text-xs'}>{percentage}%</div>
                 <div className={`${(percentage === 100) ? "bg-green-500" : "bg-blue-600"} h-2 rounded `} style={{width: percentage + "%"}}/>
             </div>
         </div>

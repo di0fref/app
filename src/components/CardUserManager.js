@@ -56,7 +56,7 @@ export default function CardUserManager({project, showTitle, button}) {
 
                     <div className={'flex flex-wrap gap-1'}>
                         {showTitle && currentCard &&  currentCard.users && currentCard.users.map(user => {
-                            return <Avatar className={"w-6 h-6 rounded-full"} key={user.id} user={user}/>
+                            return <Avatar className={"w-8 h-8 rounded-full"} key={user.id} user={user}/>
                         })}
 
 

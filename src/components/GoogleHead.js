@@ -20,14 +20,14 @@ export const Avatar = ({user, ...props}) => {
 
     if (isUndefined || !user?.image) {
         return (
-            <div className={'bg-modal-darker flex items-center justify-center rounded-full h-8 w-8'} style={
+            <div className={`${props.className} bg-modal-darker flex items-center justify-center`} style={
                 {
-                    color: "#444", padding: "3px"
+                    color: "#444", padding: "3px_"
                 }}>
                 {
                     user?.name
                         ? user.name.match(/(\b\S)?/g).join("").match(/(^\S|\S$)?/g).join("").toUpperCase()
-                        : "--"
+                        : "n/a"
                 }
             </div>
 

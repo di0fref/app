@@ -418,7 +418,7 @@ export const dataSlice = createSlice({
                     ...state.project.columns[columnIndex].cards[cardIndex].checklists[checkListIndex].checklist_items[checkListItemIndex],
                     ...action.payload
                 }
-
+                // console.log(action.payload)
 
             })
             .addCase(addChecklistItem.fulfilled, (state, action) => {
@@ -441,6 +441,7 @@ export const dataSlice = createSlice({
             })
             .addCase(getUpdatedCard.fulfilled, (state, action) => {
 
+                console.log(action.payload)
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.columnId)
                 const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.id)
 

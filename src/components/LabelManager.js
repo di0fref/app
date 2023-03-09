@@ -49,7 +49,7 @@ export default function LabelManager({project__, button, showLabels}) {
             {showLabels&&<div className={'text-xs text-neutral-500 font-semibold mb-2 '}>Labels</div>}
 
             {/*<div className={"mb-6"}>*/}
-                <Popover className="relative_">
+                <Popover className={``}>
 
                     <div className={'flex flex-wrap gap-1'}>
                         {showLabels && currentCard && currentCard.labels && currentCard.labels.map(label => {

@@ -4,7 +4,7 @@ import {Popover} from '@headlessui/react'
 import {BsCheck2Square, BsX} from "react-icons/bs";
 import {useState, useEffect, useRef} from "react";
 import {useDispatch} from "react-redux";
-import {addCheckList} from "../redux/dataSlice";
+import {addCheckList, getUpdatedCard} from "../redux/dataSlice";
 import {Pop} from "./Pop";
 import {usePopper} from "react-popper";
 
@@ -33,6 +33,7 @@ export default function ChecklistManager({card}) {
         })).then(r => {
             close()
             setName("Checklist")
+            dispatch(getUpdatedCard(card.id))
         })
     }
 

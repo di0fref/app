@@ -194,7 +194,13 @@ export const getProjectsById = async (req, res) => {
                                     separate: true,
                                 },
                                 {
-                                    model: Log
+                                    model: Log,
+                                    include:[
+                                        {
+                                            model: User,
+                                            attributes:["name", "id", "image"]
+                                        }
+                                    ]
                                 }
                             ]
                         }

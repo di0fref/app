@@ -73,8 +73,16 @@ export const getCard = async (req, res) => {
                 },
                 {
                     model: User,
-                    // as: "members"
                 },
+                {
+                    model: Log,
+                    include:[
+                        {
+                            model: User,
+                            attributes:["name", "id", "image"]
+                        }
+                    ]
+                }
             ]
         });
         res.status(200).json(response);
@@ -103,6 +111,7 @@ export const reorderCards = async (req, res) => {
                         userId: req.user.id,
                         field: "columnId",
                         value: card.columnId,
+                        action: "Moved",
                         cardId: card.id,
                         projectId: originalObj.projectId,
                         columnId: card.columnId
