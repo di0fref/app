@@ -61,7 +61,6 @@ export default function Members({project}) {
     }
 
     const removeUser = (user) => {
-        console.log(user)
         axios.post("/users/removeUserFromProject", {
             id: user.id,
             projectId: project.id

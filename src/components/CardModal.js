@@ -98,7 +98,6 @@ export default function CardModal({project, ...props}) {
             currentCard && setIsOpen(true)
             setTitle(currentCard?.title)
         }
-
     }, [currentCard])
 
     const onDeleteCard = () => {

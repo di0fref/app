@@ -9,9 +9,12 @@ const CardField = db.define('card_fields', {
         primaryKey: true
     },
     name: Sequelize.STRING,
-    value: Sequelize.STRING
+    value: Sequelize.STRING,
+    // options: Sequelize.STRING,
+    // type: Sequelize.STRING
 }, {
-    freezeTableName: true
+    freezeTableName: true,
+    timestamps: false
 });
 
 export default CardField

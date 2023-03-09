@@ -237,7 +237,9 @@ export const createCard = async (req, res) => {
                 await CardField.create({
                     cardId: newCard.id,
                     name: projectField.title,
-                    projectFieldId: projectField.id
+                    projectFieldId: projectField.id,
+                    type: projectField.type,
+                    options: projectField.options
                 })
             })
         ).then(result => {
@@ -253,7 +255,13 @@ export const createCard = async (req, res) => {
                         attributes: ["title", "id", "color"],
                     },
                     {
-                        model: CardField
+                        model: CardField,
+                        order: [["name", "asc"]],
+                        separate: true,
+                        include: [{
+                            model: ProjectField,
+                            attributes: ["options", "type", "id"]
+                        }]
                     },
                     {
                         model: Checklist

@@ -38,25 +38,6 @@ export default function CustomField() {
                                 <button onClick={close} className={'absolute top-2 right-2'}>
                                     <BsX className={'h-6 w-6'}/>
                                 </button>
-
-                                {/*{labels.map((label) => (*/}
-                                {/*    <div className={'flex items-center space-x-4 mb-4'}>*/}
-                                {/*        <div>*/}
-                                {/*            <input checked={currentCard?.labels.find(lab => lab.id === label.id) ? 1 : 0} onChange={e => onCheck(e, label)} type={"checkbox"}/>*/}
-                                {/*        </div>*/}
-                                {/*        <div className={'flex items-center space-x-2'}>*/}
-                                {/*            <div style={{backgroundColor: label.color}} className={`w-60 px-2 py-1 flex items-center space-x-2 rounded`}>*/}
-                                {/*                <div style={{*/}
-                                {/*                    backgroundColor: label.color*/}
-                                {/*                }} className={'h-3 w-3 rounded-full brightness-90'}/>*/}
-                                {/*                <div className={'text-md'}>{label.title}</div>*/}
-                                {/*            </div>*/}
-                                {/*            <div><BsPencil className={'text-neutral-500 h-3 w-3'}/></div>*/}
-                                {/*        </div>*/}
-                                {/*    </div>*/}
-                                {/*))}*/}
-
-
                                 <Disclosure as={"div"} onClose={onClose}>
                                     {({close}) => (
                                         <>
