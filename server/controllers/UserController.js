@@ -168,12 +168,12 @@ export const login = async (req, res) => {
             where: {
                 email: username
             },
-            include: [
-                {
-                    model: Notification,
-                    as: "notificationUser"
-                }
-            ]
+            // include: [
+            //     {
+            //         model: Notification,
+            //         as: "notificationUser"
+            //     }
+            // ]
         })
 
         if (user) {
