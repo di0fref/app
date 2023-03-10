@@ -371,7 +371,11 @@ export const dataSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(addComment.fulfilled, (state, action) => {
-                console.log(action.payload);
+
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.card.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.card.id)
+                state.project.columns[columnIndex].cards[cardIndex].comments.unshift(action.payload)
+
             })
             .addCase(removeUserFromCard.fulfilled, (state, action) => {
                 // console.log(action.payload)

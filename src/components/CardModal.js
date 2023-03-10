@@ -199,17 +199,17 @@ export default function CardModal({project, ...props}) {
                         <button onClick={closeModal} className={'absolute top-2 right-2'}>
                             <BsX className={'h-6 w-6'}/>
                         </button>
-                        <div className={'min-h-[90vh] pl-12 pr-4 py-3'}>
+                        <div className={'min-h-[90vh] pl-12_ pr-4 py-3'}>
 
 
-                            <div className={'flex items-center space-x-2 font-semibold text-xl'}>
+                            <div className={'flex items-center space-x-2 font-semibold text-xl pl-12'}>
                                 <div className={'absolute left-6'}><BsCardText className={'h-5 w-5'}/></div>
                                 <div className={'text-neutral-500'}>#{currentCard?.number}</div>
                             </div>
 
                             <div className={'flex md:flex-row flex-col md:space-x-4 space-x-0'}>
                                 <div className={'bg-amber-400_ flex-grow pr-4 '}>
-                                    <div className={'mt-1'}>
+                                    <div className={'mt-1 pl-11'}>
                                         <TextareaAutosize
                                             onBlur={onTitleBlur}
                                             onChange={e => setTitle(e.target.value)} className={`rounded-sm
@@ -227,11 +227,11 @@ export default function CardModal({project, ...props}) {
                         
                             `} value={title}/>
                                     </div>
-                                    <div className={'text-sm pl-1 mb-4 text-neutral-500'}>In
+                                    <div className={'text-sm pl-12 mb-4 text-neutral-500'}>In
                                         list {currentCard?.column.title}
                                     </div>
 
-                                    <div className={'flex items-center space-x-4 mb-4'}>
+                                    <div className={'flex items-center space-x-4 mb-4 pl-12'}>
                                         {currentCard?.users.length ?
                                             <div className={'pl-1'}>
                                                 <CardUserManager showTitle={true} button={"plus"}/>
@@ -244,20 +244,20 @@ export default function CardModal({project, ...props}) {
                                     </div>
 
                                     <div>
-                                        <div className={'flex items-center pl-1'}>
+                                        <div className={'flex items-center pl-12'}>
                                             <div className={'absolute left-6'}><BsTextLeft className={'h-5 w-5'}/></div>
                                             <div className={'flex items-center space-x-2'}>
                                                 <div className={'font-semibold text-base'}>Description</div>
                                             </div>
                                         </div>
-                                        <div className={"mb-4 mt-3 pl-1"}>
+                                        <div className={"mb-4 mt-3 pl-12"}>
                                             <Description card={currentCard} setEdit={setEdit} edit={edit}/>
                                         </div>
                                     </div>
 
                                     {currentCard?.card_fields.length ?
                                         <>
-                                            <div className={'flex items-center pl-1'}>
+                                            <div className={'flex items-center pl-12'}>
                                                 <div className={'absolute left-6'}>
                                                     <svg width="22" height="22" role="presentation" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path fillRule="evenodd" clipRule="evenodd" d="M3 6C2.44772 6 2 6.44772 2 7C2 7.55228 2.44772 8 3 8H11C11.5523 8 12 7.55228 12 7C12 6.44772 11.5523 6 11 6H3ZM4 16V12H20V16H4ZM2 12C2 10.8954 2.89543 10 4 10H20C21.1046 10 22 10.8954 22 12V16C22 17.1046 21.1046 18 20 18H4C2.89543 18 2 17.1046 2 16V12Z" fill="currentColor"></path>
@@ -268,17 +268,18 @@ export default function CardModal({project, ...props}) {
                                                     <div className={'font-semibold text-base'}>Custom fields</div>
                                                 </div>
                                             </div>
-                                            <div className={"my-4 pl-1"}>
+                                            <div className={"my-4 pl-12"}>
                                                 <CardFields/>
                                             </div>
                                         </>
                                         : ""}
 
-                                    {currentCard?.checklists && currentCard.checklists.map(list => (
-                                        <Checklist card={currentCard} key={list.id} list={list}/>
-                                    ))}
-
-                                    <div>
+                                    <div className={'pl-12'}>
+                                        {currentCard?.checklists && currentCard.checklists.map(list => (
+                                            <Checklist card={currentCard} key={list.id} list={list}/>
+                                        ))}
+                                    </div>
+                                    <div className={'pl-6'}>
                                         <CardActivity card={currentCard}/>
                                     </div>
                                 </div>

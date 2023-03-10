@@ -22,7 +22,12 @@ export const addComment = async (req, res) => {
                 ...req.body,
                 userId: req.user.id
             })
-        res.status(200).json(comment);
+
+
+
+        res.status(200).json(await Comment.findByPk(comment.id, {
+            include: [User, Card]
+        }));
 
     } catch (error) {
         console.log(error.message);

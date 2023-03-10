@@ -112,7 +112,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
                 (
                     <>
                         <div className={'p-2 w-full bg-blue-300_'} onClick={() => setEditing(true)}>
-                            <MDEditor.Markdown placeholder={"Add a description"} className={'ml-1 pr-6 !bg-transparent !prose !text-md'} source={value}/>
+                            <MDEditor.Markdown placeholder={"Add a description"} className={`${done?"line-through	":""} ml-1 pr-6 !bg-transparent !prose !text-md`} source={value}/>
                         </div>
 
                         <div className={'absolute right-2 top-2 '}>
