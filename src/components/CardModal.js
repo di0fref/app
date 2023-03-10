@@ -98,7 +98,6 @@ export default function CardModal({project, ...props}) {
             currentCard && setIsOpen(true)
             setTitle(currentCard?.title)
         }
-
     }, [currentCard])
 
     const onDeleteCard = () => {
@@ -147,7 +146,7 @@ export default function CardModal({project, ...props}) {
 
     const onArchive = () => {
         dispatch(updateTask({
-            status: "archived",
+            status: "Archived",
             id: currentCard?.id
         }))
         socket.emit("card update", {
@@ -178,7 +177,7 @@ export default function CardModal({project, ...props}) {
 
                     <Dialog.Panel className="md:max-w-[768px] w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all">
 
-                        {currentCard?.status === "archived" ?
+                        {currentCard?.status === "Archived" ?
                             (
                                 <div className={'flex items-center py-2 pl-6 space-x-2 bg-archive-warning'}>
                                     <HiOutlineArchive/>
@@ -295,7 +294,7 @@ export default function CardModal({project, ...props}) {
 
                                     <div className={'text-xs text-neutral-500 font-semibold  mb-2 md:mt-0 pt-4 md:pl-0 pl-1'}>Actions</div>
 
-                                    {currentCard?.status === "archived"
+                                    {currentCard?.status === "Archived"
                                         ? (
                                             <>
                                                 <button onClick={sendToBoard} className={'mb-2'}>

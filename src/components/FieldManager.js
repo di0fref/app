@@ -45,12 +45,13 @@ export default function FieldManager({project__}) {
     }
     const onClose = () => {
         setModalOpen(false)
+        console.log("Close");
     }
     return (
         <div>
 
             <div className={"mb-2"}>
-                <Popover className="relative_">
+                <Popover as="div" className="relative_">
 
                     <Popover.Button>
                         <CardModelButton className={'w-44'} value={"Custom fields"} icon={
@@ -60,10 +61,10 @@ export default function FieldManager({project__}) {
                         }/>
                     </Popover.Button>
 
-                    <Popover.Panel className="absolute top-4 right-4 z-10 mt-1 w-80 ">
+                    <Popover.Panel as={"div"} className="absolute top-4 right-4 z-10 mt-1 w-80 ">
 
                         {({close}) => (
-                            <div className="overflow-hidden rounded shadow-lg min-h-[24rem] ring-1 ring-black ring-opacity-5 bg-white">
+                            <div className="overflow-auto_ rounded shadow-all min-h-[24rem] _max-h-[60vh] ring-1 ring-black ring-opacity-5 bg-white">
                                 <div className="relative bg-white p-4 ">
                                     <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Custom
                                         fields
@@ -73,7 +74,8 @@ export default function FieldManager({project__}) {
                                         <BsX className={'h-6 w-6'}/>
                                     </button>
 
-                                    <div className={'mb-8'}>
+                                    {/*{!openModal&&*/}
+                                        <div className={'mb-8'}>
                                         {fields && fields.map((field) => (
                                             <div key={field.id} className={'flex items-center mb-2 w-full '}>
 
@@ -84,13 +86,15 @@ export default function FieldManager({project__}) {
                                             </div>
                                         ))}
                                     </div>
+                                {/*}*/}
+
                                     <Disclosure as={"div"} onClose={onClose}>
                                         {({close}) => (
                                             <>
                                                 <Disclosure.Button onClick={() => setModalOpen(true)} className={'cancel-btn bg-modal hover:bg-modal-dark w-full'}>
                                                     Create new field
                                                 </Disclosure.Button>
-                                                <Disclosure.Panel className="h-full absolute z-50 top-0 left-0 bg-white">
+                                                <Disclosure.Panel className="h-full _absolute z-50 top-0 left-0 bg-white">
                                                     <button onClick={close} className={'absolute h-6 w-6 top-3 left-4'}>
                                                         <BsArrowLeft/>
                                                     </button>

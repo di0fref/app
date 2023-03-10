@@ -52,7 +52,9 @@ export const addField = async (req, res) => {
                     cardId: card.id,
                     name: req.body.title,
                     value: null,
-                    projectFieldId: projectField.id
+                    projectFieldId: projectField.id,
+                    options: req.body.options,
+                    type: req.body.type
                 })
             })
         ).then(res2 => {
@@ -192,9 +194,15 @@ export const getProjectsById = async (req, res) => {
                                     model: CardField,
                                     order: [["name", "asc"]],
                                     separate: true,
+                                    include:[{
+                                        model: ProjectField,
+                                        attributes: ["options", "type", "id"]
+                                    }]
                                 },
                                 {
                                     model: Log,
+                                    order: [["createdAt", "desc"]],
+                                    separate: true,
                                     include:[
                                         {
                                             model: User,

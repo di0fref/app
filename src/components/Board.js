@@ -228,7 +228,7 @@ export default function Board({project}) {
                                                                 <div ref={provided.innerRef}{...provided.droppableProps}>
                                                                     <div className={'rounded-box mb-1 px-2.5 pb-2.5 max-h-[calc(100vh-13rem)] overflow-y-auto overflow-x-hidden'}>
                                                                         {column.cards.map((card, index) => {
-                                                                            return (card.status !== "archived")&&<Card key={card.id} card={card} index={index}/>
+                                                                            return (card.status !== "Archived")&&<Card key={card.id} card={card} index={index}/>
                                                                         })}
                                                                         {provided.placeholder}
                                                                     </div>

@@ -79,7 +79,7 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
     return (
 
         <div className={'rounded-box relative hover:bg-modal-dark hover:cursor-pointer group'}>
-            <input onChange={updateStatus} checked={done} type={"checkbox"} className={'absolute left-2 top-2.5'}/>
+            <input onChange={updateStatus} checked={done} type={"checkbox"} className={'absolute -left-6 top-2.5'}/>
 
             {editing ? (
 
@@ -112,10 +112,10 @@ export default function ChecklistItem({item, edit, setEdit, card, isNew, list}) 
                 (
                     <>
                         <div className={'p-2 w-full bg-blue-300_'} onClick={() => setEditing(true)}>
-                            <MDEditor.Markdown placeholder={"Add a description"} className={'ml-6 pr-6 !bg-transparent !prose !text-md'} source={value}/>
+                            <MDEditor.Markdown placeholder={"Add a description"} className={'ml-1 pr-6 !bg-transparent !prose !text-md'} source={value}/>
                         </div>
 
-                        <div className={'absolute right-2 z-20_ top-2 '}>
+                        <div className={'absolute right-2 top-2 '}>
                             <Menu>
                                 <Menu.Button className={"z-20"}>
                                     <div className={'z-20 group-hover:visible invisible h-6 w-6 hover:bg-modal-darker flex items-center justify-center rounded-box'}>

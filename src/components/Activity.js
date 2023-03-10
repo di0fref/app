@@ -39,7 +39,7 @@ export default function Activity({activity}) {
             case "status":
                 return {
                     user: activity.user,
-                    action: <span>{activity.value==="archived"?"archived":"sent to board"} <Link className={"underline"} to={"/board/" + activity.card.projectId + "/card/" + activity.card.id}>{activity.card.title}</Link></span>,
+                    action: <span>{activity.value==="Archived"?"Archived":"sent to board"} <Link className={"underline"} to={"/board/" + activity.card.projectId + "/card/" + activity.card.id}>{activity.card.title}</Link></span>,
                     to: "",
                     link: "/board/" + activity.card.projectId + "/card" + activity.card.id
                 }

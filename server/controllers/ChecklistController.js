@@ -49,10 +49,26 @@ export const deleteChecklist = async (req, res) => {
             ],
         })
 
+        await ChecklistItem.destroy({
+            where: {
+                checklistId: req.params.id
+            }
+        })
+
         await Checklist.destroy({
             where: {
                 id: req.params.id
             }
+        })
+        //
+        await Log.create({
+            userId: req.user.id,
+            field: "Checklist",
+            action: "deleted",
+            module: "Checklist",
+            cardId: list.cardId,
+            // checklistId: list.id,
+            name: list.name
         })
 
         res.status(200).json(list);
@@ -82,7 +98,7 @@ export const addChecklist = async (req, res) => {
         await Log.create({
             userId: req.user.id,
             field: "Checklist",
-            action: "Added",
+            action: "created",
             module: "Checklist",
             cardId: newList.cardId,
             checklistId: newList.id,
@@ -146,7 +162,7 @@ export const updateCheckItem = async (req, res) => {
             await Log.destroy({
                 where:{
                     checklistItemId: item.id,
-                    action: "Completed"
+                    action: "completed"
                 }
             })
         }
@@ -158,7 +174,7 @@ export const updateCheckItem = async (req, res) => {
             await Log.create({
                 userId: req.user.id,
                 field: "ChecklistItem",
-                action: "Completed",
+                action: "completed",
                 module: "ChecklistItem",
                 cardId: item.checklist.card.id,
                 checklistId: item.checklistId,

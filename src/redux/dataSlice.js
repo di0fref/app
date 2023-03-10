@@ -361,16 +361,16 @@ export const dataSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(removeUserFromCard.fulfilled, (state, action) => {
-                console.log(action.payload)
+                // console.log(action.payload)
             })
             .addCase(addUserToCard.fulfilled, (state, action) => {
-                console.log(action.payload)
+                // console.log(action.payload)
             })
             .addCase(addUserToCard.rejected, (state, action) => {
-                console.log(action.payload)
+                // console.log(action.payload)
             })
             .addCase(getNotifications.fulfilled, (state, action) => {
-                console.log(action.payload)
+                // console.log(action.payload)
                 state.notifications = action.payload;
             })
             .addCase(deleteCard.fulfilled, (state, action) => {

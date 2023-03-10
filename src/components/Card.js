@@ -40,7 +40,7 @@ export default function Card({card, index}) {
                     {...provided.dragHandleProps}>
                     <Link to={"card/" + card.id + loc.search} className={'group'}>
 
-                        <div className={'mx-1_ hover:shadow-md p-2 mt-2 rounded-box bg-white shadow w-64_ _min-h-[6rem] hover:bg-neutral-50 relative'}>
+                        <div className={'mx-1_ hover:shadow-all p-2 mt-2 rounded-box bg-white shadow w-64_ _min-h-[6rem] hover:bg-neutral-50 relative'}>
 
                             {card?.labels && card?.labels.length ? (
                                 <div className={'pb-1.5'}>

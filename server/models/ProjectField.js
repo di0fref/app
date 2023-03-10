@@ -10,6 +10,7 @@ const ProjectField = db.define('project_fields', {
     },
     title: Sequelize.STRING,
     type: Sequelize.STRING,
+    options: Sequelize.STRING
 }, {
     freezeTableName: true,
     timestamps: false

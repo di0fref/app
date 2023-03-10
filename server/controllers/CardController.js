@@ -66,20 +66,32 @@ export const getCard = async (req, res) => {
                     model: CardField,
                     order: [["name", "asc"]],
                     separate: true,
+                    include: [{
+                        model: ProjectField,
+                        attributes: ["options", "type", "id"]
+                    }]
                 },
                 {
                     model: Checklist,
-                    include: [ChecklistItem]
+                    include: [
+                        {
+                            model: ChecklistItem,
+                            order: [["createdAt", "asc"]],
+                            separate: true
+                        },
+                    ]
                 },
                 {
                     model: User,
                 },
                 {
                     model: Log,
-                    include:[
+                    separate: true,
+                    order: [["createdAt", "desc"]],
+                    include: [
                         {
                             model: User,
-                            attributes:["name", "id", "image"]
+                            attributes: ["name", "id", "image"]
                         }
                     ]
                 }
@@ -107,11 +119,15 @@ export const reorderCards = async (req, res) => {
                 const originalObj = await Card.findByPk(card.id)
 
                 if (originalObj.columnId != card.columnId) {
-                    Log.create({
+
+                    const oldColumn = await Column.findByPk(originalObj.columnId)
+                    const newColumn= await Column.findByPk(card.columnId)
+
+                    await Log.create({
                         userId: req.user.id,
                         field: "columnId",
                         value: card.columnId,
-                        action: "Moved",
+                        action: "moved this card from " + oldColumn.title + " to " + newColumn.title,
                         cardId: card.id,
                         projectId: originalObj.projectId,
                         columnId: card.columnId
@@ -166,12 +182,17 @@ export const updateCard = async (req, res) => {
         const changes = _.pickBy(req.body, (v, k) => !_.isEqual(originalObj[k], v))
 
         Object.entries(changes).map(([key, val]) => {
-
+            console.log(key, val)
+            let action = ""
             let log = false;
 
             switch (key) {
                 case "status":
-                    // if (val === "archived")
+                    if (val === "Archived") {
+                        action = "archived this card"
+                    } else {
+                        action = "sent this card to the board"
+                    }
                     log = true
                     break;
                 case "due":
@@ -182,8 +203,10 @@ export const updateCard = async (req, res) => {
             if (log) {
                 Log.create({
                     userId: req.user.id,
-                    field: key,
-                    value: val,
+                    field: "Card",
+                    action: action,
+                    module: "Card",
+                    // name: originalObj.title,
                     cardId: originalObj.id,
                     projectId: originalObj.projectId,
                 })
@@ -241,37 +264,74 @@ export const createCard = async (req, res) => {
             }
         })
 
+        Log.create({
+            userId: req.user.id,
+            field: "Card",
+            action: "created this card",
+            module: "Card",
+            // name: originalObj.title,
+            cardId: newCard.id,
+            projectId: newCard.projectId,
+        })
+
         await Promise.all(
             Object.values(projectFields).map(async projectField => {
                 await CardField.create({
                     cardId: newCard.id,
                     name: projectField.title,
-                    projectFieldId: projectField.id
+                    projectFieldId: projectField.id,
+                    type: projectField.type,
+                    options: projectField.options
                 })
             })
         ).then(result => {
-
             Card.findByPk(newCard.id, {
                 include: [
                     {
+                        model: Label,
+                        attributes: ["title", "id", "color"],
+                        order: [["title", "asc"]],
+                        // separate: true
+                    }, {
                         model: Column,
                         attributes: ["title"],
                     },
                     {
-                        model: Label,
-                        attributes: ["title", "id", "color"],
+                        model: CardField,
+                        order: [["name", "asc"]],
+                        separate: true,
+                        include: [{
+                            model: ProjectField,
+                            attributes: ["options", "type", "id"]
+                        }]
                     },
                     {
-                        model: CardField
-                    },
-                    {
-                        model: Checklist
+                        model: Checklist,
+                        include: [
+                            {
+                                model: ChecklistItem,
+                                order: [["createdAt", "asc"]],
+                                separate: true
+                            },
+                        ]
                     },
                     {
                         model: User,
+                    },
+                    {
+                        model: Log,
+                        separate: true,
+                        order: [["createdAt", "desc"]],
+                        include: [
+                            {
+                                model: User,
+                                attributes: ["name", "id", "image"]
+                            }
+                        ]
                     }
-                ],
-            }).then(card => {
+                ]
+            }
+     ).then(card => {
                 io.emit("new card", {
                     card
                 })

@@ -14,6 +14,7 @@ import {Avatar, GoogleHead} from "./GoogleHead";
 import {usePopper} from "react-popper";
 import {signOutFireBase} from "../auth/firebase";
 import Notifications from "./Notifications";
+import SettingsModal from "./SettingsModal";
 
 const navigation = [
     {name: 'Dashboard', href: '/', current: true},
@@ -40,6 +41,7 @@ export default function Navbar() {
     const [open, setOpen] = useState(false)
     const [error, setError] = useState("")
     const [name, setName] = useState("")
+    const [settingModalOpen, setSettingModalOpen] = useState(false)
 
     let [referenceElement, setReferenceElement] = useState()
     let [popperElement, setPopperElement] = useState()
@@ -99,7 +101,7 @@ export default function Navbar() {
                                                             <Menu.Item as={"div"} key={project.id}>
                                                                 {({close}) => (
 
-                                                                    <Link to={"/board/" + project.id} onClick={close} className={'flex items-center space-x-2 mb-2 hover:bg-modal-dark  w-full py-1 px-1'}>
+                                                                    <Link to={"/board/" + project.id} onClick={close} className={'flex items-center space-x-2 my-1 hover:bg-modal-dark  w-full py-1 px-1'}>
                                                                         <div className={'w-6 h-6 font-bold_ text-md bg-gray-300 rounded-box flex items-center justify-center'}>{project.title.charAt(0)}</div>
                                                                         <div className={'font-bold_ text-md'}>{project.title}</div>
                                                                     </Link>
@@ -178,9 +180,7 @@ export default function Navbar() {
                             <div className={'relative w-full justify-end flex'}>
 
                                 <>
-                                    {/*<div className={'mr-3 mt-1'}>*/}
-                                        <Notifications/>
-                                    {/*</div>*/}
+                                    <Notifications/>
                                     <Popover>
                                         <Popover.Button ref={setReferenceElement}>
                                             <Avatar user={user} className={"w-8 h-8 rounded-full"}/>
@@ -188,8 +188,7 @@ export default function Navbar() {
                                         <Popover.Panel as={"div"}>
                                             <div className={'z-20 bg-white shadow-lg absolute w-44 rounded-box right-0'}>
 
-                                                <button onClick={e => {
-                                                }} className={'my-1 hover:bg-modal-dark w-full'}>
+                                                <button onClick={e => {setSettingModalOpen(true)}} className={'my-1 hover:bg-modal-dark w-full'}>
                                                     <div className={'flex items-center space-x-2 px-2 py-1'}>
                                                         <HiOutlineCog className={'text-neutral-500'}/>
                                                         <div className={'text-sm'}>Settings</div>
@@ -205,6 +204,7 @@ export default function Navbar() {
                                             </div>
                                         </Popover.Panel>
                                     </Popover>
+                                    <SettingsModal open={settingModalOpen} seOpen={setSettingModalOpen}/>
                                 </>
                             </div>
                         </div>
