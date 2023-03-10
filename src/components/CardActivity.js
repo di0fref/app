@@ -5,6 +5,7 @@ import {BsCheck2Square} from "react-icons/bs";
 import {RxActivityLog} from "react-icons/rx";
 import {useState} from "react";
 import {useLocalStorage} from "usehooks-ts";
+import {AddComment, Comments} from "./Comments";
 
 const Activity = ({log}) => {
     return (
@@ -12,7 +13,8 @@ const Activity = ({log}) => {
             <div className={'flex items-center space-x-4'}>
                 <div><Avatar className={"rounded-full h-8 w-8"} user={log.user}/></div>
                 <div>
-                    <div className={'text-sm'}><span className={'font-semibold'}>{log.user.name}</span> {log.action} {log.name}</div>
+                    <div className={'text-sm'}>
+                        <span className={'font-semibold'}>{log.user.name}</span> {log.action} {log.name}</div>
                     <div className={'text-xs text-neutral-500'}>{format(new Date(log.createdAt), "Y-MM-dd H:ii")}</div>
                 </div>
             </div>
@@ -39,6 +41,10 @@ export default function CardActivity({card}) {
                         {detailsShown ? "Hide" : "Show"} details
                     </button>
                 </div>
+            </div>
+            <div className={'mt-3'}>
+                <AddComment card={card}/>
+                <Comments card={card}/>
             </div>
             {detailsShown && card.logs.map(log => {
                 return <Activity key={log.id} log={log}/>

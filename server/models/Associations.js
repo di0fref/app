@@ -12,7 +12,7 @@ import ChecklistItem from "./ChecklistItem.js";
 import ProjectUser from "../models/ProjectUser.js";
 import Notification from "../models//Notification.js";
 import CardUser from "./CardUser.js";
-// import CardMember from "./CardMember.js";
+import Comment from "./Comment.js";
 
 // Card.belongsTo(User);
 Card.belongsTo(Project)
@@ -81,6 +81,10 @@ User.hasMany(Notification)
 Card.belongsToMany(User, {through: CardUser, timestamps: false})
 User.belongsToMany(Card, {through: CardUser, timestamps: false})
 
+
+Comment.belongsTo(Card)
+Comment.belongsTo(User)
+Card.hasMany(Comment)
 // Card.hasMany(CardMember, {as: "members"})
 // CardMember.belongsTo(Card, {as: "members"})
 //

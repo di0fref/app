@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useRef, useState} from "react";
-import {updateField} from "../redux/dataSlice";
+import {getUpdatedCard, updateField} from "../redux/dataSlice";
 import {Listbox} from "@headlessui/react";
 import {HiChevronDown} from "react-icons/hi";
 import {usePopper} from 'react-popper'
@@ -43,7 +43,7 @@ const DropdownField = ({field, saveField}) => {
     //     </Listbox>
     // )
     return (
-        <select defaultValue={field.value} onChange={onChange} className={'w-[150px] text-sm bg-modal-dark border-none h-8 focus:bg-white rounded-box'}>
+        <select defaultValue={field.value} onChange={onChange} className={'w-[150px] p-0 text-sm bg-modal-dark border-none h-8 pl-2 focus:bg-white rounded-box'}>
             {options.map(option => (
                 <option value={option} key={option}>{option}</option>
             ))}
@@ -90,7 +90,7 @@ function TextField({field, saveField}) {
     )
 }
 
-const Field = ({field}) => {
+const Field = ({field, card}) => {
 
     const dispatch = useDispatch();
     let actualField = ""
@@ -99,8 +99,11 @@ const Field = ({field}) => {
         if (value !== initialValue) {
             dispatch(updateField({
                 id: field.id,
-                value: value
-            })).unwrap()
+                value: value,
+                cardId: card.id
+            })).unwrap().then(r => {
+                dispatch(getUpdatedCard(card.id))
+            })
         }
     }
 
@@ -114,7 +117,8 @@ const Field = ({field}) => {
         case "number":
             actualField = <NumberField field={field} saveField={saveField}/>
             break;
-        default: return ""
+        default:
+            return ""
     }
 
     return (
@@ -135,7 +139,7 @@ export default function CardFields() {
             <div className={'flex flex-wrap gap-4'}>
                 {currentCard?.card_fields.map(field => {
                     return (
-                        <Field key={field.id} field={field}/>
+                        <Field card={currentCard} key={field.id} field={field}/>
                     )
                 })}
             </div>

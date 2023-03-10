@@ -3,7 +3,7 @@ import {Fragment, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {HiOutlineXMark} from "react-icons/hi2";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {setCurrentCard, updateTask, deleteCard} from "../redux/dataSlice";
+import {setCurrentCard, updateTask, deleteCard, getUpdatedCard} from "../redux/dataSlice";
 import {
     BsCalendar,
     BsCardText,
@@ -44,6 +44,7 @@ import {usePopper} from "react-popper";
 import CardUserManager from "./CardUserManager";
 import {Avatar} from "./GoogleHead";
 import CardActivity from "./CardActivity";
+import {Comments, AddComment} from "./Comments";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -137,10 +138,12 @@ export default function CardModal({project, ...props}) {
         dispatch(updateTask({
             id: currentCard.id,
             due: date ? format(date, dbDateFormat) : null,
-        }))
-        socket.emit("card update", {
-            id: currentCard.id,
-            room: currentCard.projectId
+        })).then(r => {
+            dispatch(getUpdatedCard(currentCard.id))
+            socket.emit("card update", {
+                id: currentCard.id,
+                room: currentCard.projectId
+            })
         })
     }
 
@@ -148,21 +151,27 @@ export default function CardModal({project, ...props}) {
         dispatch(updateTask({
             status: "Archived",
             id: currentCard?.id
-        }))
-        socket.emit("card update", {
-            id: currentCard.id,
-            room: currentCard.projectId
+        })).then(r => {
+            dispatch(getUpdatedCard(currentCard.id))
+            socket.emit("card update", {
+                id: currentCard.id,
+                room: currentCard.projectId
+            })
         })
+
     }
     const sendToBoard = () => {
         dispatch(updateTask({
             status: "",
             id: currentCard?.id
-        }))
-        socket.emit("card update", {
-            id: currentCard.id,
-            room: currentCard.projectId
+        })).then(r => {
+            dispatch(getUpdatedCard(currentCard.id))
+            socket.emit("card update", {
+                id: currentCard.id,
+                room: currentCard.projectId
+            })
         })
+
     }
     return (
         <Dialog

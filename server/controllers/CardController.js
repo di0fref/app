@@ -13,6 +13,21 @@ import Log from "../models/Log.js"
 import Checklist from "../models/Checklist.js";
 import ChecklistItem from "../models/ChecklistItem.js";
 import User from "../models/User.js";
+import Comment from "../models/Comment.js";
+export const addComment = async (req, res) => {
+    try {
+
+        const comment = await Comment.create(
+            {
+                ...req.body,
+                userId: req.user.id
+            })
+        res.status(200).json(comment);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 export const deleteCard = async (req, res) => {
     try {
@@ -121,7 +136,7 @@ export const reorderCards = async (req, res) => {
                 if (originalObj.columnId != card.columnId) {
 
                     const oldColumn = await Column.findByPk(originalObj.columnId)
-                    const newColumn= await Column.findByPk(card.columnId)
+                    const newColumn = await Column.findByPk(card.columnId)
 
                     await Log.create({
                         userId: req.user.id,
@@ -151,14 +166,14 @@ export const reorderCards = async (req, res) => {
 }
 
 export const updateField = async (req, res) => {
+
     try {
         const cardField = await CardField.update(req.body, {
             where: {
                 id: req.body.id
             }
         })
-
-        res.status(200).json(await CardField.findOne({
+        const field = await CardField.findOne({
             where: {
                 id: req.body.id
             },
@@ -168,7 +183,16 @@ export const updateField = async (req, res) => {
                     attributes: ["id", "columnId"]
                 }
             ]
-        }))
+        })
+
+        const log = await Log.create({
+            cardId: req.body.cardId,
+            userId: req.user.id,
+            action: "updated field " + field.name + " to " + field.value
+        })
+
+
+        res.status(200).json(field)
 
     } catch (error) {
         console.log(error.message);
@@ -196,6 +220,7 @@ export const updateCard = async (req, res) => {
                     log = true
                     break;
                 case "due":
+                    action = "changed due date to " + req.body.due
                     log = true
                     break;
             }
@@ -286,52 +311,52 @@ export const createCard = async (req, res) => {
             })
         ).then(result => {
             Card.findByPk(newCard.id, {
-                include: [
-                    {
-                        model: Label,
-                        attributes: ["title", "id", "color"],
-                        order: [["title", "asc"]],
-                        // separate: true
-                    }, {
-                        model: Column,
-                        attributes: ["title"],
-                    },
-                    {
-                        model: CardField,
-                        order: [["name", "asc"]],
-                        separate: true,
-                        include: [{
-                            model: ProjectField,
-                            attributes: ["options", "type", "id"]
-                        }]
-                    },
-                    {
-                        model: Checklist,
-                        include: [
-                            {
-                                model: ChecklistItem,
-                                order: [["createdAt", "asc"]],
-                                separate: true
-                            },
-                        ]
-                    },
-                    {
-                        model: User,
-                    },
-                    {
-                        model: Log,
-                        separate: true,
-                        order: [["createdAt", "desc"]],
-                        include: [
-                            {
-                                model: User,
-                                attributes: ["name", "id", "image"]
-                            }
-                        ]
-                    }
-                ]
-            }
-     ).then(card => {
+                    include: [
+                        {
+                            model: Label,
+                            attributes: ["title", "id", "color"],
+                            order: [["title", "asc"]],
+                            // separate: true
+                        }, {
+                            model: Column,
+                            attributes: ["title"],
+                        },
+                        {
+                            model: CardField,
+                            order: [["name", "asc"]],
+                            separate: true,
+                            include: [{
+                                model: ProjectField,
+                                attributes: ["options", "type", "id"]
+                            }]
+                        },
+                        {
+                            model: Checklist,
+                            include: [
+                                {
+                                    model: ChecklistItem,
+                                    order: [["createdAt", "asc"]],
+                                    separate: true
+                                },
+                            ]
+                        },
+                        {
+                            model: User,
+                        },
+                        {
+                            model: Log,
+                            separate: true,
+                            order: [["createdAt", "desc"]],
+                            include: [
+                                {
+                                    model: User,
+                                    attributes: ["name", "id", "image"]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ).then(card => {
                 io.emit("new card", {
                     card
                 })

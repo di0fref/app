@@ -35,7 +35,7 @@ export default function SettingsModal({open, seOpen}) {
                             <div className={'font-bold flex items-center justify-center'}>Settings</div>
 
                             Background:
-                            
+
 
                         </div>
 

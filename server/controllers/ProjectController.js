@@ -13,7 +13,7 @@ import Checklist from "../models/Checklist.js"
 import ChecklistItem from "../models/ChecklistItem.js";
 import Notification from "../models//Notification.js";
 import ProjectUser from "../models/ProjectUser.js";
-// import CardMember from "../models/CardMember.js";
+import Comment from "../models/Comment.js";
 
 export const getProjects = async (req, res) => {
     try {
@@ -111,10 +111,11 @@ export const getFilteredProjectById = async (req, res) => {
                                         separate: true
                                     },]
                                 },
-                                // {
-                                //     model: CardMember,
-                                //     as: "members"
-                                // },
+                                {
+                                    model: Comment,
+                                    order: [["createdAt", "desc"]],
+                                    separate: true,
+                                },
                                 {
                                     model: Label,
                                     attributes: ["title", "id", "color"],
@@ -179,6 +180,12 @@ export const getProjectsById = async (req, res) => {
                                     ]
                                 },
                                 {
+                                    model: Comment,
+                                    order: [["createdAt", "desc"]],
+                                    separate: true,
+                                    include: [User]
+                                },
+                                {
                                     model: User,
                                     // as: "members"
                                 },
@@ -194,7 +201,7 @@ export const getProjectsById = async (req, res) => {
                                     model: CardField,
                                     order: [["name", "asc"]],
                                     separate: true,
-                                    include:[{
+                                    include: [{
                                         model: ProjectField,
                                         attributes: ["options", "type", "id"]
                                     }]
@@ -203,10 +210,10 @@ export const getProjectsById = async (req, res) => {
                                     model: Log,
                                     order: [["createdAt", "desc"]],
                                     separate: true,
-                                    include:[
+                                    include: [
                                         {
                                             model: User,
-                                            attributes:["name", "id", "image"]
+                                            attributes: ["name", "id", "image"]
                                         }
                                     ]
                                 }

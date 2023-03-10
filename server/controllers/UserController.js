@@ -6,17 +6,24 @@ import ProjectUser from "../models/ProjectUser.js";
 import Notification from "../models/Notification.js";
 import Card from "../models/Card.js";
 import CardUser from "../models/CardUser.js";
-// import CardMember from "../models/CardMember.js";
+import Log from "../models/Log.js";
 
 export const accessTokenSecret = "kalle"
 
 
 export const addUserToCard = async (req, res) => {
-
+    console.log(req.body);
     try {
         const member = await CardUser.create({
             userId: req.body.userId,
             cardId: req.body.cardId
+        })
+
+
+        const log = Log.create({
+            userId: req.body.userId,
+            cardId: req.body.cardId,
+            action: "joined this card"
         })
 
         res.status(200).json(member);
@@ -34,6 +41,12 @@ export const removeUserFromCard = async (req, res) => {
                 userId: req.body.userId,
                 cardId: req.body.cardId
             }
+        })
+
+        const log = Log.create({
+            userId: req.body.userId,
+            cardId: req.body.cardId,
+            action: " left this card"
         })
 
         res.status(200).json(member);

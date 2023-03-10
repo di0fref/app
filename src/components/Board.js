@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {socket, store} from "../redux/store";
 import React from "react";
 import ColumnAdder from "./ColumnAdder";
-import {getProject, reorderTasks, setBoard, updateColumn} from "../redux/dataSlice";
+import {getProject, getUpdatedCard, reorderTasks, setBoard, updateColumn} from "../redux/dataSlice";
 import CardModal from "./CardModal";
 import Filters from "./Filters";
 import {useReadLocalStorage} from "usehooks-ts";
@@ -63,11 +63,14 @@ export default function Board({project}) {
     const onDragEnd = (result, columns) => {
 
         const {type} = result;
-        const {source, destination} = result;
+        const {source, destination, draggableId} = result;
 
-        if (type === "col"){
+        console.log(result);
 
-            if(source.index === destination.index){
+
+        if (type === "col") {
+
+            if (source.index === destination.index) {
                 /* Bail early */
                 return
             }
@@ -83,7 +86,10 @@ export default function Board({project}) {
             })
             setBoard(newColumns)
             dispatch(setBoard(newColumns))
-
+            socket.emit("card reorder", {
+                board: columns,
+                room: project.id
+            })
         }
 
         if (type === "card") {
@@ -102,6 +108,9 @@ export default function Board({project}) {
 
                 const sourceColumnIndex = columns.findIndex(col => source.droppableId === col.id)
                 const destColumnIndex = columns.findIndex(col => destination.droppableId === col.id)
+
+                /* What card did we move */
+                // const card = columns[sourceColumnIndex].cards[]
 
                 const sourceItems = [...sourceColumn.cards];
                 const destItems = [...destColumn.cards];
@@ -141,6 +150,7 @@ export default function Board({project}) {
                 dispatch(reorderTasks(sCards)).unwrap().then(r => {
                     dispatch(reorderTasks(dCards)).unwrap().then(t => {
                         dispatch(setBoard(cols))
+                        dispatch(getUpdatedCard(draggableId))
                     })
                 })
 
@@ -228,7 +238,8 @@ export default function Board({project}) {
                                                                 <div ref={provided.innerRef}{...provided.droppableProps}>
                                                                     <div className={'rounded-box mb-1 px-2.5 pb-2.5 max-h-[calc(100vh-13rem)] overflow-y-auto overflow-x-hidden'}>
                                                                         {column.cards.map((card, index) => {
-                                                                            return (card.status !== "Archived")&&<Card key={card.id} card={card} index={index}/>
+                                                                            return (card.status !== "Archived") &&
+                                                                                <Card key={card.id} card={card} index={index}/>
                                                                         })}
                                                                         {provided.placeholder}
                                                                     </div>

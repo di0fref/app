@@ -316,7 +316,17 @@ export const removeUserFromCard = createAsyncThunk(
         }
     }
 )
-
+export const addComment = createAsyncThunk(
+    'data/addComment',
+    async (comment, thunkAPI) => {
+        try {
+            const response = await axios.post("/cards/comment/add", comment)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 const initialState = {
     projects: [],
     project: [],
@@ -360,6 +370,9 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(addComment.fulfilled, (state, action) => {
+                console.log(action.payload);
+            })
             .addCase(removeUserFromCard.fulfilled, (state, action) => {
                 // console.log(action.payload)
             })
