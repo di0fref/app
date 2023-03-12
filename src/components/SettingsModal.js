@@ -10,8 +10,6 @@ export default function SettingsModal({open, seOpen}) {
 
     useEffect(() => {
         setIsOpen(open)
-        console.log(open);
-
     }, [open])
 
     const onClose = () => {

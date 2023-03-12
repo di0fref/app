@@ -39,8 +39,10 @@ const socketMiddleware = store => {
                     })
                 })
             })
+            socket.on("comment new", (data) => {
+                store.dispatch(getNewCard(data.id))
+            })
             socket.on("card new", (data) => {
-                console.log("new card", data);
                 store.dispatch(getNewCard(data.id))
             })
             socket.on("card reorder", (data) => {
@@ -50,7 +52,7 @@ const socketMiddleware = store => {
                 store.dispatch(getUpdatedCard(data.id))
             })
             socket.on("project shared", (data) => {
-                if(data.email === store.getState().data.user.email){
+                if (data.email === store.getState().data.user.email) {
                     store.dispatch(getNotifications())
                 }
             })

@@ -2,7 +2,8 @@ import express from "express";
 import {
     createCard,
     getCards, updateCard, reorderCards,
-    addLabel, removeLabel, getCardsByIds, updateField, archiveCards, getCard, deleteCard, addComment
+    addLabel, removeLabel, getCardsByIds, updateField, archiveCards, getCard, deleteCard, addComment,
+    deleteComment
 } from "../controllers/CardController.js";
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.put('/cards/field/update', updateField);
 router.post('/cards/archive', archiveCards);
 router.delete("/cards/:id", deleteCard)
 router.post('/cards/comment/add', addComment);
+router.post('/cards/comment/delete', deleteComment);
 
 
 // router.patch('/users/:id', updateUser);

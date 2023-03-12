@@ -41,8 +41,8 @@ export default function ChecklistManager({card}) {
 
         <Popover as={"div"} className={"_mb-2"}>
 
-            <Popover.Button ref={setReferenceElement} className={'mb-2'}>
-                <CardModelButton className={'w-44'} value={"Checklist"} icon={<BsCheck2Square/>}/>
+            <Popover.Button ref={setReferenceElement} className={'mb-2 w-full'}>
+                <CardModelButton className={'w-44_'} value={"Checklist"} icon={<BsCheck2Square/>}/>
             </Popover.Button>
 
             <Popover.Panel as={"div"} className={"w-80"} ref={setPopperElement} style={{zIndex: 10, ...styles.popper}}{...attributes.popper}>

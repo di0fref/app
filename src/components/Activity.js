@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {format} from "date-fns";
 import {Avatar, GoogleHead} from "./GoogleHead";
 import {useSelector} from "react-redux";
+import {formatDate} from "../helper";
 
 export default function Activity({activity}) {
 
@@ -18,7 +19,7 @@ export default function Activity({activity}) {
                         <span className={'font-semibold text-black'}>{arr.user.id === user.id?"You":arr.user.name} </span>
                         <span>{arr.action} </span>
                         <span>{arr.to}</span>
-                        <p className={'text-xs mt-1'}>at {format(new Date(activity.createdAt), "Y-MM-dd H:ii")}</p>
+                        <p className={'text-xs mt-1'}>at {formatDate(activity.createdAt)}</p>
                     </div>
                 </div>
             </div>

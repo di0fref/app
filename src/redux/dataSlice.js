@@ -327,6 +327,17 @@ export const addComment = createAsyncThunk(
         }
     }
 )
+export const deleteComment = createAsyncThunk(
+    'data/deleteComment',
+    async (comment, thunkAPI) => {
+        try {
+            const response = await axios.post("/cards/comment/delete", comment)
+            return response.data
+        } catch (error) {
+            throw thunkAPI.rejectWithValue(error.message)
+        }
+    }
+)
 const initialState = {
     projects: [],
     project: [],
@@ -370,6 +381,21 @@ export const dataSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(deleteComment.fulfilled, (state, action) => {
+
+                console.log(action.payload)
+                const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.card.columnId)
+                const cardIndex = state.project.columns[columnIndex].cards.findIndex(card => card.id === action.payload.card.id)
+                const commentIndex = state.project.columns[columnIndex].cards[cardIndex].comments.findIndex(comment => comment.id === action.payload.id)
+
+                console.log(columnIndex, cardIndex, commentIndex)
+
+                console.log(state.project.columns[columnIndex].cards[cardIndex].comments[commentIndex])
+
+                state.project.columns[columnIndex].cards[cardIndex].comments.splice(commentIndex, 1)
+
+
+            })
             .addCase(addComment.fulfilled, (state, action) => {
 
                 const columnIndex = state.project.columns.findIndex(col => col.id === action.payload.card.columnId)

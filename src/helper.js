@@ -1,19 +1,13 @@
 import {format, formatRelative} from "date-fns";
 
 export const dbDateFormat = "Y-MM-dd"
-export const dateFormat = "d MMM"
+export const dateFormat = "d MMM HH:mm"
 
 
-function getFormat(date, include_day) {
+function getFormat(date) {
 
     let format = "";
-
-    if (!include_day) {
-        format = dateFormat + (date.getFullYear() === new Date().getFullYear() ? '' : ', YYY');
-    } else {
-        format = dateFormat + (date.getFullYear() === new Date().getFullYear() ? '' : ', YYY') + " ‧ EEEE";
-
-    }
+    format = (date.getFullYear() === new Date().getFullYear() ? 'd MMM HH:mm' : 'd MMM, YYY HH:mm');
     return format
 }
 
@@ -34,4 +28,11 @@ export function formatDate(date, include_day) {
 
 export const delay = (time) => {
     return new Promise(resolve => setTimeout(resolve, time));
+}
+export function isGuid(stringToTest) {
+    if (stringToTest[0] === "{") {
+        stringToTest = stringToTest.substring(1, stringToTest.length - 1);
+    }
+    var regexGuid = /^(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}$/gi;
+    return regexGuid.test(stringToTest);
 }

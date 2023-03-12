@@ -12,7 +12,7 @@ export default function CustomDatePicker({_date, onDateChange, ...props}) {
     const [date, setDate] = useState(_date)
 
     const DateCustomInput = forwardRef(({value, onClick}, ref) => (
-        <CardModelButton onClick={onClick} value={value ? formatDate(value):"Select"} icon={<FiClock/>}/>
+        <CardModelButton className={'w-44_'} onClick={onClick} value={value ? formatDate(value):"Select"} icon={<FiClock/>}/>
     ))
 
     useEffect(() => {

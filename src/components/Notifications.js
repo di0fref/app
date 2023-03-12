@@ -47,7 +47,7 @@ const Notification = ({data}) => {
                 <div className={'text-sm'}>
                     <span className={'font-semibold text-black'}>{notification.userBy.name} </span>
                     <span>{formatData()}</span>
-                    <p className={'text-xs mt-1'}>at {format(new Date(notification.createdAt), "Y-MM-dd H:ii")}</p>
+                    <p className={'text-xs mt-1'}>at {formatData(notification)}</p>
                 </div>
             </div>
         </div>

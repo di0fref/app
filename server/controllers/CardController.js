@@ -14,6 +14,7 @@ import Checklist from "../models/Checklist.js";
 import ChecklistItem from "../models/ChecklistItem.js";
 import User from "../models/User.js";
 import Comment from "../models/Comment.js";
+
 export const addComment = async (req, res) => {
     try {
 
@@ -23,11 +24,28 @@ export const addComment = async (req, res) => {
                 userId: req.user.id
             })
 
-
-
         res.status(200).json(await Comment.findByPk(comment.id, {
             include: [User, Card]
         }));
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+export const deleteComment = async (req, res) => {
+    try {
+
+        const comment = await Comment.findByPk(req.body.id, {
+            include:[Card]
+        })
+
+        // const del = await Comment.destroy({
+        //     where:{
+        //         id: req.body.id
+        //     }
+        // })
+
+        res.status(200).json(comment);
 
     } catch (error) {
         console.log(error.message);
@@ -50,6 +68,14 @@ export const deleteCard = async (req, res) => {
                 id: req.params.id
             }
         });
+
+
+        /* Delete */
+        // Fields
+        // Checklist
+        // ChecklistItem
+        // Comments
+        // Labels
 
 
         res.status(200).json(response);

@@ -60,7 +60,7 @@ export default function CardUserManager({project, showTitle, button}) {
                         })}
 
 
-                        <Popover.Button ref={setReferenceElement}>
+                        <Popover.Button className={'w-full_'} ref={setReferenceElement}>
                             {button === "plus"
                                 ? <div className={'w-8 h-8 bg-modal-dark font-bold py-1 rounded-full hover:bg-modal-darker'}>+</div>
                                 : <CardModelButton className={'w-44'} value={"Members"} icon={<HiUser/>}/>}

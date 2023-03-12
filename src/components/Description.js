@@ -51,7 +51,7 @@ export default function Description({card, edit, setEdit}) {
     } else {
         if (card.text) {
             return (
-                <div>
+                <div onClick={e => setEdit(true)}>
                     <MDEditor.Markdown placeholder={"Add a detailed description"} className={' !bg-transparent !prose !text-md '} source={value}/>
                 </div>
             )

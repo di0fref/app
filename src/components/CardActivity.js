@@ -7,17 +7,18 @@ import {useEffect, useState} from "react";
 import {useLocalStorage} from "usehooks-ts";
 import {AddComment, Comments} from "./Comments";
 import {useSelector} from "react-redux";
+import {dateFormat} from "../helper";
 
-const Activity = ({log}) => {
+const Activity = ({log, detailsShown}) => {
     return (
         // <div></div>
-        <div className={'mt-4'}>
+        <div className={`${detailsShown ? "hidden" : "block"} mt-4`}>
             <div className={'flex items-center space-x-4'}>
-                <div><Avatar className={"rounded-full h-8 w-8"} user={log.user}/></div>
+                <Avatar className={"rounded-full h-8 w-8"} user={log.user}/>
                 <div>
                     <div className={'text-sm'}>
                         <span className={'font-semibold'}>{log.user.name}</span> {log.action} {log.name}</div>
-                    <div className={'text-xs text-neutral-500'}>{format(new Date(log.createdAt), "Y-MM-dd H:ii")}</div>
+                    <div className={'text-xs text-neutral-500'}>{formatDate(log.createdAt)}</div>
                 </div>
             </div>
         </div>
@@ -27,22 +28,17 @@ const Activity = ({log}) => {
 export default function CardActivity({card}) {
 
     const [detailsShown, setDetailsShown] = useLocalStorage(true)
-    const [p, setP] = useLocalStorage([])
+    const [activities, setActivities] = useLocalStorage([])
 
 
     useEffect(() => {
-        let p1 = [...card.logs, ...card.comments]
-
-        // p1.sort((a, b) => {
-        //     return new Date(a) - new Date(b)
-        // })
-console.log("Count", p1.length);
-        setP(p1)
+        setActivities([...card.logs, ...card.comments].sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt)
+        }))
     }, [card])
 
     const toggleDetails = () => {
         setDetailsShown(!detailsShown)
-        console.error("Not implemented")
     }
 
     return (
@@ -59,18 +55,13 @@ console.log("Count", p1.length);
             <div className={'mt-3'}>
                 <AddComment card={card}/>
             </div>
-            {p?.map(activity => {
-                console.log(format(new Date(activity.createdAt), "Y-MM-dd H:ii"));
-                if (activity.field) {
-                    return <Activity key={activity.id} log={activity}/>
+            {activities?.map(activity => {
+                if (activity.module !== undefined) {
+                    return <Activity card={card} detailsShown={detailsShown} key={activity.id} log={activity}/>
                 } else {
-                    return <Comments key={activity.id} comment={activity}/>
+                    return <Comments card={card} key={activity.id} comment={activity}/>
                 }
             })}
-
-            {/*{detailsShown && card.logs.map(log => {*/}
-            {/*    return <Activity key={log.id} log={log}/>*/}
-            {/*})}*/}
         </div>
     )
 }

@@ -21,9 +21,10 @@ export const addUserToCard = async (req, res) => {
 
 
         const log = Log.create({
-            userId: req.body.userId,
+            userId: req.user.id,
             cardId: req.body.cardId,
-            action: "joined this card"
+            action: "joined this card",
+            module: "Card"
         })
 
         res.status(200).json(member);
@@ -34,7 +35,7 @@ export const addUserToCard = async (req, res) => {
     }
 }
 export const removeUserFromCard = async (req, res) => {
-    console.log(req.body)
+
     try {
         const member = await CardUser.destroy({
             where: {
@@ -44,9 +45,10 @@ export const removeUserFromCard = async (req, res) => {
         })
 
         const log = Log.create({
-            userId: req.body.userId,
+            userId: req.user.id,
             cardId: req.body.cardId,
-            action: " left this card"
+            action: "left this card",
+            module: "Card"
         })
 
         res.status(200).json(member);

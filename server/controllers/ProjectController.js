@@ -181,7 +181,7 @@ export const getProjectsById = async (req, res) => {
                                 },
                                 {
                                     model: Comment,
-                                    order: [["createdAt", "desc"]],
+                                    order: [["createdAt", "asc"]],
                                     separate: true,
                                     include: [User]
                                 },

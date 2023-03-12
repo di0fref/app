@@ -56,6 +56,13 @@ io.on('connection', function (socket) {
         });
     })
 
+    socket.on("comment new", function ({room, comment}) {
+        const user = getUser(socket.id)
+        socket.broadcast.in(room).emit('comment new', {
+            comment: comment,
+        });
+    })
+
     socket.on("project shared", function ({email, projectId}) {
         console.log("shared")
         socket.broadcast.emit("project shared", {

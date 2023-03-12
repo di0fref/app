@@ -56,9 +56,9 @@ export default function LabelManager({project__, button, showLabels}) {
                             return <Label key={label.id} label={label}/>
                         })}
 
-                        <Popover.Button>
+                        <Popover.Button className={'w-full_'}>
                             {button === "plus"
-                                ? <div className={'w-8 h-8 bg-modal-dark font-bold py-1 hover:bg-modal-dar'}>+</div>
+                                ? <div className={'w-8 h-8 bg-modal-dark font-bold py-1 hover:bg-modal-dark'}>+</div>
                                 : <CardModelButton className={'w-44'} icon={<HiOutlineTag/>} value={"Label"}/>}
                         </Popover.Button>
 

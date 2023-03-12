@@ -9,7 +9,7 @@ const Comment = db.define('comments', {
         allowNull: false,
         primaryKey: true
     },
-    text: Sequelize.STRING,
+    text: Sequelize.TEXT,
 
 }, {
     freezeTableName: true,

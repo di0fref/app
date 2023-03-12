@@ -285,7 +285,7 @@ export default function CardModal({project, ...props}) {
                                 </div>
 
 
-                                <div className={'bg-green-600_ w-44 '}>
+                                <div className={'bg-green-600_ w-full md:w-44 px-12 md:px-0'}>
                                     <div className={'mb-4'}>
                                         <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Due
                                             date
@@ -307,16 +307,16 @@ export default function CardModal({project, ...props}) {
                                     {currentCard?.status === "Archived"
                                         ? (
                                             <>
-                                                <button onClick={sendToBoard} className={'mb-2'}>
-                                                    <CardModelButton className={'w-44'} value={"Send to board"} icon={
+                                                <button onClick={sendToBoard} className={'mb-2 w-full'}>
+                                                    <CardModelButton className={'w-44_'} value={"Send to board"} icon={
                                                         <HiRefresh/>}/>
                                                 </button>
                                                 {/*<button onClick={onDeleteCard} className={'mb-2'}>*/}
                                                 {/*    <CardModelButtonRed className={'w-44'} value={"Delete"} icon={<BsDash/>}/>*/}
 
                                                 <Popover className={"relative"}>
-                                                    <Popover.Button ref={setReferenceElement}>
-                                                        <CardModelButtonRed className={'w-44'} value={"Delete"} icon={
+                                                    <Popover.Button className={'w-full'} ref={setReferenceElement}>
+                                                        <CardModelButtonRed className={'w-44_'} value={"Delete"} icon={
                                                             <BsDash/>}/>
                                                     </Popover.Button>
                                                     <Popover.Panel className={'absolute top-8 right-0 z-10 mt-1 w-80'}
@@ -346,8 +346,8 @@ export default function CardModal({project, ...props}) {
                                             </>
                                         )
                                         : (
-                                            <button onClick={onArchive} className={'mb-2'}>
-                                                <CardModelButton className={'w-44'} value={"Archive"} icon={
+                                            <button onClick={onArchive} className={'mb-2 w-full'}>
+                                                <CardModelButton className={'w-44_'} value={"Archive"} icon={
                                                     <HiOutlineArchive className={'h-4 w-4'}/>}/>
                                             </button>
                                         )
