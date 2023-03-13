@@ -248,6 +248,12 @@ export default function CardModal({project, ...props}) {
                                             <div className={'absolute left-6'}><BsTextLeft className={'h-5 w-5'}/></div>
                                             <div className={'flex items-center space-x-2'}>
                                                 <div className={'font-semibold text-base'}>Description</div>
+                                                <div>
+                                                    <button onClick={() => {
+                                                        setEdit(true)
+                                                    }} className={'py-1 px-2 bg-neutral-200 text-sm rounded hover:bg-neutral-300'}>Edit
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                         <div className={"mb-4 mt-3 pl-12"}>

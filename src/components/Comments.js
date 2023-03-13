@@ -62,13 +62,6 @@ export function AddComment({card}) {
     }
     const fetchUsers = (query, callback) => {
         if (!query) return;
-        // axios.get("/users/" + card.projectId)
-        //     .then(res => res.data)
-        //     .then(res => res.map(user => {
-        //         return {display: user.user.name, id: user.user.id, image: user.user.image, ...user.user}
-        //     }))
-        //     .then(callback)
-
         const fetchedUsers = users.map(user => ({display: user.name, id: user.id, image: user.image, ...user}))
         callback(fetchedUsers)
     };
@@ -84,15 +77,9 @@ export function AddComment({card}) {
 
     const renderSuggestionContainer = (children) => {
         return (
-            // <div className={'bg-white shadow-lg'}>
-            //     <div>Mention</div>
-            //     <div>{children}</div>
-            // </div>
             <div className="overflow-hidden rounded shadow-all w-80 ring-1 ring-black ring-opacity-5 bg-white">
                 <div className="relative bg-white p-2 ">
                     <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Mention?</div>
-
-
                     <div>
                         {children}
                     </div>
@@ -102,26 +89,30 @@ export function AddComment({card}) {
         )
     }
     return (
-        <div>
-
-            {edit?( <>
-                <MentionsInput
-                    value={value}
-                    allowSuggestionsAboveCursor={true}
-                    onChange={onChange}
-                    placeholder={"Write a comment"}
-                    a11ySuggestionsListLabel={"Suggested mentions"}
-                    style={defaultStyle}
-                    customSuggestionsContainer={(children) => renderSuggestionContainer(children)}>
-                    <Mention
-                        markup={"[@__display__](/#__id__)"}
-                        appendSpaceOnAdd={true}
-                        renderSuggestion={renderSuggestion}
-                        displayTransform={(id, display) => (`@${display}`)}
-                        trigger={"@"} data={fetchUsers} onAdd={onAdd} style={defaultMentionStyle}/>
-                </MentionsInput>
-                <button disabled={value === ""} onClick={onAddComment} className={'disabled:opacity-50 save-btn'}>Save</button>
-            </>):(
+        <div className={'flex items-start space-x-4 w-full text-md'}>
+            <Avatar className={'rounded-full h-8 w-8'} user={currentUser}/>
+            {edit ? (
+                <div ref={clickRef} className={'w-full bg-white p-2 border'}>
+                    <MentionsInput
+                        className={"mentionsinput"}
+                        autoFocus={true}
+                        value={value}
+                        allowSuggestionsAboveCursor={true}
+                        onChange={onChange}
+                        placeholder={"Write a comment"}
+                        a11ySuggestionsListLabel={"Suggested mentions"}
+                        style={defaultStyle}
+                        customSuggestionsContainer={(children) => renderSuggestionContainer(children)}>
+                        <Mention
+                            markup={"[@__display__](/#__id__)"}
+                            appendSpaceOnAdd={true}
+                            renderSuggestion={renderSuggestion}
+                            displayTransform={(id, display) => (`@${display}`)}
+                            trigger={"@"} data={fetchUsers} onAdd={onAdd} style={defaultMentionStyle}/>
+                    </MentionsInput>
+                    <button disabled={value === ""} onClick={onAddComment} className={'disabled:opacity-50 save-btn'}>Save</button>
+                </div>
+            ) : (
                 <div onClick={e => setEdit(true)} className={"w-full bg-white border p-2"}>
                     <ReactMarkdown className={'rounded-box cursor-pointer p-0 m-0 text-neutral-400 text-md'} children={"Write a comment"}/>
                 </div>
@@ -199,7 +190,7 @@ export function Comments({comment, card}) {
                                        components={{
                                            a: props => {
                                                return (props.href.startsWith("/#")) ? (
-                                                   <a className={"atMention"} href={props.href}>{props.children}</a> // Render mention links with custom component
+                                                   <a className={`${""} atMention`} href={props.href}>{props.children}</a> // Render mention links with custom component
                                                ) : (
                                                    <a href={props.href}>{props.children}</a> // All other links
                                                )
@@ -208,40 +199,42 @@ export function Comments({comment, card}) {
                                        }}
                         />
                     </div>
-                    <div className={'flex space-x-2 text-xs mt-1'}>
-                        <button className={'text-neutral-500 underline'}>Edit</button>
-                        <Popover as={"div"}>
-                            <Popover.Button ref={setReferenceElement}>
-                                <div className={'text-neutral-500 underline'}>Delete</div>
-                            </Popover.Button>
+                    {(currentUser === comment.userId) &&
+                        <div className={'flex space-x-2 text-xs mt-1'}>
+                            <button className={'text-neutral-500 underline'}>Edit</button>
+                            <Popover as={"div"}>
+                                <Popover.Button ref={setReferenceElement}>
+                                    <div className={'text-neutral-500 underline'}>Delete</div>
+                                </Popover.Button>
 
-                            <Popover.Panel as={"div"} className={"w-80"} ref={setPopperElement} style={{zIndex: 10, ...styles.popper}}{...attributes.popper}>
-                                {({close}) => (
+                                <Popover.Panel as={"div"} className={"w-80"} ref={setPopperElement} style={{zIndex: 10, ...styles.popper}}{...attributes.popper}>
+                                    {({close}) => (
 
-                                    <div className="overflow-hidden rounded shadow-all ring-1 ring-black ring-opacity-5 bg-white">
-                                        <div className="relative bg-white p-4 ">
-                                            <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Delete comment?</div>
-
-
-                                            <button onClick={close} className={'absolute top-3 right-2'}>
-                                                <BsX className={'h-6 w-6'}/>
-                                            </button>
+                                        <div className="overflow-hidden rounded shadow-all ring-1 ring-black ring-opacity-5 bg-white">
+                                            <div className="relative bg-white p-4 ">
+                                                <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Delete comment?</div>
 
 
-                                            <div>
-                                                <div className={'text-sm p-1'}>Deleting a comment is permanent and there is no way to get it back.
+                                                <button onClick={close} className={'absolute top-3 right-2'}>
+                                                    <BsX className={'h-6 w-6'}/>
+                                                </button>
+
+
+                                                <div>
+                                                    <div className={'text-sm p-1'}>Deleting a comment is permanent and there is no way to get it back.
+                                                    </div>
+                                                    <div className={'mt-2 text-center'}>
+                                                        <CardModelButtonRed onClick={onDeleteComment} className={'text-center'} value={"Delete"}/>
+                                                    </div>
                                                 </div>
-                                                <div className={'mt-2 text-center'}>
-                                                    <CardModelButtonRed onClick={onDeleteComment} className={'text-center'} value={"Delete"}/>
-                                                </div>
+
                                             </div>
-
                                         </div>
-                                    </div>
-                                )}
-                            </Popover.Panel>
-                        </Popover>
-                    </div>
+                                    )}
+                                </Popover.Panel>
+                            </Popover>
+                        </div>
+                    }
                 </div>
             </div>
             {/*))}*/}

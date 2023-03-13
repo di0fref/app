@@ -1,8 +1,8 @@
 export default {
     control: {
-        backgroundColor: "#fff",
-        fontSize: 14,
-        fontWeight: "normal",
+        // backgroundColor: "#fff",
+        // fontSize: 14,
+        // fontWeight: "normal",
     },
 
     "&multiLine": {
@@ -11,12 +11,14 @@ export default {
             minHeight: 63,
         },
         highlighter: {
-            padding: 9,
+            padding: 0,
             border: "1px solid transparent",
         },
         input: {
-            padding: 9,
-            border: "1px solid silver",
+            // padding: 9,
+            // border: "1px solid white",
+            border: 0,
+            padding: 0
         },
     },
 

@@ -12,27 +12,9 @@ body, html {
     /*@apply #285C8D*/
     @apply bg-gradient-to-b from-[#285C8D] to-[rgb(0,121,191)]
 }
-
-
-/*.react-kanban-column {*/
-/*    @apply bg-[#ebecf0]*/
-/*    rounded-box*/
-/*    pb-2*/
-/*    pt-1*/
-/*    px-1*/
-/*    min-w-[272px]*/
-/*    inline-block*/
-/*    align-top*/
-/*        !*max-h-[calc(100vh-2rem)]*!*/
-/*        !*	max-h-full*!*/
-/*        !*h-screen*!*/
-/*    overflow-hidden*/
-
-/*}*/
-
-/*.react-kanban-board {*/
-/*    @apply flex*/
-/*}*/
+.mentionsinput__input{
+    @apply border-0 focus:border-0 focus:ring-0 rounded-box
+}
 .atMention{
     @apply bg-neutral-200 py-0.5 px-1 rounded-2xl text-sm !no-underline !font-normal
 }

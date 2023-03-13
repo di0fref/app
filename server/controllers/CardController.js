@@ -36,7 +36,7 @@ export const deleteComment = async (req, res) => {
     try {
 
         const comment = await Comment.findByPk(req.body.id, {
-            include:[Card]
+            include: [Card]
         })
 
         // const del = await Comment.destroy({
@@ -351,6 +351,12 @@ export const createCard = async (req, res) => {
                         }, {
                             model: Column,
                             attributes: ["title"],
+                        },
+                        {
+                            model: Comment,
+                            order: [["createdAt", "asc"]],
+                            separate: true,
+                            include: [User]
                         },
                         {
                             model: CardField,
