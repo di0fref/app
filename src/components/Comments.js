@@ -114,7 +114,7 @@ export function AddComment({card}) {
                 </div>
             ) : (
                 <div onClick={e => setEdit(true)} className={"w-full bg-white border p-2"}>
-                    <ReactMarkdown className={'rounded-box cursor-pointer p-0 m-0 text-neutral-400 text-md'} children={"Write a comment"}/>
+                    <ReactMarkdown className={'rounded-box cursor-pointer p-0 m-0 text-neutral-400 text-md placeHolder'} children={"Write a comment"}/>
                 </div>
             )}
         </div>
@@ -185,17 +185,16 @@ export function Comments({comment, card}) {
                         {/*<MDEditor.Markdown placeholder={""} className={' !bg-transparent !prose !text-md '} source={comment.text}/>*/}
                         {/*</div>*/}
                         <ReactMarkdown children={comment.text}
-                                       className={'!prose !text-md'}
+                                       className={'prose text-md'}
                                        remarkPlugins={[remarkGfm]}
                                        components={{
                                            a: props => {
                                                return (props.href.startsWith("/#")) ? (
                                                    <a className={`${""} atMention`} href={props.href}>{props.children}</a> // Render mention links with custom component
                                                ) : (
-                                                   <a href={props.href}>{props.children}</a> // All other links
+                                                   <a className={''} href={props.href}>{props.children}</a> // All other links
                                                )
                                            }
-
                                        }}
                         />
                     </div>

@@ -184,7 +184,7 @@ export default function CardModal({project, ...props}) {
                 <div className="flex min-h-[600px] items-center justify-center p-4">
 
 
-                    <Dialog.Panel className="md:max-w-[768px] w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all">
+                    <Dialog.Panel className="md:max-w-[768px] w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all card-modal">
 
                         {currentCard?.status === "Archived" ?
                             (

@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,12 +11,15 @@ body, html {
     /*@apply #285C8D*/
     @apply bg-gradient-to-b from-[#285C8D] to-[rgb(0,121,191)]
 }
-.mentionsinput__input{
+
+.mentionsinput__input {
     @apply border-0 focus:border-0 focus:ring-0 rounded-box
 }
-.atMention{
+
+.atMention {
     @apply bg-neutral-200 py-0.5 px-1 rounded-2xl text-sm !no-underline !font-normal
 }
+
 .column-fref {
     @apply max-h-[calc(100vh-9rem)] overflow-auto min-h-[28px]
 }
@@ -30,7 +32,33 @@ body, html {
     @apply text-neutral-500 py-1 px-2 hover:bg-neutral-200 hover:text-neutral-700 text-sm rounded
 }
 
-.bg-archive-warning{
+.prose a:not(.atMention){
+    @apply !text-blue-800 font-normal
+}
+.prose a:hover{
+    @apply !text-neutral-800 font-normal
+}
+/*ul {*/
+/*    @apply pl-8 list-disc my-1*/
+/*}*/
+
+/*ol {*/
+/*    @apply pl-8 list-decimal py-1*/
+/*}*/
+
+/*.markdown p {*/
+/*    @apply mb-3*/
+/*}*/
+
+/*.card-modal a:not(.atMention) {*/
+/*    @apply text-blue-700 underline*/
+/*}*/
+
+/*.card-modal a:hover {*/
+/*    @apply text-neutral-800*/
+/*}*/
+
+.bg-archive-warning {
     background-color: #FDFAE5;
     background-image: linear-gradient(to bottom right, var(--ds-background-neutral, rgba(0, 0, 0, 0.05)) 25%, transparent 25%, transparent 50%, var(--ds-background-neutral, rgba(0, 0, 0, 0.05)) 50%, var(--ds-background-neutral, rgba(0, 0, 0, 0.05)) 75%, transparent 75%, transparent);
     background-size: 14px 14px;
@@ -38,15 +66,16 @@ body, html {
 
 input[type=checkbox] {
     @apply shrink-0 mt-0.5
-        border-neutral-300
-        border
+    border-neutral-300
+    border
     bg-white
     rounded
     focus:ring-0
     h-4 w-4
-    /*hover:bg-neutral-300*/
+        /*hover:bg-neutral-300*/
     disabled:hover:cursor-not-allowed
 }
+
 .p-mention-panel {
     position: absolute;
     top: 0;
@@ -54,6 +83,7 @@ input[type=checkbox] {
     overflow: visible;
     @apply bg-white shadow-lg p-2 w-80 !max-h-[90vh]
 }
+
 /* Works on Firefox */
 * {
     scrollbar-width: thin;
