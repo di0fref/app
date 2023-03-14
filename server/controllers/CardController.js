@@ -15,6 +15,15 @@ import ChecklistItem from "../models/ChecklistItem.js";
 import User from "../models/User.js";
 import Comment from "../models/Comment.js";
 
+
+export const uploadFile = async (req, res) => {
+    try {
+
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 export const addComment = async (req, res) => {
     try {
 

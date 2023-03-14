@@ -13,6 +13,13 @@ import {authorize} from '@thream/socketio-jwt'
 import {addUser, getAllUsers, deleteUser, getUser} from "./users.js";
 import ChecklistRoute from "./routes/ChecklistRoute.js";
 import ProjectUsers from "./models/ProjectUser.js";
+import fileUpload from "express-fileupload"
+import path from 'path';
+import {fileURLToPath} from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 export const app = express();
 const server = http.createServer(app);
@@ -85,8 +92,13 @@ app.use(cors());
 app.use(express.json());
 app.use(authenticateJWT)
 app.use([UserRoute, CardRoute, ProjectRoute, LabelRoute, ChecklistRoute]);
+app.use(fileUpload({
+    useTempFiles: true,
+    safeFileNames: true,
+    preserveExtension: true,
+    tempFileDir: __dirname + "/public/files/temp"
+}))
 
-// app.listen(8000, () => console.log('Server up and running...'));
 app.get('/', (req, res) => {
     res.send("Server is up and running")
 })

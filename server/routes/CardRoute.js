@@ -3,7 +3,7 @@ import {
     createCard,
     getCards, updateCard, reorderCards,
     addLabel, removeLabel, getCardsByIds, updateField, archiveCards, getCard, deleteCard, addComment,
-    deleteComment
+    deleteComment, uploadFile
 } from "../controllers/CardController.js";
 
 const router = express.Router();
@@ -23,6 +23,7 @@ router.post('/cards/archive', archiveCards);
 router.delete("/cards/:id", deleteCard)
 router.post('/cards/comment/add', addComment);
 router.post('/cards/comment/delete', deleteComment);
+router.post("/cards/file/upload", uploadFile)
 
 
 // router.patch('/users/:id', updateUser);

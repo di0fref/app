@@ -1,5 +1,5 @@
 import {Dialog, Transition, Popover} from '@headlessui/react'
-import {Fragment, useEffect, useState} from 'react'
+import {Fragment, useEffect, useState, useMemo} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {HiOutlineXMark} from "react-icons/hi2";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
@@ -45,7 +45,37 @@ import CardUserManager from "./CardUserManager";
 import {Avatar} from "./GoogleHead";
 import CardActivity from "./CardActivity";
 import {Comments, AddComment} from "./Comments";
+import Dropzone, {useDropzone} from "react-dropzone";
 
+const baseStyle = {
+  // flex: 1,
+  // display: 'flex',
+  // flexDirection: 'column',
+  // alignItems: 'center',
+  // padding: '20px',
+  borderWidth: 4,
+  borderRadius: 2,
+    // borderStyle: 'dashed',
+  borderColor: '#F4F5F7',
+  // borderStyle: 'dashed',
+  // backgroundColor: '#fafafa',
+  // color: '#bdbdbd',
+  // outline: 'none',
+  transition: 'border .24s ease-in-out'
+};
+
+const focusedStyle = {
+  borderColor: '#2196f3',
+    backgroundColor: '#fafafa',
+};
+
+const acceptStyle = {
+  borderColor: '#00e676'
+};
+
+const rejectStyle = {
+  borderColor: '#ff1744'
+};
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
         <div onClick={onClick} className={`rounded-box ml-0.5 md:ml-0 hover:cursor-pointer hover:bg-modal-darker bg-modal-dark h-8 px-2 text-left ${props.className}`}>
@@ -78,6 +108,8 @@ export default function CardModal({project, ...props}) {
         placement: "bottom-end",
         strategy: 'absolute',
     })
+
+    const [dragOver, setDragOver] = useState(false)
 
     let [isOpen, setIsOpen] = useState(false)
     const currentCard = useSelector(state => state.data.currentCard)
@@ -171,8 +203,36 @@ export default function CardModal({project, ...props}) {
                 room: currentCard.projectId
             })
         })
-
     }
+
+    const onDragLeave = () => {
+        dragOver && setDragOver(false)
+    }
+    const onDragEnter = () => {
+        !dragOver && setDragOver(true)
+    }
+
+    const {
+        getRootProps,
+        getInputProps,
+        isFocused,
+        isDragAccept,
+        isDragReject,
+        isDragActive
+    } = useDropzone({noClick: true});
+
+    const style = useMemo(() => ({
+        ...baseStyle,
+        ...(isDragActive ? focusedStyle : {}),
+        ...(isDragAccept ? acceptStyle : {}),
+        ...(isDragReject ? rejectStyle : {})
+    }), [
+        isFocused,
+        isDragAccept,
+        isDragReject
+    ]);
+
+
     return (
         <Dialog
             open={isOpen}
@@ -184,180 +244,188 @@ export default function CardModal({project, ...props}) {
                 <div className="flex min-h-[600px] items-center justify-center p-4">
 
 
-                    <Dialog.Panel className="md:max-w-[768px] w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all card-modal">
+                    <Dialog.Panel className={`${dragOver ? "opacity-80" : ""} md:max-w-[768px] w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all card-modal`}>
 
-                        {currentCard?.status === "Archived" ?
-                            (
-                                <div className={'flex items-center py-2 pl-6 space-x-2 bg-archive-warning'}>
-                                    <HiOutlineArchive/>
-                                    <div className={'font-semibold'}>
-                                        This card is archived
+                        <div {...getRootProps({style})}>
+                            <input {...getInputProps()} className={"focus:border-0 focus:ring-0"} />
+
+                            {currentCard?.status === "Archived" ?
+                                (
+                                    <div className={'flex items-center py-2 pl-6 space-x-2 bg-archive-warning'}>
+                                        <HiOutlineArchive/>
+                                        <div className={'font-semibold'}>
+                                            This card is archived
+                                        </div>
                                     </div>
+                                ) : ""}
+
+                            <button onClick={closeModal} className={'absolute top-2 right-2'}>
+                                <BsX className={'h-6 w-6'}/>
+                            </button>
+                            <div className={'min-h-[90vh] pl-12_ pr-4 py-3'}>
+
+
+                                <div className={'flex items-center space-x-2 font-semibold text-xl pl-12'}>
+                                    <div className={'absolute left-6'}><BsCardText className={'h-5 w-5'}/>
+                                    </div>
+                                    <div className={'text-neutral-500'}>#{currentCard?.number}</div>
                                 </div>
-                            ) : ""}
 
-                        <button onClick={closeModal} className={'absolute top-2 right-2'}>
-                            <BsX className={'h-6 w-6'}/>
-                        </button>
-                        <div className={'min-h-[90vh] pl-12_ pr-4 py-3'}>
+                                <div className={'flex md:flex-row flex-col md:space-x-4 space-x-0'}>
+                                    <div className={'bg-amber-400_ flex-grow pr-4 '}>
+                                        <div className={'mt-1 pl-11'}>
+                                            <TextareaAutosize
+                                                onBlur={onTitleBlur}
 
+                                                onChange={e => setTitle(e.target.value)} className={`rounded-sm
+                                                                resize-none
+                                                                px-1
+                                                                py-0.5
+                                                                w-full
+                                                                font-semibold
+                                                                text-xl
+                                                                border-0
+                                                                bg-transparent
+                                                                focus:bg-white
+                                                                focus:ring-1
+                                                                focus:border-0
+                            
+                                                        `} value={title}/>
+                                        </div>
+                                        <div className={'text-sm pl-12 mb-4 text-neutral-500'}>In
+                                            list {currentCard?.column.title}
+                                        </div>
 
-                            <div className={'flex items-center space-x-2 font-semibold text-xl pl-12'}>
-                                <div className={'absolute left-6'}><BsCardText className={'h-5 w-5'}/></div>
-                                <div className={'text-neutral-500'}>#{currentCard?.number}</div>
-                            </div>
-
-                            <div className={'flex md:flex-row flex-col md:space-x-4 space-x-0'}>
-                                <div className={'bg-amber-400_ flex-grow pr-4 '}>
-                                    <div className={'mt-1 pl-11'}>
-                                        <TextareaAutosize
-                                            onBlur={onTitleBlur}
-                                            onChange={e => setTitle(e.target.value)} className={`rounded-sm
-                                    resize-none
-                                    px-1
-                                    py-0.5
-                                    w-full
-                                    font-semibold
-                                    text-xl
-                                    border-0 
-                                    bg-transparent 
-                                    focus:bg-white 
-                                    focus:ring-1 
-                                    focus:border-0
-                        
-                            `} value={title}/>
-                                    </div>
-                                    <div className={'text-sm pl-12 mb-4 text-neutral-500'}>In
-                                        list {currentCard?.column.title}
-                                    </div>
-
-                                    <div className={'flex items-center space-x-4 mb-4 pl-12'}>
-                                        {currentCard?.users.length ?
-                                            <div className={'pl-1'}>
-                                                <CardUserManager showTitle={true} button={"plus"}/>
-                                            </div>
-                                            : ""}
-                                        {currentCard?.labels.length ?
-                                            <div className={'pl-1'}>
-                                                <LabelManager showLabels={true} button={"plus"} card={currentCard} project={project}/>
-                                            </div> : ""}
-                                    </div>
-
-                                    <div>
-                                        <div className={'flex items-center pl-12'}>
-                                            <div className={'absolute left-6'}><BsTextLeft className={'h-5 w-5'}/></div>
-                                            <div className={'flex items-center space-x-2'}>
-                                                <div className={'font-semibold text-base'}>Description</div>
-                                                <div>
-                                                    <button onClick={() => {
-                                                        setEdit(true)
-                                                    }} className={'py-1 px-2 bg-neutral-200 text-sm rounded hover:bg-neutral-300'}>Edit
-                                                    </button>
+                                        <div className={'flex items-center space-x-4 mb-4 pl-12'}>
+                                            {currentCard?.users.length ?
+                                                <div className={'pl-1'}>
+                                                    <CardUserManager showTitle={true} button={"plus"}/>
                                                 </div>
-                                            </div>
+                                                : ""}
+                                            {currentCard?.labels.length ?
+                                                <div className={'pl-1'}>
+                                                    <LabelManager showLabels={true} button={"plus"} card={currentCard} project={project}/>
+                                                </div> : ""}
                                         </div>
-                                        <div className={"mb-4 mt-3 pl-12"}>
-                                            <Description card={currentCard} setEdit={setEdit} edit={edit}/>
-                                        </div>
-                                    </div>
 
-                                    {currentCard?.card_fields.length ?
-                                        <>
+                                        <div>
                                             <div className={'flex items-center pl-12'}>
                                                 <div className={'absolute left-6'}>
-                                                    <svg width="22" height="22" role="presentation" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path fillRule="evenodd" clipRule="evenodd" d="M3 6C2.44772 6 2 6.44772 2 7C2 7.55228 2.44772 8 3 8H11C11.5523 8 12 7.55228 12 7C12 6.44772 11.5523 6 11 6H3ZM4 16V12H20V16H4ZM2 12C2 10.8954 2.89543 10 4 10H20C21.1046 10 22 10.8954 22 12V16C22 17.1046 21.1046 18 20 18H4C2.89543 18 2 17.1046 2 16V12Z" fill="currentColor"></path>
-                                                    </svg>
-
+                                                    <BsTextLeft className={'h-5 w-5'}/>
                                                 </div>
                                                 <div className={'flex items-center space-x-2'}>
-                                                    <div className={'font-semibold text-base'}>Custom fields</div>
+                                                    <div className={'font-semibold text-base'}>Description</div>
+                                                    <div>
+                                                        <button onClick={() => {
+                                                            setEdit(true)
+                                                        }} className={'py-1 px-2 bg-neutral-200 text-sm rounded hover:bg-neutral-300'}>Edit
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className={"my-4 pl-12"}>
-                                                <CardFields/>
+                                            <div className={"mb-4 mt-3 pl-12"}>
+                                                <Description card={currentCard} setEdit={setEdit} edit={edit}/>
                                             </div>
-                                        </>
-                                        : ""}
-
-                                    <div className={'pl-12'}>
-                                        {currentCard?.checklists && currentCard.checklists.map(list => (
-                                            <Checklist card={currentCard} key={list.id} list={list}/>
-                                        ))}
-                                    </div>
-                                    <div className={'pl-6'}>
-                                        <CardActivity card={currentCard}/>
-                                    </div>
-                                </div>
-
-
-                                <div className={'bg-green-600_ w-full md:w-44 px-12 md:px-0'}>
-                                    <div className={'mb-4'}>
-                                        <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Due
-                                            date
                                         </div>
-                                        <CustomDatePicker onDateChange={onDateChange} _date={currentCard?.due}/>
-                                    </div>
 
-                                    <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Add
-                                        to card
-                                    </div>
-
-                                    <FieldManager showLabels={true}/>
-                                    <CardUserManager project={project} showTitle={false}/>
-                                    <ChecklistManager card={currentCard}/>
-                                    <LabelManager showLabels={false}/>
-
-                                    <div className={'text-xs text-neutral-500 font-semibold  mb-2 md:mt-0 pt-4 md:pl-0 pl-1'}>Actions</div>
-
-                                    {currentCard?.status === "Archived"
-                                        ? (
+                                        {currentCard?.card_fields.length ?
                                             <>
-                                                <button onClick={sendToBoard} className={'mb-2 w-full'}>
-                                                    <CardModelButton className={'w-44_'} value={"Send to board"} icon={
-                                                        <HiRefresh/>}/>
-                                                </button>
-                                                {/*<button onClick={onDeleteCard} className={'mb-2'}>*/}
-                                                {/*    <CardModelButtonRed className={'w-44'} value={"Delete"} icon={<BsDash/>}/>*/}
+                                                <div className={'flex items-center pl-12'}>
+                                                    <div className={'absolute left-6'}>
+                                                        <svg width="22" height="22" role="presentation" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                            <path fillRule="evenodd" clipRule="evenodd" d="M3 6C2.44772 6 2 6.44772 2 7C2 7.55228 2.44772 8 3 8H11C11.5523 8 12 7.55228 12 7C12 6.44772 11.5523 6 11 6H3ZM4 16V12H20V16H4ZM2 12C2 10.8954 2.89543 10 4 10H20C21.1046 10 22 10.8954 22 12V16C22 17.1046 21.1046 18 20 18H4C2.89543 18 2 17.1046 2 16V12Z" fill="currentColor"></path>
+                                                        </svg>
 
-                                                <Popover className={"relative"}>
-                                                    <Popover.Button className={'w-full'} ref={setReferenceElement}>
-                                                        <CardModelButtonRed className={'w-44_'} value={"Delete"} icon={
-                                                            <BsDash/>}/>
-                                                    </Popover.Button>
-                                                    <Popover.Panel className={'absolute top-8 right-0 z-10 mt-1 w-80'}
-                                                                   ref={setPopperElement}
-                                                                   style={{zIndex: 10, ...styles.popper}}
-                                                                   {...attributes.popper}
-                                                    >
-                                                        {({close}) => (
-
-                                                            <div className="overflow-hidden rounded shadow-all ring-1 ring-black ring-opacity-5 bg-white">
-                                                                <div className="relative bg-white p-4 ">
-                                                                    <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Delete card?</div>
-
-                                                                    <button onClick={close} className={'absolute top-3 right-2'}>
-                                                                        <BsX className={'h-6 w-6'}/>
-                                                                    </button>
-
-                                                                    <div className={'text-sm'}>All actions will be removed from the activity feed and you won’t be able to re-open the card. There is no undo.</div>
-                                                                    <CardModelButtonRed onClick={onDeleteCard} className={'w-full text-center mt-3'} value={"Delete"}/>
-                                                                </div>
-                                                            </div>
-                                                        )}
-                                                    </Popover.Panel>
-                                                </Popover>
-
-                                                {/*</button>*/}
+                                                    </div>
+                                                    <div className={'flex items-center space-x-2'}>
+                                                        <div className={'font-semibold text-base'}>Custom fields</div>
+                                                    </div>
+                                                </div>
+                                                <div className={"my-4 pl-12"}>
+                                                    <CardFields/>
+                                                </div>
                                             </>
-                                        )
-                                        : (
-                                            <button onClick={onArchive} className={'mb-2 w-full'}>
-                                                <CardModelButton className={'w-44_'} value={"Archive"} icon={
-                                                    <HiOutlineArchive className={'h-4 w-4'}/>}/>
-                                            </button>
-                                        )
-                                    }
+                                            : ""}
+
+                                        <div className={'pl-12'}>
+                                            {currentCard?.checklists && currentCard.checklists.map(list => (
+                                                <Checklist card={currentCard} key={list.id} list={list}/>
+                                            ))}
+                                        </div>
+                                        <div className={'pl-6'}>
+                                            <CardActivity card={currentCard}/>
+                                        </div>
+                                    </div>
+
+
+                                    <div className={'bg-green-600_ w-full md:w-44 px-12 md:px-0'}>
+                                        <div className={'mb-4'}>
+                                            <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Due
+                                                date
+                                            </div>
+                                            <CustomDatePicker onDateChange={onDateChange} _date={currentCard?.due}/>
+                                        </div>
+
+                                        <div className={'text-xs text-neutral-500 font-semibold mb-2 md:mt-0 mt-4 md:pl-0 pl-1'}>Add
+                                            to card
+                                        </div>
+
+                                        <FieldManager showLabels={true}/>
+                                        <CardUserManager project={project} showTitle={false}/>
+                                        <ChecklistManager card={currentCard}/>
+                                        <LabelManager showLabels={false}/>
+
+                                        <div className={'text-xs text-neutral-500 font-semibold  mb-2 md:mt-0 pt-4 md:pl-0 pl-1'}>Actions</div>
+
+                                        {currentCard?.status === "Archived"
+                                            ? (
+                                                <>
+                                                    <button onClick={sendToBoard} className={'mb-2 w-full'}>
+                                                        <CardModelButton className={'w-44_'} value={"Send to board"} icon={
+                                                            <HiRefresh/>}/>
+                                                    </button>
+                                                    {/*<button onClick={onDeleteCard} className={'mb-2'}>*/}
+                                                    {/*    <CardModelButtonRed className={'w-44'} value={"Delete"} icon={<BsDash/>}/>*/}
+
+                                                    <Popover className={"relative"}>
+                                                        <Popover.Button className={'w-full'} ref={setReferenceElement}>
+                                                            <CardModelButtonRed className={'w-44_'} value={"Delete"} icon={
+                                                                <BsDash/>}/>
+                                                        </Popover.Button>
+                                                        <Popover.Panel className={'absolute top-8 right-0 z-10 mt-1 w-80'}
+                                                                       ref={setPopperElement}
+                                                                       style={{zIndex: 10, ...styles.popper}}
+                                                                       {...attributes.popper}
+                                                        >
+                                                            {({close}) => (
+
+                                                                <div className="overflow-hidden rounded shadow-all ring-1 ring-black ring-opacity-5 bg-white">
+                                                                    <div className="relative bg-white p-4 ">
+                                                                        <div className={'text-sm text-neutral-500 font-semibold mb-4 text-center border-b pb-2'}>Delete card?</div>
+
+                                                                        <button onClick={close} className={'absolute top-3 right-2'}>
+                                                                            <BsX className={'h-6 w-6'}/>
+                                                                        </button>
+
+                                                                        <div className={'text-sm'}>All actions will be removed from the activity feed and you won’t be able to re-open the card. There is no undo.</div>
+                                                                        <CardModelButtonRed onClick={onDeleteCard} className={'w-full text-center mt-3'} value={"Delete"}/>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </Popover.Panel>
+                                                    </Popover>
+
+                                                    {/*</button>*/}
+                                                </>
+                                            )
+                                            : (
+                                                <button onClick={onArchive} className={'mb-2 w-full'}>
+                                                    <CardModelButton className={'w-44_'} value={"Archive"} icon={
+                                                        <HiOutlineArchive className={'h-4 w-4'}/>}/>
+                                                </button>
+                                            )
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>

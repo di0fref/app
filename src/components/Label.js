@@ -8,7 +8,7 @@ export default function Label({label}) {
             <div style={{
                 backgroundColor: label.color && color(label.color).saturate(30).darken(0.4).hex(),
             }} className={'h-3 w-3 rounded-full'}/>
-            <div className={'text-md'}>{label.title}</div>
+            <div className={'text-sm'}>{label.title}</div>
         </div>
     )
 }

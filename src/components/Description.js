@@ -7,6 +7,7 @@ import {Mention, MentionsInput} from "react-mentions";
 import defaultStyle from "../service/defaultStyle";
 import defaultMentionStyle from "../service/defaultStyle";
 import TextareaAutosize from "react-textarea-autosize";
+import remarkGfm from 'remark-gfm'
 
 export default function Description({card, edit, setEdit}) {
 
@@ -54,7 +55,7 @@ export default function Description({card, edit, setEdit}) {
         if (card.text) {
             return (
                 <div onClick={e => setEdit(true)}>
-                    <ReactMarkdown placeholder={"Add a detailed description"} className={' prose text-md'} children={value}/>
+                    <ReactMarkdown remarkPlugins={[remarkGfm]} placeholder={"Add a detailed description"} className={' prose text-md'} children={value}/>
                 </div>
             )
         } else {

@@ -13,6 +13,7 @@ import ProjectUser from "../models/ProjectUser.js";
 import Notification from "../models//Notification.js";
 import CardUser from "./CardUser.js";
 import Comment from "./Comment.js";
+import File from "./File.js";
 
 // Card.belongsTo(User);
 Card.belongsTo(Project)
@@ -85,6 +86,12 @@ User.belongsToMany(Card, {through: CardUser, timestamps: false})
 Comment.belongsTo(Card)
 Comment.belongsTo(User)
 Card.hasMany(Comment)
+
+File.belongsTo(Card)
+Card.hasMany(File)
+File.belongsTo(User)
+User.hasMany(File)
+
 // Card.hasMany(CardMember, {as: "members"})
 // CardMember.belongsTo(Card, {as: "members"})
 //
