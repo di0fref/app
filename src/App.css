@@ -11,7 +11,19 @@ body, html {
     /*@apply #285C8D*/
     @apply bg-gradient-to-b from-[#285C8D] to-[rgb(0,121,191)]
 }
+.dropzone {
+    box-sizing: border-box;
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    z-index: 99999;
 
+    background-color: blue;
+    border: 11px dashed blue;
+}
 .mentionsinput__input {
     @apply border-0 focus:border-0 focus:ring-0 rounded-box
 }

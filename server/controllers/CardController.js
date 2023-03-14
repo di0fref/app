@@ -19,6 +19,7 @@ import Comment from "../models/Comment.js";
 export const uploadFile = async (req, res) => {
     try {
 
+        console.log(req.files)
 
     } catch (error) {
         console.log(error.message);

@@ -92,12 +92,7 @@ app.use(cors());
 app.use(express.json());
 app.use(authenticateJWT)
 app.use([UserRoute, CardRoute, ProjectRoute, LabelRoute, ChecklistRoute]);
-app.use(fileUpload({
-    useTempFiles: true,
-    safeFileNames: true,
-    preserveExtension: true,
-    tempFileDir: __dirname + "/public/files/temp"
-}))
+app.use(fileUpload())
 
 app.get('/', (req, res) => {
     res.send("Server is up and running")

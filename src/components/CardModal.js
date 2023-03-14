@@ -1,5 +1,5 @@
 import {Dialog, Transition, Popover} from '@headlessui/react'
-import {Fragment, useEffect, useState, useMemo} from 'react'
+import {Fragment, useEffect, useState, useMemo, useCallback} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {HiOutlineXMark} from "react-icons/hi2";
 import {useLocation, useNavigate, useParams} from "react-router-dom";
@@ -46,36 +46,8 @@ import {Avatar} from "./GoogleHead";
 import CardActivity from "./CardActivity";
 import {Comments, AddComment} from "./Comments";
 import Dropzone, {useDropzone} from "react-dropzone";
+import axios from "axios";
 
-const baseStyle = {
-  // flex: 1,
-  // display: 'flex',
-  // flexDirection: 'column',
-  // alignItems: 'center',
-  // padding: '20px',
-  borderWidth: 4,
-  borderRadius: 2,
-    // borderStyle: 'dashed',
-  borderColor: '#F4F5F7',
-  // borderStyle: 'dashed',
-  // backgroundColor: '#fafafa',
-  // color: '#bdbdbd',
-  // outline: 'none',
-  transition: 'border .24s ease-in-out'
-};
-
-const focusedStyle = {
-  borderColor: '#2196f3',
-    backgroundColor: '#fafafa',
-};
-
-const acceptStyle = {
-  borderColor: '#00e676'
-};
-
-const rejectStyle = {
-  borderColor: '#ff1744'
-};
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
         <div onClick={onClick} className={`rounded-box ml-0.5 md:ml-0 hover:cursor-pointer hover:bg-modal-darker bg-modal-dark h-8 px-2 text-left ${props.className}`}>
@@ -211,26 +183,54 @@ export default function CardModal({project, ...props}) {
     const onDragEnter = () => {
         !dragOver && setDragOver(true)
     }
+    const onDrop = useCallback((acceptedFiles) => {
+        setDragOver(false)
+        acceptedFiles.forEach((file, index) => {
 
+            let formData = new FormData()
+
+            formData.append(`files[]`, file, file.name)
+
+            axios.post("/cards/file/upload", formData)
+
+            //
+            //
+            // console.log(file)
+            //
+            // const reader = new FileReader()
+            //
+            // reader.onabort = () => console.log('file reading was aborted')
+            // reader.onerror = () => console.log('file reading has failed')
+            // reader.onload = () => {
+            //     // Do whatever you want with the file contents
+            //     const binaryStr = reader.result
+            //
+            //     console.log( binaryStr)
+            //
+            //
+            //     axios.post("/cards/file/upload", formData, {
+            //         headers: {
+            //             ...formData.getHeaders()
+            //         }
+            //     })
+            //
+            //
+            // }
+            // reader.readAsBinaryString(file)
+
+        })
+
+
+    }, [])
     const {
         getRootProps,
         getInputProps,
         isFocused,
         isDragAccept,
         isDragReject,
-        isDragActive
-    } = useDropzone({noClick: true});
-
-    const style = useMemo(() => ({
-        ...baseStyle,
-        ...(isDragActive ? focusedStyle : {}),
-        ...(isDragAccept ? acceptStyle : {}),
-        ...(isDragReject ? rejectStyle : {})
-    }), [
-        isFocused,
-        isDragAccept,
-        isDragReject
-    ]);
+        isDragActive,
+        acceptedFiles
+    } = useDropzone({noClick: true, onDragEnter: onDragEnter, onDragLeave: onDragLeave, onDrop: onDrop});
 
 
     return (
@@ -244,10 +244,13 @@ export default function CardModal({project, ...props}) {
                 <div className="flex min-h-[600px] items-center justify-center p-4">
 
 
-                    <Dialog.Panel className={`${dragOver ? "opacity-80" : ""} md:max-w-[768px] w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all card-modal`}>
+                    <Dialog.Panel className={`md:max-w-[768px] w-11/12 transform rounded-sm bg-modal text-left align-middle shadow-xl transition-all card-modal`}>
 
-                        <div {...getRootProps({style})}>
-                            <input {...getInputProps()} className={"focus:border-0 focus:ring-0"} />
+                        <div {...getRootProps()}>
+                            <div className={`${dragOver ? "block" : "hidden"} z-50 absolute opacity-80 bg-white top-0 left-0 w-full h-full`}>
+                                <div className={'text-center absolute w-96 top-1/2 left-0 right-0 mx-auto text-2xl font-semibold'}>Drop files to upload</div>
+                            </div>
+                            <input {...getInputProps()} />
 
                             {currentCard?.status === "Archived" ?
                                 (
