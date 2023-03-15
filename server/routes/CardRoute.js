@@ -1,5 +1,12 @@
 import express from "express";
 import multer from "multer";
+import {
+    createCard,
+    getCards, updateCard, reorderCards,
+    addLabel, removeLabel, getCardsByIds, updateField, archiveCards, getCard, deleteCard, addComment,
+    deleteComment
+} from "../controllers/CardController.js";
+import File from "../models/File.js";
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -10,14 +17,6 @@ var storage = multer.diskStorage({
     }
 });
 var upload = multer({storage: storage});
-
-import {
-    createCard,
-    getCards, updateCard, reorderCards,
-    addLabel, removeLabel, getCardsByIds, updateField, archiveCards, getCard, deleteCard, addComment,
-    deleteComment, uploadFile
-} from "../controllers/CardController.js";
-import File from "../models/File.js";
 
 const router = express.Router();
 
@@ -35,8 +34,21 @@ router.put('/cards/field/update', updateField);
 router.post('/cards/archive', archiveCards);
 router.delete("/cards/:id", deleteCard)
 router.post('/cards/comment/add', addComment);
-router.post('/cards/comment/delete', deleteComment);
+router.post('/cards/comment/delete', deleteComment)
+router.get("/cards/file/download/:id", async (req, res) => {
+
+    console.log("/cards/file/download/:id");
+
+    const file = await File.findByPk(req.params.id)
+    res.download('public/uploads/' + req.params.id, (err) => {
+        if (err) {
+            console.log("Error", err)
+        }
+    })
+})
 router.post("/cards/file/upload", upload.single('file'), async (req, res) => {
+        console.log("/cards/file/upload");
+
     try {
         const file = await File.create({
             id: req.file.filename,

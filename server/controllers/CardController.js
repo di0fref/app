@@ -17,15 +17,7 @@ import Comment from "../models/Comment.js";
 import File from "../models/File.js";
 
 
-export const uploadFile = async (req, res) => {
-    try {
 
-        console.log(req.files)
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 export const addComment = async (req, res) => {
     try {
 

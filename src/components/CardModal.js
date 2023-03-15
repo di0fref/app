@@ -186,18 +186,23 @@ export default function CardModal({project, ...props}) {
     const onDragEnter = () => {
         !dragOver && setDragOver(true)
     }
-    const onDrop = useCallback((acceptedFiles) => {
+    const onDrop = useCallback(async (acceptedFiles) => {
         setDragOver(false)
-        acceptedFiles.forEach((file, index) => {
-            let formData = new FormData()
-            formData.append(`file`, file, file.name)
-            formData.append("userId", currentUser.id)
-            formData.append("cardId", currentCard.id)
-            axios.post("/cards/file/upload", formData)
-            console.log("File");
+
+        Promise.all(
+            acceptedFiles.forEach((file, index) => {
+                let formData = new FormData()
+                formData.append(`file`, file, file.name)
+                formData.append("userId", currentUser.id)
+                formData.append("cardId", currentCard.id)
+                axios.post("/cards/file/upload", formData)
+            })
+        ).then(res => {
+            dispatch(getUpdatedCard(currentCard.id))
         })
-        dispatch(getUpdatedCard(currentCard.id))
-    }, [])
+
+
+    }, [currentCard?.id])
 
     const {
         getRootProps,
