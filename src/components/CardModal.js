@@ -186,11 +186,11 @@ export default function CardModal({project, ...props}) {
     const onDragEnter = () => {
         !dragOver && setDragOver(true)
     }
-    const onDrop = useCallback(async (acceptedFiles) => {
-        setDragOver(false)
 
-        Promise.all(
-            acceptedFiles.forEach((file, index) => {
+
+    const onDrop = async (acceptedFiles) => {
+        await Promise.all(
+            acceptedFiles.map(async (file, index) => {
                 let formData = new FormData()
                 formData.append(`file`, file, file.name)
                 formData.append("userId", currentUser.id)
@@ -199,10 +199,26 @@ export default function CardModal({project, ...props}) {
             })
         ).then(res => {
             dispatch(getUpdatedCard(currentCard.id))
+            setDragOver(false)
         })
+    }
 
-
-    }, [currentCard?.id])
+    // const onDrop = useCallback( (acceptedFiles) => {
+    //
+    //     console.log(acceptedFiles);
+    //
+    //     await Promise.all(
+    //         acceptedFiles.forEach(async (file, index) => {
+    //             let formData = new FormData()
+    //             formData.append(`file`, file, file.name)
+    //             formData.append("userId", currentUser.id)
+    //             formData.append("cardId", currentCard.id)
+    //             axios.post("/cards/file/upload", formData)
+    //         })
+    //     )
+    //     // dispatch(getUpdatedCard(currentCard.id))
+    //
+    // }, [currentCard?.id])
 
     const {
         getRootProps,
