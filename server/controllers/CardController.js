@@ -14,6 +14,7 @@ import Checklist from "../models/Checklist.js";
 import ChecklistItem from "../models/ChecklistItem.js";
 import User from "../models/User.js";
 import Comment from "../models/Comment.js";
+import File from "../models/File.js";
 
 
 export const uploadFile = async (req, res) => {
@@ -109,6 +110,11 @@ export const getCard = async (req, res) => {
     try {
         const response = await Card.findByPk(req.params.id, {
             include: [
+                {
+                    model: File,
+                    separate: true,
+                    order: [["createdAt", "asc"]],
+                },
                 {
                     model: Label,
                     attributes: ["title", "id", "color"],
@@ -353,6 +359,11 @@ export const createCard = async (req, res) => {
         ).then(result => {
             Card.findByPk(newCard.id, {
                     include: [
+                        {
+                            model: File,
+                            separate: true,
+                            order: [["createdAt", "asc"]],
+                        },
                         {
                             model: Label,
                             attributes: ["title", "id", "color"],

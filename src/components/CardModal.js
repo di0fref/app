@@ -14,7 +14,7 @@ import {
     BsArchive,
     BsTag,
     BsTrash,
-    BsDash
+    BsDash, BsPaperclip
 } from "react-icons/bs";
 import Description from "./Description";
 import LabelManager from "./LabelManager";
@@ -47,6 +47,7 @@ import CardActivity from "./CardActivity";
 import {Comments, AddComment} from "./Comments";
 import Dropzone, {useDropzone} from "react-dropzone";
 import axios from "axios";
+import Attachment from "./Attachment";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -85,6 +86,8 @@ export default function CardModal({project, ...props}) {
 
     let [isOpen, setIsOpen] = useState(false)
     const currentCard = useSelector(state => state.data.currentCard)
+    const currentUser = useSelector(state => state.data.user)
+
     const nav = useNavigate()
     const dispatch = useDispatch();
     const params = useParams()
@@ -186,42 +189,16 @@ export default function CardModal({project, ...props}) {
     const onDrop = useCallback((acceptedFiles) => {
         setDragOver(false)
         acceptedFiles.forEach((file, index) => {
-
             let formData = new FormData()
-
-            formData.append(`files[]`, file, file.name)
-
+            formData.append(`file`, file, file.name)
+            formData.append("userId", currentUser.id)
+            formData.append("cardId", currentCard.id)
             axios.post("/cards/file/upload", formData)
-
-            //
-            //
-            // console.log(file)
-            //
-            // const reader = new FileReader()
-            //
-            // reader.onabort = () => console.log('file reading was aborted')
-            // reader.onerror = () => console.log('file reading has failed')
-            // reader.onload = () => {
-            //     // Do whatever you want with the file contents
-            //     const binaryStr = reader.result
-            //
-            //     console.log( binaryStr)
-            //
-            //
-            //     axios.post("/cards/file/upload", formData, {
-            //         headers: {
-            //             ...formData.getHeaders()
-            //         }
-            //     })
-            //
-            //
-            // }
-            // reader.readAsBinaryString(file)
-
+            console.log("File");
         })
-
-
+        dispatch(getUpdatedCard(currentCard.id))
     }, [])
+
     const {
         getRootProps,
         getInputProps,
@@ -350,11 +327,21 @@ export default function CardModal({project, ...props}) {
                                             </>
                                             : ""}
 
+
+                                        <div className={'pl-12'}>
+                                            <BsPaperclip className={'absolute left-6 h-5 w-5'}/>
+                                            <div className={'font-semibold text-base my-4'}>Attachments</div>
+                                            {currentCard?.files && currentCard.files.map(file => (
+                                                <Attachment card={currentCard} key={file.id} file={file}/>
+                                            ))}
+                                        </div>
+
                                         <div className={'pl-12'}>
                                             {currentCard?.checklists && currentCard.checklists.map(list => (
                                                 <Checklist card={currentCard} key={list.id} list={list}/>
                                             ))}
                                         </div>
+
                                         <div className={'pl-6'}>
                                             <CardActivity card={currentCard}/>
                                         </div>

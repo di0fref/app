@@ -14,6 +14,8 @@ import ChecklistItem from "../models/ChecklistItem.js";
 import Notification from "../models//Notification.js";
 import ProjectUser from "../models/ProjectUser.js";
 import Comment from "../models/Comment.js";
+import File from "../models/File.js";
+
 
 export const getProjects = async (req, res) => {
     try {
@@ -104,6 +106,11 @@ export const getFilteredProjectById = async (req, res) => {
                             where: dueWhere,
                             include: [
                                 {
+                                    model: File,
+                                    separate: true,
+                                    order: [["createdAt", "asc"]],
+                                },
+                                {
                                     model: Checklist,
                                     include: [{
                                         model: ChecklistItem,
@@ -184,6 +191,11 @@ export const getProjectsById = async (req, res) => {
                                     order: [["createdAt", "asc"]],
                                     separate: true,
                                     include: [User]
+                                },
+                                {
+                                    model: File,
+                                    separate: true,
+                                    order: [["createdAt", "asc"]],
                                 },
                                 {
                                     model: User,

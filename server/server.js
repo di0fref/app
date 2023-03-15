@@ -92,7 +92,7 @@ app.use(cors());
 app.use(express.json());
 app.use(authenticateJWT)
 app.use([UserRoute, CardRoute, ProjectRoute, LabelRoute, ChecklistRoute]);
-app.use(fileUpload())
+// app.use(fileUpload())
 
 app.get('/', (req, res) => {
     res.send("Server is up and running")

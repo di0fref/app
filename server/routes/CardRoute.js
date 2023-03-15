@@ -1,10 +1,23 @@
 import express from "express";
+import multer from "multer";
+
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+var upload = multer({storage: storage});
+
 import {
     createCard,
     getCards, updateCard, reorderCards,
     addLabel, removeLabel, getCardsByIds, updateField, archiveCards, getCard, deleteCard, addComment,
     deleteComment, uploadFile
 } from "../controllers/CardController.js";
+import File from "../models/File.js";
 
 const router = express.Router();
 
@@ -23,7 +36,22 @@ router.post('/cards/archive', archiveCards);
 router.delete("/cards/:id", deleteCard)
 router.post('/cards/comment/add', addComment);
 router.post('/cards/comment/delete', deleteComment);
-router.post("/cards/file/upload", uploadFile)
+router.post("/cards/file/upload", upload.single('file'), async (req, res) => {
+    try {
+        const file = await File.create({
+            id: req.file.filename,
+            cardId: req.body.cardId,
+            filename: req.file.originalname,
+            userId: req.body.userId,
+            mime: req.file.mimetype,
+            size: req.file.size
+        })
+        res.status(200).json(file);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+})
 
 
 // router.patch('/users/:id', updateUser);
