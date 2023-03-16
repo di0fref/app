@@ -7,6 +7,7 @@ import {
     deleteComment
 } from "../controllers/CardController.js";
 import File from "../models/File.js";
+import fs from "fs"
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -16,7 +17,26 @@ var storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + Date.now())
     }
 });
-var upload = multer({storage: storage});
+var upload = multer({
+    storage: storage,
+    fileFilter: fileFilter
+});
+
+function fileFilter(req, file, cb) {
+
+    // The function should call `cb` with a boolean
+    // to indicate if the file should be accepted
+
+    // To reject this file pass `false`, like so:
+    // cb(null, false)
+
+    // // To accept the file pass `true`, like so:
+    cb(null, true)
+    //
+    // // You can always pass an error if something goes wrong:
+    // cb(new Error('I don\'t have a clue!'))
+
+}
 
 const router = express.Router();
 
@@ -34,7 +54,23 @@ router.put('/cards/field/update', updateField);
 router.post('/cards/archive', archiveCards);
 router.delete("/cards/:id", deleteCard)
 router.post('/cards/comment/add', addComment);
-router.post('/cards/comment/delete', deleteComment)
+router.post('/cards/comment/delete', deleteComment);
+
+
+router.get("/cards/file/delete/:id", async (req, res) => {
+
+    await File.destroy({
+        where: {
+            id: req.params.id
+        }
+    })
+
+    fs.unlink("public/uploads/" + req.params.id, (err) => {
+        console.log(err);
+    });
+
+    res.status(200).json("ok");
+})
 router.get("/cards/file/download/:id", async (req, res) => {
 
     console.log("/cards/file/download/:id");
@@ -47,7 +83,7 @@ router.get("/cards/file/download/:id", async (req, res) => {
     })
 })
 router.post("/cards/file/upload", upload.single('file'), async (req, res) => {
-        console.log("/cards/file/upload");
+    console.log("/cards/file/upload");
 
     try {
         const file = await File.create({

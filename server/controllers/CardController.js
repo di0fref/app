@@ -436,7 +436,6 @@ export const addLabel = async (req, res) => {
     }
 }
 export const removeLabel = async (req, res) => {
-    console.log(req.body.card_id);
     try {
         Card.findByPk(req.body.card_id).then(card => {
             card.removeLabels(req.body.labelId).then(sc => {

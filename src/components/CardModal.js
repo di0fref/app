@@ -47,7 +47,7 @@ import CardActivity from "./CardActivity";
 import {Comments, AddComment} from "./Comments";
 import Dropzone, {useDropzone} from "react-dropzone";
 import axios from "axios";
-import Attachment from "./Attachment";
+import Attachments from "./Attachment";
 
 export function CardModelButton({icon, value, onClick, ...props}) {
     return (
@@ -74,7 +74,6 @@ export function CardModelButtonRed({icon, value, onClick, ...props}) {
 
 export default function CardModal({project, ...props}) {
 
-
     let [referenceElement, setReferenceElement] = useState()
     let [popperElement, setPopperElement] = useState()
     let {styles, attributes} = usePopper(referenceElement, popperElement, {
@@ -83,6 +82,7 @@ export default function CardModal({project, ...props}) {
     })
 
     const [dragOver, setDragOver] = useState(false)
+    const [uploading, setUploading] = useState(false)
 
     let [isOpen, setIsOpen] = useState(false)
     const currentCard = useSelector(state => state.data.currentCard)
@@ -189,6 +189,7 @@ export default function CardModal({project, ...props}) {
 
 
     const onDrop = async (acceptedFiles) => {
+        setUploading(true)
         await Promise.all(
             acceptedFiles.map(async (file, index) => {
                 let formData = new FormData()
@@ -198,27 +199,16 @@ export default function CardModal({project, ...props}) {
                 axios.post("/cards/file/upload", formData)
             })
         ).then(res => {
-            dispatch(getUpdatedCard(currentCard.id))
+            dispatch(getUpdatedCard(currentCard.id)).then(res => {
+                toast.success("Attachments uploaded")
+            })
             setDragOver(false)
+            socket.emit("file added", {
+                id: currentCard.id,
+                room: currentCard.projectId
+            })
         })
     }
-
-    // const onDrop = useCallback( (acceptedFiles) => {
-    //
-    //     console.log(acceptedFiles);
-    //
-    //     await Promise.all(
-    //         acceptedFiles.forEach(async (file, index) => {
-    //             let formData = new FormData()
-    //             formData.append(`file`, file, file.name)
-    //             formData.append("userId", currentUser.id)
-    //             formData.append("cardId", currentCard.id)
-    //             axios.post("/cards/file/upload", formData)
-    //         })
-    //     )
-    //     // dispatch(getUpdatedCard(currentCard.id))
-    //
-    // }, [currentCard?.id])
 
     const {
         getRootProps,
@@ -246,7 +236,10 @@ export default function CardModal({project, ...props}) {
 
                         <div {...getRootProps()}>
                             <div className={`${dragOver ? "block" : "hidden"} z-50 absolute opacity-80 bg-white top-0 left-0 w-full h-full`}>
-                                <div className={'text-center absolute w-96 top-1/2 left-0 right-0 mx-auto text-2xl font-semibold'}>Drop files to upload</div>
+                                <div className={'text-center absolute w-96 top-1/2 left-0 right-0 mx-auto text-2xl font-semibold'}>
+                                    <div>Drop files to upload</div>
+                                    <div>Uploading...</div>
+                                </div>
                             </div>
                             <input {...getInputProps()} />
 
@@ -324,7 +317,7 @@ export default function CardModal({project, ...props}) {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className={"mb-4 mt-3 pl-12"}>
+                                            <div className={"mb-6 mt-3 pl-12"}>
                                                 <Description card={currentCard} setEdit={setEdit} edit={edit}/>
                                             </div>
                                         </div>
@@ -342,7 +335,7 @@ export default function CardModal({project, ...props}) {
                                                         <div className={'font-semibold text-base'}>Custom fields</div>
                                                     </div>
                                                 </div>
-                                                <div className={"my-4 pl-12"}>
+                                                <div className={"mt-4 mb-8 pl-12"}>
                                                     <CardFields/>
                                                 </div>
                                             </>
@@ -350,11 +343,7 @@ export default function CardModal({project, ...props}) {
 
 
                                         <div className={'pl-12'}>
-                                            <BsPaperclip className={'absolute left-6 h-5 w-5'}/>
-                                            <div className={'font-semibold text-base my-4'}>Attachments</div>
-                                            {currentCard?.files && currentCard.files.map(file => (
-                                                <Attachment card={currentCard} key={file.id} file={file}/>
-                                            ))}
+                                            <Attachments card={currentCard}/>
                                         </div>
 
                                         <div className={'pl-12'}>
