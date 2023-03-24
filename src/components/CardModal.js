@@ -241,7 +241,7 @@ export default function CardModal({project, ...props}) {
                                     <div>Uploading...</div>
                                 </div>
                             </div>
-                            <input {...getInputProps()} />
+                            <input {...getInputProps()} className={'focus:ring-0 focus:border-none border-none ring-0'}/>
 
                             {currentCard?.status === "Archived" ?
                                 (

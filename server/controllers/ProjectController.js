@@ -71,8 +71,6 @@ export const addField = async (req, res) => {
 
 export const getFilteredProjectById = async (req, res) => {
 
-    console.log(req.body)
-
     const labelWhere = req.body.labels.length ? {id: req.body.labels.map(label => label)} : null
 
     const dueWhere = req.body.due.length ?
@@ -106,22 +104,29 @@ export const getFilteredProjectById = async (req, res) => {
                             where: dueWhere,
                             include: [
                                 {
+                                    model: Checklist,
+                                    include: [
+                                        {
+                                            model: ChecklistItem,
+                                            order: [["createdAt", "asc"]],
+                                            separate: true
+                                        },
+                                    ]
+                                },
+                                {
+                                    model: Comment,
+                                    order: [["createdAt", "asc"]],
+                                    separate: true,
+                                    include: [User]
+                                },
+                                {
                                     model: File,
                                     separate: true,
                                     order: [["createdAt", "asc"]],
                                 },
                                 {
-                                    model: Checklist,
-                                    include: [{
-                                        model: ChecklistItem,
-                                        order: [["createdAt", "asc"]],
-                                        separate: true
-                                    },]
-                                },
-                                {
-                                    model: Comment,
-                                    order: [["createdAt", "desc"]],
-                                    separate: true,
+                                    model: User,
+                                    // as: "members"
                                 },
                                 {
                                     model: Label,
@@ -136,6 +141,21 @@ export const getFilteredProjectById = async (req, res) => {
                                     model: CardField,
                                     order: [["name", "asc"]],
                                     separate: true,
+                                    include: [{
+                                        model: ProjectField,
+                                        attributes: ["options", "type", "id"]
+                                    }]
+                                },
+                                {
+                                    model: Log,
+                                    order: [["createdAt", "desc"]],
+                                    separate: true,
+                                    include: [
+                                        {
+                                            model: User,
+                                            attributes: ["name", "id", "image"]
+                                        }
+                                    ]
                                 }
                             ]
                         }
@@ -143,6 +163,7 @@ export const getFilteredProjectById = async (req, res) => {
                 }
             ]
         })
+
         res.status(200).json(project);
     } catch
         (error) {
@@ -157,7 +178,6 @@ export const getProjectsById = async (req, res) => {
             include: [
                 {
                     model: User,
-                    // as: "users"
                 },
                 {
                     model: Label
