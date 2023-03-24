@@ -17,7 +17,6 @@ import Comment from "../models/Comment.js";
 import File from "../models/File.js";
 
 
-
 export const addComment = async (req, res) => {
     try {
 
@@ -72,7 +71,35 @@ export const deleteCard = async (req, res) => {
             }
         });
 
+        await Field.destroy({
+            where: {
+                cardId: req.params.id
+            }
+        })
 
+        await Checklist.destroy({
+            where: {
+                cardId: req.params.id
+            }
+        })
+
+        await Comment.destroy({
+            where: {
+                cardId: req.params.id
+            }
+        })
+
+        await Label.destroy({
+            where: {
+                cardId: req.params.id
+            }
+        })
+
+        await File.destroy({
+            where: {
+                cardId: req.params.id
+            }
+        })
         /* Delete */
         // Fields
         // Checklist
@@ -166,11 +193,14 @@ export const getCardsByIds = async (req, res) => {
 }
 
 export const reorderCards = async (req, res) => {
+    // console.log(req.body)
     try {
         Promise.all(
             Object.values(req.body).map(async card => {
 
                 const originalObj = await Card.findByPk(card.id)
+
+                console.log(originalObj.columnId, card.id)
 
                 if (originalObj.columnId != card.columnId) {
 

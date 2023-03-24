@@ -39,8 +39,14 @@ export default function AddTask({column, project, addCard}) {
                 projectId: project.id,
                 columnId: column.id,
                 title: line
-            })).unwrap().then(res => {
-                addCard(res)
+            })).unwrap().then(response => {
+                
+                addCard(response)
+                
+                socket.emit("card new", {
+                    id: response.id,
+                    room: response.projectId
+                })
             })
         })
         setValue("")

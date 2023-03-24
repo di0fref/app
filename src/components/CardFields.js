@@ -44,8 +44,8 @@ const DropdownField = ({field, saveField}) => {
     // )
     return (
         <select defaultValue={field.value} onChange={onChange} className={'w-[150px] p-0 text-sm bg-modal-dark border-none h-8 pl-2 focus:bg-white rounded-box'}>
-            {options.map(option => (
-                <option value={option} key={option}>{option}</option>
+            {options.map(({option, value}) => (
+                <option value={option} key={option}>{value}</option>
             ))}
         </select>
     )

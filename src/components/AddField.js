@@ -11,7 +11,7 @@ import {BsTrash} from "react-icons/bs";
 function DropdownOptionEdit({option}) {
     return (
         <div className={'flex items-center justify-between space-y-4 px_-2'}>
-            <div className={'text-md'}>{option}</div>
+            <div className={'text-md'}>{option.value}</div>
             <BsTrash className={'text-neutral-400 h-3 w-3'}/>
         </div>
     )
@@ -43,9 +43,6 @@ export default function AddField({close}) {
 
     const saveField = () => {
 
-
-        console.log(dropdownValues, selected);
-
         if (selected == "Select") {
             setTypeError(true)
             return;
@@ -59,6 +56,13 @@ export default function AddField({close}) {
         if (name === "") {
             setError(true)
             return
+        }
+
+        if (selected.toLowerCase() === "dropdown") {
+            dropdownValues.unshift({
+                option: "",
+                value: "Select"
+            })
         }
 
         const data = {
@@ -80,7 +84,10 @@ export default function AddField({close}) {
     const addDropdownOption = (e) => {
         setDropdownValues([
             ...dropdownValues,
-            currentOption
+            {
+                option: currentOption,
+                value: currentOption
+            }
         ])
         setCurrentOption("")
         setDdEmptyError(false)
@@ -132,7 +139,7 @@ export default function AddField({close}) {
                         {selected === "Dropdown" && (
                             <div className={''}>
                                 <div className={"text-xs text-neutral-500 font-semibold mt-4 mb-1"}>Options</div>
-                                {dropdownValues?.map(option => (
+                                {dropdownValues?.map((option) => (
                                     <DropdownOptionEdit key={option} option={option}/>
                                 ))}
                                 <div className={'flex items-center space-x-2 mt-3'}>
