@@ -305,17 +305,20 @@ export const createProject = async (req, res) => {
         /* Create default columns */
         const colBacklog = await Column.create({
             title: "Backlog",
-            projectId: project.id
+            projectId: project.id,
+            order: 1
         })
 
         const colStarted = await Column.create({
             title: "Started",
-            projectId: project.id
+            projectId: project.id,
+            order: 2
         })
 
         const colDone = await Column.create({
             title: "Done",
-            projectId: project.id
+            projectId: project.id,
+            order: 3
         })
 
         res.status(200).json(project);

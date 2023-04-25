@@ -62,6 +62,7 @@ export default function Board({project}) {
 
     const onDragEnd = (result, columns) => {
 
+        console.log("Starting");
         const {type} = result;
         const {source, destination, draggableId} = result;
 
@@ -84,7 +85,6 @@ export default function Board({project}) {
                     order: index
                 }))
             })
-            setBoard(newColumns)
             dispatch(setBoard(newColumns))
             socket.emit("card reorder", {
                 board: columns,
@@ -128,7 +128,7 @@ export default function Board({project}) {
                     ...cols[destColumnIndex], cards: destItems
                 }
 
-                setBoard(cols)
+                dispatch(setBoard(cols))
 
                 const sourceCards = cols[sourceColumnIndex].cards
                 const destCards = cols[destColumnIndex].cards
@@ -173,8 +173,8 @@ export default function Board({project}) {
                 cols[columnIndex] = {
                     ...cols[columnIndex], cards: copiedItems
                 }
-                setBoard({columns: cols})
-
+                dispatch(setBoard({columns: cols}))
+                console.log("Done setting board");
                 const cards = cols[columnIndex].cards
                 const orderedCards = cards.map((card, index) => {
                     return {
@@ -185,7 +185,7 @@ export default function Board({project}) {
                 })
                 dispatch(reorderTasks(orderedCards)).unwrap()
                 dispatch(setBoard(cols))
-
+                console.log("Done reordering");
                 socket.emit("card reorder", {
                     board: cols,
                     room: project.id

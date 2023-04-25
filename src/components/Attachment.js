@@ -26,6 +26,11 @@ function Attachment({file}) {
             fileDownload(response.data, file.filename);
         })
     }
+    const previewFile = () => {
+
+
+
+    }
 
     const deleteAttachment = () => {
         console.log(file.id, file.cardId);
@@ -35,11 +40,14 @@ function Attachment({file}) {
     }
 
     return (
-        <div className={'hover:bg-modal-darker group mb-2 hover:cursor-pointer'}>
+        <div className={'hover:bg-modal-darker group mb-2 hover:cursor-pointer'} onClick={downLoad}>
             <div className={'flex items-center space-x-4'}>
-                <div className={'rounded text-sm font-bold group-hover:bg-modal-darker bg-modal-dark h-20 w-20 flex items-center justify-center'}>{file.filename.split(".").pop()}</div>
+                <div className={'rounded text-sm font-bold group-hover:bg-modal-darker bg-modal-dark h-20 w-20 flex items-center justify-center'}>
+                    {/*<img src={"/uploads/" + file.id}/>*/}
+                    {file.filename.split(".").pop()}
+                </div>
                 <div>
-                    <div className={'text-sm font-semibold'}>{file.filename}</div>
+                    <div className={'text-sm font-semibold pr-2'}>{file.filename}</div>
                     <div className={'text-xs flex items-center space-x-2'}>
                         <div>Added {formatDate(file.createdAt)}</div>
                         <Popover as={"div"}>

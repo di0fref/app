@@ -62,7 +62,7 @@ export default function Card({card, index}) {
                                 <div className={'text-sm'}><DateBadge date={card.due}/></div>
                                 <div className={'flex items-center space-x-2'}>
                                     {card?.text ? <BsTextLeft className={'h-4 w-4 text-neutral-500'}/> : ""}
-                                    {card?.id}
+                                    {/*{card?.id}*/}
                                     {card?.checklists && card.checklists.length ? <BsCheck2Square className={'h-4 w-4 text-neutral-500'}/> : ""}
                                 </div>
                             </div>
